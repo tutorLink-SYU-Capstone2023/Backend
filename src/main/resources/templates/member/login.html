@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+</head>
+<script>
+  const message = '[[${message}]]';
+  message && alert(message);
+</script>
+<body>
+<h1>로그인 페이지</h1>
+<!-- Spring Security의 FormLogin을 할 경우 username, password로 전달 된 id과 pwd를 꺼내도록
+기본적으로 설정 되어 있으므로 name 속성을 작성할 때 유의한다. -->
+<form action="/member/login" method="post">
+  <div>
+    <span>아이디 : </span>
+    <input type="text" name="username">
+  </div>
+  <div>
+    <span>비밀번호 : </span>
+    <input type="password" name="password">
+  </div>
+  <div>
+    <button>로그인</button>
+  </div>
+</form>
+</body>
+</html>
