@@ -8,13 +8,12 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -61,6 +60,16 @@ public class MemberController {
             throw new UserNotFoundException("회원 정보를 찾을 수 없습니다.");
         }
         return ResponseEntity.ok().build();
+    }
+    @ControllerAdvice
+    public class ExceptionController {
+        @ExceptionHandler(UserNotFoundException.class)
+        public ResponseEntity<MemberDTO> handleUserRegistException(UserNotFoundException e) {
+            String code = "ERROR_CODE_00000";
+            String description = "멤버 정보 조회 실패";
+            String detail = e.getMessage();
+            return new ResponseEntity<>(new MemberDTO(), HttpStatus.NOT_FOUND);
+        }
     }
 
 }
