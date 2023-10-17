@@ -4,8 +4,12 @@ import com.ohgiraffers.tutorlinktest.member.dto.MemberDTO;
 import com.ohgiraffers.tutorlinktest.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +42,15 @@ public class MemberController {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
+    }
+    @GetMapping("/tutee")
+    public String findAllTutee(@PageableDefault Pageable pageable, Model model){
+       return "/member/tutee";
+    }
+
+    @GetMapping("/tutor")
+    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
+        return "/member/tutor";
     }
 
 }
