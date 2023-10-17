@@ -2,11 +2,13 @@ package com.ohgiraffers.tutorlinktest.member.controller;
 
 import com.ohgiraffers.tutorlinktest.member.dto.MemberDTO;
 import com.ohgiraffers.tutorlinktest.member.service.MemberService;
+import com.ohgiraffers.tutorlinktest.valid.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +53,14 @@ public class MemberController {
     @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
         return "/member/tutor";
+    }
+    @GetMapping("/member/{memberNo}")
+    public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
+        boolean check = true;
+        if(check) {
+            throw new UserNotFoundException("회원 정보를 찾을 수 없습니다.");
+        }
+        return ResponseEntity.ok().build();
     }
 
 }
