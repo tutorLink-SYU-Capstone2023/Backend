@@ -2,6 +2,7 @@ package com.ohgiraffers.tutorlinktest.member.controller;
 
 import com.ohgiraffers.tutorlinktest.member.dto.MemberDTO;
 import com.ohgiraffers.tutorlinktest.member.service.MemberService;
+import com.ohgiraffers.tutorlinktest.valid.ErrorResponse;
 import com.ohgiraffers.tutorlinktest.valid.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -64,12 +66,38 @@ public class MemberController {
     @ControllerAdvice
     public class ExceptionController {
         @ExceptionHandler(UserNotFoundException.class)
-        public ResponseEntity<MemberDTO> handleUserRegistException(UserNotFoundException e) {
+        public ResponseEntity<ErrorResponse> handleUserRegistException(UserNotFoundException e) {
             String code = "ERROR_CODE_00000";
             String description = "멤버 정보 조회 실패";
             String detail = e.getMessage();
-            return new ResponseEntity<>(new MemberDTO(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ErrorResponse(code, description, detail), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> methodValidException(MethodArgumentNotValidException e) {
+        String code = "";
+        String description = "";
+        String detail = "";
+        /* 에러가 있다면 */
+        if(e.getBindingResult().hasErrors()) {
+            detail = e.getBindingResult().getFieldError().getDefaultMessage();
+            String bindResultCode = e.getBindingResult().getFieldError().getCode();
+            System.out.println(bindResultCode);
+            switch(bindResultCode) {
+                case "NotNull" :
+                    code = "ERROR_CODE_00001";
+                    description = "필수 값이 누락되었습니다.";
+                case "NotBlank" :
+                    code = "ERROR_CODE_00002";
+                    description = "필수 값이 공백으로 처리되었습니다.";
+                case "Size" :
+                    code = "ERROR_CODE_00003";
+                    description = "알맞은 크기의 값이 입력되지 않았습니다.";
+            }
+        }
+        ErrorResponse errorResponse = new ErrorResponse(code, description, detail);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
