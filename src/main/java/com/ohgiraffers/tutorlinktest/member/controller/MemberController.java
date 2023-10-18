@@ -31,6 +31,14 @@ public class MemberController {
     @GetMapping("/login")
     public void loginPage() {}
 
+    @PostMapping("/loginfail")
+    public String loginFailed(RedirectAttributes rttr) {
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
+
+        return "redirect:/member/login";
+    }
+
     @GetMapping("/join")
     public void joinPage(){ }
 
@@ -40,6 +48,30 @@ public class MemberController {
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
         return "redirect:/";
     }
+
+
+    @PostMapping("/idDupCheck")
+    public ResponseEntity<String> checkDuplication(@RequestBody MemberDTO member, RedirectAttributes rttr) {
+
+        log.info("[MemberController] checkDuplication ========================== ");
+
+        log.info("[MemberController] Request Check ID : {}", member.getMemberId());
+
+        if (memberService.selectMemberById(member.getMemberId())) {
+            log.info("[MemberController] Already Exist");
+
+            rttr.addFlashAttribute("message", "중복된 아이디입니다."); // 중복된 경우 메시지를 추가
+        } else {
+            rttr.addFlashAttribute("message", "사용 가능한 아이디입니다."); // 중복되지 않은 경우 메시지를 추가
+        }
+
+        log.info("[MemberController] checkDuplication ========================== ");
+
+        return ResponseEntity.ok().build();
+    }
+
+
+
     @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
@@ -50,7 +82,6 @@ public class MemberController {
     public String findAllTutee(@PageableDefault Pageable pageable, Model model){
        return "/member/tutee";
     }
-
     @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
         return "/member/tutor";

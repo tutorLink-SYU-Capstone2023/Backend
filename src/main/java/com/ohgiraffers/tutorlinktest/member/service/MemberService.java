@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -40,5 +41,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    @Transactional
+    public boolean selectMemberById(String memberId) {
+        // 데이터베이스에서 해당 아이디를 찾아봅니다.
+        Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
 
+        // 아이디가 중복되었는지 여부를 반환합니다.
+        return existingMember.isPresent();
+    }
 }
