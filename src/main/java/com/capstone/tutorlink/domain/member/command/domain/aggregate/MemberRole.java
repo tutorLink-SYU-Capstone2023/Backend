@@ -6,19 +6,25 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbl_member_role")
-@Getter @Setter
+@Table(name = "MEMBER_ROLE")
+@Getter
+@Setter
 public class MemberRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_role_code")
     private int memberRoleCode;
+
     @Column(name = "member_no")
     private int memberNo;
+
     @ManyToOne
-    @JoinColumn(name = "authority_code")
+    @JoinColumn(name = "authority_num")
     private Authority authority;
-    public MemberRole() {}
+
+    public MemberRole() {
+    }
+
     public MemberRole(Authority authority) {
         this.authority = authority;
     }
