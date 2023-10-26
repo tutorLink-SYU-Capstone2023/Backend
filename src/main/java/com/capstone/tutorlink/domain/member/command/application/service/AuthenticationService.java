@@ -4,6 +4,7 @@ import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,30 +13,33 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class AuthenticationService implements UserDetailsService {
     private final MemberRepository memberRepository;
+    private final ModelMapper modelMapper;
     @Autowired
-    public AuthenticationService(MemberRepository memberRepository) {
+    public AuthenticationService(MemberRepository memberRepository,ModelMapper modelMapper) {
         this.memberRepository = memberRepository;
+        this.modelMapper = modelMapper;
     }
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("로그인 요청 id : {}", username);
-        Member member = memberRepository.findByMemberId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        List<GrantedAuthority> authorities =
-                member.getMemberRoleList().stream()
-                        .map(memberRole -> new SimpleGrantedAuthority(memberRole.getAuthority().getAuthorityName()))
-                        .collect(Collectors.toList());
-        log.info("member : {}", member);
-        log.info("authorities : {}", authorities);
-        return new MemberDTO(member.getMemberNo(), member.getMemberId(), member.getMemberPwd(),
-                member.getMemberName(), authorities);
+    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
+        log.info("[AuthenticationService] =====================================================");
+        log.info("[AuthenticationService] memberId : " + memberId);
+
+        Member selectedMember = memberRepository.findByMemberIdAndMemberStatus(memberId, "Y").orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
+
+        MemberDTO member = modelMapper.map(selectedMember, MemberDTO.class);
+
+        log.info("[AuthenticationService] member : " + member);
+
+        return member;
     }
 }
 

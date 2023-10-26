@@ -41,7 +41,7 @@ public class Member {
     @Column(name = "enroll_date", columnDefinition = "datetime default now()", nullable = false)
     private Date enrollDate;
 
-    @Column(name = "member_status", length = 2, columnDefinition = "default 'Y'", nullable = false)
+    @Column(name = "member_status")
     private String memberStatus;
 
     @Column(name = "member_phonenumber", nullable = false)

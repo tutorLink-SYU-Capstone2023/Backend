@@ -29,21 +29,41 @@ public class MemberService {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
-    @Transactional
-    public void joinMember(MemberDTO memberInfo) {
-        Member member = modelMapper.map(memberInfo, Member.class);
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_MEMBER");
-        member.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
-        member.setMemberPwd(passwordEncoder.encode(memberInfo.getMemberPwd()));
-        memberRepository.save(member);
-    }
 
     @Transactional
     public boolean selectMemberById(String memberId) {
-        // 데이터베이스에서 해당 아이디를 찾아봅니다.
-        Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
 
-        // 아이디가 중복되었는지 여부를 반환합니다.
-        return existingMember.isPresent();
+        return memberRepository.findByMemberIdAndMemberStatus(memberId, "Y").isPresent();
+    }
+
+    @Transactional
+    public void joinMember(MemberDTO memberInfo) {
+        Member member = modelMapper.map(memberInfo, Member.class);
+        Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
+        member.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
+        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
+        memberRepository.save(member);
+    }
+
+    public void registMember(MemberDTO member) {
+
+        memberRepository.save(modelMapper.map(member, Member.class));
+    }
+
+    public void modifyMember(MemberDTO updateMember) {
+
+        Member savedMember = memberRepository.findByMemberNo((long) updateMember.getMemberNo());
+        savedMember.setMemberNickname(updateMember.getMemberNickname());
+        savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber());
+        savedMember.setMemberEmail(updateMember.getMemberEmail());
+        savedMember.setMemberGender(updateMember.getMemberGender());
+
+    }
+
+    public void removeMember(MemberDTO member) {
+
+        Member savedMember = memberRepository.findByMemberNo((long) member.getMemberNo());
+        savedMember.setMemberStatus("N");
+
     }
 }
