@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostCategoryDTO {
+public class BoardCategoryDTO {
     private String categoryCode;
     private String categoryName;
 }

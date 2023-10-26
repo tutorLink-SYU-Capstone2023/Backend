@@ -8,8 +8,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "POST_CATEGORY")
-public class PostCategory {
+@Table(name = "BOARD_CATEGORY")
+
+public class BoardCategory {
 
     @Id
     @Column(name = "category_code")
