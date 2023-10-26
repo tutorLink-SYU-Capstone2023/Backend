@@ -23,13 +23,14 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "category_code")
-    private PostCategory category;
+    private BoardCategory category;
 
     @Column(name = "post_title")
     private String postTitle;
 
     @Column(name = "post_content")
     private String postContent;
+
     @Column(name = "post_regist_date")
     private Date postRegistDate;
 
