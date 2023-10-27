@@ -2,23 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>join</title>
+    <title>회원가입</title>
 </head>
 <body>
 <h1>회원가입 페이지</h1>
 <form action="/member/join" method="post">
     <div>
-        <span>아이디 : </span>
+        <span>아이디: </span>
         <input type="text" name="memberId">
     </div>
     <div>
-        <span>비밀번호 : </span>
-        <input type="password" name="memberPwd">
+        <span>비밀번호: </span>
+        <input type="password" name="memberPw">
     </div>
     <div>
-        <span>이름 : </span>
+        <span>닉네임: </span>
+        <input type="text" name="memberNickname">
+    </div>
+    <div>
+        <span>이름: </span>
         <input type="text" name="memberName">
     </div>
+    <div>
+        <span>이메일: </span>
+        <input type="email" name="memberEmail">
+    </div>
+    <div>
+        <span>성별: </span>
+        <label><input type="radio" name="memberGender" value="M">남성</label>
+        <label><input type="radio" name="memberGender" value="F">여성</label>
+    </div>
+    <div>
+        <span>생년월일: </span>
+        <input type="date" name="memberBirthday">
+    </div>
+    <div>
+        <span>전화번호: </span>
+        <input type="tel" name="memberPhoneNumber">
+    </div>
+
     <div>
         <button>회원가입</button>
     </div>

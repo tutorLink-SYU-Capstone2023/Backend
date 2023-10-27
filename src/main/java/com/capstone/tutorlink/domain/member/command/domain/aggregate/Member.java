@@ -1,11 +1,12 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.MemberRole;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "MEMBER")
@@ -15,7 +16,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_no")
-    private int memberNo;
+    private Integer memberNo;
 
     @Column(name = "member_id", length = 20, nullable = false)
     private String memberId;
@@ -33,7 +34,7 @@ public class Member {
     private String memberEmail;
 
     @Column(name = "member_gender", length = 1, nullable = false)
-    private char memberGender;
+    private Character memberGender;
 
     @Column(name = "member_birthday", nullable = false)
     private Date memberBirthday;
@@ -45,10 +46,10 @@ public class Member {
     private String memberStatus;
 
     @Column(name = "member_phonenumber", nullable = false)
-    private int memberPhoneNumber;
+    private Integer memberPhoneNumber;
 
     @Column(name = "tutor_school_authorize", length = 1, nullable = false)
-    private char tutorSchoolAuthorize;
+    private Character tutorSchoolAuthorize;
 
     @Column(name = "tutor_midleschool", length = 45)
     private String tutorMiddleSchool;
@@ -60,7 +61,7 @@ public class Member {
     private String tutorUni;
 
     @Column(name = "tutor_uni_is_enrolled", length = 1)
-    private char tutorUniIsEnrolled;
+    private Character tutorUniIsEnrolled;
 
     @Column(name = "tutor_major", length = 45)
     private String tutorMajor;
