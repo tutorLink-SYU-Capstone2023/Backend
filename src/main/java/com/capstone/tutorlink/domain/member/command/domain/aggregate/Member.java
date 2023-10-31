@@ -1,6 +1,5 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
-import com.capstone.tutorlink.domain.member.command.domain.aggregate.MemberRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,7 @@ public class Member {
     @Column(name = "member_name", length = 45, nullable = false)
     private String memberName;
 
-    @Column(name = "member_email", length = 45, nullable = false)
+    @Column(name = "member_email", length = 100, nullable = false)
     private String memberEmail;
 
     @Column(name = "member_gender", length = 1, nullable = false)
@@ -39,22 +38,22 @@ public class Member {
     @Column(name = "member_birthday", nullable = false)
     private Date memberBirthday;
 
-    @Column(name = "enroll_date", columnDefinition = "datetime default now()", nullable = false)
-    private Date enrollDate;
+    @Column(name = "member_enroll_date", columnDefinition = "datetime default now()", nullable = false)
+    private Date memberEnrollDate; // member_enroll_date를 memberEnrollDate로 수정
 
-    @Column(name = "member_status")
-    private String memberStatus;
+    @Column(name = "member_current_status")
+    private String memberCurrentStatus; // member_current_status를 memberCurrentStatus로 수정
 
-    @Column(name = "member_phonenumber", nullable = false)
-    private Integer memberPhoneNumber;
+    @Column(name = "member_phone_number", nullable = false)
+    private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
     @Column(name = "tutor_school_authorize", length = 1, nullable = false)
     private Character tutorSchoolAuthorize;
 
-    @Column(name = "tutor_midleschool", length = 45)
+    @Column(name = "tutor_middle_school", length = 45)
     private String tutorMiddleSchool;
 
-    @Column(name = "tutor_highschool", length = 45)
+    @Column(name = "tutor_high_school", length = 45)
     private String tutorHighSchool;
 
     @Column(name = "tutor_uni", length = 45)
@@ -67,13 +66,13 @@ public class Member {
     private String tutorMajor;
 
     @Column(name = "tutor_major_num")
-    private Integer tutorMajorNum;
+    private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
 
     @Column(name = "tutor_authorize", length = 45)
     private String tutorAuthorize;
 
-    @Column(name = "key", length = 255, nullable = false)
-    private String key;
+    @Column(name = "my_key", length = 255, nullable = false)
+    private String myKey; // my_key를 myKey로 수정
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_no")

@@ -17,6 +17,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Slf4j
 @Controller
 @RequestMapping("/member")
@@ -42,12 +46,33 @@ public class MemberController {
     public void joinPage(){ }
 
     @PostMapping("/join")
-    public String joinPage(MemberDTO memberInfo, RedirectAttributes rttr) {
+    public String joinMember(@ModelAttribute MemberDTO memberInfo, RedirectAttributes rttr) {
+
+        log.info("[MemberController] joinMember ==============================");
+
+        // Replace dashes in memberPhoneNumber
+        memberInfo.setMemberPhoneNumber(memberInfo.getMemberPhoneNumber().replace("-", ""));
+
+        log.info("[MemberController] joinMember request Member : " + memberInfo);
+
+        memberService.joinMember(memberInfo);
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.regist"));
+
+        log.info("[MemberController] joinMember ==============================");
+
+        return "redirect:/";
+    }
+
+
+    /*
+    @PostMapping("/join")
+    public String joinMember(@ModelAttribute MemberDTO memberInfo, RedirectAttributes rttr) {
         memberService.joinMember(memberInfo);
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
         return "redirect:/";
     }
-
+     */
 
     @PostMapping("/idDupCheck")
     public ResponseEntity<String> checkDuplication(@RequestBody MemberDTO member, RedirectAttributes rttr) {
