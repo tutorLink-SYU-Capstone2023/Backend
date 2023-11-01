@@ -1,8 +1,11 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -11,6 +14,8 @@ import javax.persistence.*;
 @Table(name = "MEMBER")
 @Getter
 @Setter
+@NoArgsConstructor
+@DynamicInsert
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,17 +43,18 @@ public class Member {
     @Column(name = "member_birthday", nullable = false)
     private Date memberBirthday;
 
-    @Column(name = "member_enroll_date", columnDefinition = "datetime default now()", nullable = false)
-    private Date memberEnrollDate; // member_enroll_date를 memberEnrollDate로 수정
+    @Column(name = "member_enroll_date")
+    private Date memberEnrollDate;
 
-    @Column(name = "member_current_status")
-    private String memberCurrentStatus; // member_current_status를 memberCurrentStatus로 수정
+
+    @Column(name = "member_current_status", nullable = false)
+    private String memberCurrentStatus = "A"; // 기본값 설정
 
     @Column(name = "member_phone_number", nullable = false)
     private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
-    @Column(name = "tutor_school_authorize", length = 1, nullable = false)
-    private Character tutorSchoolAuthorize;
+    @Column(name = "tutor_school_authorize", nullable = false)
+    private String tutorSchoolAuthorize ="N";
 
     @Column(name = "tutor_middle_school", length = 45)
     private String tutorMiddleSchool;
@@ -59,8 +65,8 @@ public class Member {
     @Column(name = "tutor_uni", length = 45)
     private String tutorUni;
 
-    @Column(name = "tutor_uni_is_enrolled", length = 1)
-    private Character tutorUniIsEnrolled;
+    @Column(name = "tutor_uni_is_enrolled")
+    private String  tutorUniIsEnrolled;
 
     @Column(name = "tutor_major", length = 45)
     private String tutorMajor;
@@ -76,5 +82,5 @@ public class Member {
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_no")
-    public List<MemberRole> memberRoleList;
+    public List<MemberRole> memberRoleList = new ArrayList<>();
 }

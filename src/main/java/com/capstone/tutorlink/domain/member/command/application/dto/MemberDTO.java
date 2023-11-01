@@ -42,11 +42,11 @@ public class MemberDTO implements UserDetails {
     private String memberCurrentStatus; // member_current_status를 memberCurrentStatus로 수정
     private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
-    private char tutorSchoolAuthorize;
+    private String tutorSchoolAuthorize;
     private String tutorMiddleSchool;
     private String tutorHighSchool;
     private String tutorUni;
-    private char tutorUniIsEnrolled;
+    private String tutorUniIsEnrolled;
     private String tutorMajor;
     private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
     private String tutorAuthorize;

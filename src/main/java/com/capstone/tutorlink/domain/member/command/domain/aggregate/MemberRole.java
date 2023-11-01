@@ -15,12 +15,13 @@ public class MemberRole {
     @Column(name = "member_role_code")
     private int memberRoleCode;
 
-    @Column(name = "member_no")
-    private int memberNo;
-
     @ManyToOne
     @JoinColumn(name = "authority_num")
     private Authority authority;
+
+    @ManyToOne
+    @JoinColumn(name = "member_no")
+    private Member member;
 
     public MemberRole() {
     }

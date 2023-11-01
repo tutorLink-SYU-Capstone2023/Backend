@@ -64,25 +64,20 @@ public class MemberService {
     }
     */
     @Transactional
-    public void joinMember(MemberDTO memberInfo) {
-        // 회원 엔티티 생성
-        Member member = new Member();
-        member.setMemberId(memberInfo.getMemberId());
-        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
-        member.setMemberNickname(memberInfo.getMemberNickname());
-        member.setMemberName(memberInfo.getMemberName());
-        member.setMemberEmail(memberInfo.getMemberEmail());
-        member.setMemberGender(memberInfo.getMemberGender());
-        member.setMemberBirthday(memberInfo.getMemberBirthday());
-        member.setMemberPhoneNumber(memberInfo.getMemberPhoneNumber());
-        member.setMyKey(memberInfo.getMyKey());
+    public void joinMember(MemberDTO member) {
+        // MemberDTO를 Member로 변환
+        Member memberEntity = modelMapper.map(member, Member.class);
+
+        // 비밀번호 암호화
+        String encryptedPassword = passwordEncoder.encode(member.getMemberPw());
+        memberEntity.setMemberPw(encryptedPassword);
 
         // 권한 설정
         Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-        MemberRole memberRole = new MemberRole(authority);
+        memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
 
         // 회원 저장
-        memberRepository.save(member);
+        memberRepository.save(memberEntity);
     }
 
 
