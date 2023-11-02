@@ -12,7 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,8 +104,39 @@ public class MemberController {
 
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/update")
+    public String goModifyMember() {
 
+        return "member/update";
+    }
+    @PostMapping("/update")
+    public String modifyMember(@ModelAttribute MemberDTO updateMember,
+                               @AuthenticationPrincipal MemberDTO loginMember,
+                               RedirectAttributes rttr) {
 
+        log.info("[MemberController] modifyMember ==============================");
+
+        //updateMember.setMemberPw(loginMember.getMemberPw());
+        updateMember.setMemberNickname(loginMember.getMemberNickname());
+        updateMember.setMemberEmail(loginMember.getMemberEmail());
+        updateMember.setMemberGender(loginMember.getMemberGender());
+        updateMember.setMemberBirthday(loginMember.getMemberBirthday());
+        updateMember.setMemberPhoneNumber(loginMember.getMemberPhoneNumber().replace("-", ""));
+        //updateMember.setMyKey(loginMember.getMyKey());
+
+        log.info("[MemberController] modifyMember request Member : {}", updateMember);
+
+        memberService.modifyMember(updateMember);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication, loginMember.getMemberId()));
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.modify"));
+
+        log.info("[MemberController] modifyMember ==============================");
+
+        return "redirect:/member/mypage";
+    }
 
     @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
@@ -124,6 +160,14 @@ public class MemberController {
         }
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/member/update")
+    public String getUpdatePage(Authentication authentication) {
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            System.out.println("User has authority: " + authority.getAuthority());
+        }
+        return "member/update";
+    }
+
     @ControllerAdvice
     public class ExceptionController {
         @ExceptionHandler(UserNotFoundException.class)
@@ -159,6 +203,14 @@ public class MemberController {
         }
         ErrorResponse errorResponse = new ErrorResponse(code, description, detail);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    protected Authentication createNewAuthentication(Authentication currentAuth, String memberId) {
+
+        UserDetails newPrincipal = authenticationService.loadUserByUsername(memberId);
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
+        newAuth.setDetails(currentAuth.getDetails());
+        return newAuth;
+
     }
 
 }

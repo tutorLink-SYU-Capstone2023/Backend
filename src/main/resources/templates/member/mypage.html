@@ -1,18 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>mypage</title>
+    <title>마이 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .btns {
+            margin-top: 20px;
+        }
+
+        .btns a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .btns button {
+            background: none;
+            color: gray;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <h1>마이 페이지</h1>
-<th:block sec:authorize="isAuthenticated()">
-    <h3>principal : <span sec:authentication="principal"></span></h3>
-    <h3>principal.username : <span sec:authentication="principal.username"></span></h3>
-    <h3>principal.memberNo : <span sec:authentication="principal.memberNo"></span></h3>
-    <h3>principal.memberId : <span sec:authentication="principal.memberId"></span></h3>
-    <h3>[[${#authentication.principal.memberName}]]님 환영합니다.</h3>
-</th:block>
+<div class="container">
+    <th:block sec:authorize="isAuthenticated()">
+        <h3>회원 번호: <span sec:authentication="principal.memberNo"></span></h3>
+        <h3>아이디: <span sec:authentication="principal.memberId"></span></h3>
+        <h3>닉네임: <span sec:authentication="principal.memberNickname"></span></h3>
+        <h3>이름: <span sec:authentication="principal.memberName"></span></h3>
+        <h3>이메일: <span sec:authentication="principal.memberEmail"></span></h3>
+        <h3>성별: <span sec:authentication="principal.memberGender"></span></h3>
+        <h3>생년월일: <span sec:authentication="principal.memberBirthday"></span></h3>
+        <h3>전화번호: <span sec:authentication="principal.memberPhoneNumber"></span></h3>
+        <h3>My Key: <span sec:authentication="principal.myKey"></span></h3>
+    <div class="btns">
+        <button onclick="location.href='/member/update'">수정하기</button>
+        <button onclick="location.href='/'">돌아가기</button>
+    </div>
+    </th:block>
+</div>
 </body>
 </html>
