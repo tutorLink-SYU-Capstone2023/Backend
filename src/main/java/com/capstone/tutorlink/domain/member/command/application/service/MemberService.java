@@ -63,30 +63,14 @@ public class MemberService {
     @Transactional
     public Member modifyMember(MemberDTO updateMember, MemberDTO loginMember) {
         try {
-            // 데이터베이스에서 현재 로그인한 사용자 정보를 가져옵니다.
-            log.info("MemberNo :{}" ,loginMember.getMemberNo()) ;
             Member savedMember = memberRepository.findByMemberNo(loginMember.getMemberNo());
-            System.out.println(savedMember.toString());
-            System.out.println("---------------------------");
-            if (savedMember != null) {
-                // 변경된 정보를 업데이트합니다.
-                log.info("0") ;
-                //loginMember.getMemberNickname()
-                savedMember.setMemberNickname(updateMember.getMemberNickname());
-                log.info("1") ;
-                //loginMember.getMemberEmail()
-                savedMember.setMemberEmail(updateMember.getMemberEmail());
-                log.info("2") ;
-                //loginMember.getMemberGender()
-                savedMember.setMemberGender(updateMember.getMemberGender());
-                log.info("3") ;
-                //loginMember.getMemberBirthday()
-                savedMember.setMemberBirthday(updateMember.getMemberBirthday());
-                //loginMember.getMemberPhoneNumber()
-                savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-", ""));
-                log.info("5") ;
 
-                log.info("서비스에서 업데이트에 활용된 개체", savedMember);
+            if (savedMember != null) {
+                savedMember.setMemberNickname(updateMember.getMemberNickname());
+                savedMember.setMemberEmail(updateMember.getMemberEmail());
+                savedMember.setMemberGender(loginMember.getMemberGender()); // 성별은 loginMember에서 가져오기
+                savedMember.setMemberBirthday(updateMember.getMemberBirthday());
+                savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-",""));
 
                 // 변경사항을 저장
                 memberRepository.save(savedMember);
@@ -104,6 +88,7 @@ public class MemberService {
     }
 
 
+    @Transactional
     public void removeMember(MemberDTO member) {
 
         Member savedMember = memberRepository.findByMemberNo(member.getMemberNo());

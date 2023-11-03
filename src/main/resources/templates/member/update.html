@@ -37,6 +37,24 @@
             }
         });
     }
+
+    function leaveMember() {
+        if (confirm("정말로 탈퇴하시겠습니까?")) {
+            $.ajax({
+                type: "GET",
+                url: "/member/leave",
+                success: function(response) {
+                    // 탈퇴가 성공하면 로그아웃 및 리디렉션
+                    window.location.href = "/";
+                },
+                error: function() {
+                    // 탈퇴 실패 시 오류 처리
+                    alert("탈퇴 실패");
+                }
+            });
+        }
+    }
+
 </script>
 <head>
     <meta charset="UTF-8">
@@ -102,6 +120,7 @@
                     <span th:text="${#authentication.principal.memberName}"></span>
                 </td>
             </tr>
+            <tr>
                 <td>닉네임</td>
                 <td>
                     <input type="text" name="memberNickname" th:value="${#authentication.principal.memberNickname}">
@@ -118,8 +137,8 @@
             <tr>
                 <td>성별</td>
                 <td>
-                    <input type="radio" name="memberGender" value="M" th:checked="${#strings.equals(#authentication.principal.memberGender, '남자')}"> 남자
-                    <input type="radio" name="memberGender" value="F" th:checked="${#strings.equals(#authentication.principal.memberGender, '여자')}"> 여자
+                    <input type="radio" name="memberGender" value="M" th:checked="${#strings.equals(#authentication.principal.memberGender, 'M')}"> 남자
+                    <input type="radio" name="memberGender" value="F" th:checked="${#strings.equals(#authentication.principal.memberGender, 'F')}"> 여자
                 </td>
             </tr>
             <tr>
@@ -146,7 +165,7 @@
 
         <div class="btns">
             <input type="submit" value="저장하기" id="saveButton" onclick="updateMemberInfo()">
-            <input type="button" value="탈퇴하기" id="deleteMember">
+            <input type="button" value="탈퇴하기" id="deleteMember" onclick="leaveMember()">
             <a href="/member/mypage">마이 페이지로 돌아가기</a>
         </div>
     </th:block>
