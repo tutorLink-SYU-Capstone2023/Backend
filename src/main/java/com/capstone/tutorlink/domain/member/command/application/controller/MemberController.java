@@ -12,7 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,6 +104,50 @@ public class MemberController {
 
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/update")
+    public String goModifyMember() {
+
+        return "member/update";
+    }
+
+    @PostMapping("/update")
+    public String modifyMember(MemberDTO updateMember,
+                               @AuthenticationPrincipal MemberDTO loginMember,
+                               RedirectAttributes rttr)  {
+
+        log.info("[MemberController] modifyMember ==============================");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        // 문자열 -> Date
+        /*ystem.out.println(updateMember.toString());
+        Date date = formatter.parse(birthday);
+        System.out.println("updateMember " +nickname);
+        System.out.println("email " +email);
+        System.out.println("birthday " +birthday);
+        System.out.println("phone " +phone);
+        System.out.println("loginMember " + loginMember.toString());*/
+        // MemberService를 통해 회원 정보 업데이트
+        Member updatedMember = memberService.modifyMember(updateMember,loginMember);
+
+        // 변경된 회원 정보로 Authentication을 업데이트
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 수정된 회원 정보로 MemberDTO 업데이트
+        loginMember.setMemberNickname(updatedMember.getMemberNickname());
+        loginMember.setMemberEmail(updatedMember.getMemberEmail());
+        loginMember.setMemberGender(updatedMember.getMemberGender());
+        loginMember.setMemberBirthday(updatedMember.getMemberBirthday());
+        loginMember.setMemberPhoneNumber(updatedMember.getMemberPhoneNumber());
+
+        // SecurityContextHolder에 수정된 Authentication 설정
+        SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication, loginMember.getMemberId()));
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.modify"));
+
+        log.info("[MemberController] modifyMember ==============================");
+
+        return "redirect:/member/mypage";
+    }
 
 
 
@@ -110,7 +159,7 @@ public class MemberController {
     }
     @GetMapping("/tutee")
     public String findAllTutee(@PageableDefault Pageable pageable, Model model){
-       return "/member/tutee";
+        return "/member/tutee";
     }
     @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
@@ -124,6 +173,14 @@ public class MemberController {
         }
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/member/update")
+    public String getUpdatePage(Authentication authentication) {
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            System.out.println("User has authority: " + authority.getAuthority());
+        }
+        return "member/update";
+    }
+
     @ControllerAdvice
     public class ExceptionController {
         @ExceptionHandler(UserNotFoundException.class)
@@ -159,6 +216,14 @@ public class MemberController {
         }
         ErrorResponse errorResponse = new ErrorResponse(code, description, detail);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    protected Authentication createNewAuthentication(Authentication currentAuth, String memberId) {
+
+        UserDetails newPrincipal = authenticationService.loadUserByUsername(memberId);
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
+        newAuth.setDetails(currentAuth.getDetails());
+        return newAuth;
+
     }
 
 }

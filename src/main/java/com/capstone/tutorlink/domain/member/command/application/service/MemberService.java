@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Date;
@@ -36,71 +37,74 @@ public class MemberService {
         return memberRepository.findByMemberIdAndMemberCurrentStatus(memberId, "A").isPresent();
     }
 
-    /*
-    @Transactional
-    public void joinMember(MemberDTO memberInfo) {
-        Member member = modelMapper.map(memberInfo, Member.class);
-        member.setMemberId(memberInfo.getMemberId());
-        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
-        member.setMemberNickname(memberInfo.getMemberNickname());
-        member.setMemberName(memberInfo.getMemberName());
-        member.setMemberEmail(memberInfo.getMemberEmail());
-        member.setMemberGender(memberInfo.getMemberGender());
-        member.setMemberBirthday(memberInfo.getMemberBirthday());
-        member.setMemberEnrollDate(new Date());
-        member.setMemberCurrentStatus("A");
-        member.setMemberPhoneNumber(memberInfo.getMemberPhoneNumber());
-        member.setMyKey(memberInfo.getMyKey());
-        // 권한 설정
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-        member.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
-        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
-
-         // 회원 엔티티에 권한 설정
-        member.setMemberRoleList(Collections.singletonList(memberRole));
-
-        // 회원 저장
-        memberRepository.save(member);
-    }
-    */
     @Transactional
     public void joinMember(MemberDTO member) {
-        // MemberDTO를 Member로 변환
-        Member memberEntity = modelMapper.map(member, Member.class);
+        try {
+            // MemberDTO를 Member로 변환
+            Member memberEntity = modelMapper.map(member, Member.class);
 
-        // 비밀번호 암호화
-        String encryptedPassword = passwordEncoder.encode(member.getMemberPw());
-        memberEntity.setMemberPw(encryptedPassword);
+            // 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(member.getMemberPw());
+            memberEntity.setMemberPw(encryptedPassword);
 
-        // 권한 설정
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-        memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
+            // 권한 설정
+            Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
+            memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
 
-        // 회원 저장
-        memberRepository.save(memberEntity);
+            // 회원 저장
+            memberRepository.save(memberEntity);
+        } catch (Exception e) {
+            // 예외 처리 - 예외 메시지를 로그에 기록
+            log.error("Error in joinMember: " + e.getMessage());
+        }
     }
 
 
+    @Transactional
+    public Member modifyMember(MemberDTO updateMember, MemberDTO loginMember) {
+        try {
+            // 데이터베이스에서 현재 로그인한 사용자 정보를 가져옵니다.
+            log.info("MemberNo :{}" ,loginMember.getMemberNo()) ;
+            Member savedMember = memberRepository.findByMemberNo(loginMember.getMemberNo());
+            System.out.println(savedMember.toString());
+            System.out.println("---------------------------");
+            if (savedMember != null) {
+                // 변경된 정보를 업데이트합니다.
+                log.info("0") ;
+                //loginMember.getMemberNickname()
+                savedMember.setMemberNickname(updateMember.getMemberNickname());
+                log.info("1") ;
+                //loginMember.getMemberEmail()
+                savedMember.setMemberEmail(updateMember.getMemberEmail());
+                log.info("2") ;
+                //loginMember.getMemberGender()
+                savedMember.setMemberGender(updateMember.getMemberGender());
+                log.info("3") ;
+                //loginMember.getMemberBirthday()
+                savedMember.setMemberBirthday(updateMember.getMemberBirthday());
+                //loginMember.getMemberPhoneNumber()
+                savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-", ""));
+                log.info("5") ;
 
+                // 변경사항을 저장
+                memberRepository.save(savedMember);
 
-    public void registMember(MemberDTO member) {
-
-        memberRepository.save(modelMapper.map(member, Member.class));
+                return savedMember;
+            } else {
+                // 사용자를 찾을 수 없음
+                throw new EntityNotFoundException("User not found with ID: " + loginMember.getMemberNo());
+            }
+        } catch (Exception e) {
+            // 예외 처리 - 예외 메시지를 로그에 기록
+            log.error("Error in modifyMember: " + e.getMessage());
+            throw e; // 예외 다시 던지기
+        }
     }
 
-    public void modifyMember(MemberDTO updateMember) {
-
-        Member savedMember = memberRepository.findByMemberNo((long) updateMember.getMemberNo());
-        savedMember.setMemberNickname(updateMember.getMemberNickname());
-        savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber());
-        savedMember.setMemberEmail(updateMember.getMemberEmail());
-        savedMember.setMemberGender(updateMember.getMemberGender());
-
-    }
 
     public void removeMember(MemberDTO member) {
 
-        Member savedMember = memberRepository.findByMemberNo((long) member.getMemberNo());
+        Member savedMember = memberRepository.findByMemberNo(member.getMemberNo());
         savedMember.setMemberCurrentStatus("D");
 
     }
