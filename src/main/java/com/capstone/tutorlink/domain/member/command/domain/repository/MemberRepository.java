@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByMemberIdAndMemberCurrentStatus(String memberId, String memberCurrentStatus);
-    Member findByMemberNo(Long memberNo);
+    Member findByMemberNo(int memberNo);
 }

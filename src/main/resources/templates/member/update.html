@@ -6,22 +6,26 @@
 <script type="text/javascript">
     function updateMemberInfo() {
         // 입력된 정보 가져오기
-        var nickname = $("input[name='nickname']").val();
-        var email = $("input[name='email']").val();
-        var gender = $("input[name='gender']:checked").val();
-        var birthday = $("input[name='birthday']").val();
-        var phone = $("input[name='phone']").val();
-
+        var memberNickname = $("input[name='memberNickname']").val();
+        var memberEmail = $("input[name='memberEmail']").val();
+        var memberGender = $("input[name='memberGender']:checked").val();
+        var memberBirthday = $("input[name='memberBirthday']").val();
+        var memberPhoneNumber = $("input[name='memberPhoneNumber']").val();
+        console.log(memberNickname)
+        console.log(memberEmail)
+        console.log(memberGender)
+        console.log(memberBirthday)
+        console.log(memberPhoneNumber)
         // 서버로 데이터 전송
         $.ajax({
             type: "POST",
-            url: "/update",
+            url: "/member/update",
             data: {
-                nickname: nickname,
-                email: email,
-                gender: gender,
-                birthday: birthday,
-                phone: phone
+                memberNickname: memberNickname,
+                memberEmail: memberEmail,
+                memberGender: memberGender,
+                memberBirthday: memberBirthday,
+                memberPhoneNumber: memberPhoneNumber
             },
             success: function(response) {
                 // 업데이트가 성공하면 마이 페이지로 리디렉션
@@ -34,7 +38,6 @@
         });
     }
 </script>
-
 <head>
     <meta charset="UTF-8">
     <title>마이 페이지</title>
@@ -101,34 +104,34 @@
             </tr>
                 <td>닉네임</td>
                 <td>
-                    <input type="text" name="nickname" th:value="${#authentication.principal.memberNickname}">
+                    <input type="text" name="memberNickname" th:value="${#authentication.principal.memberNickname}">
                 </td>
             </tr>
 
             <tr>
                 <td>이메일 </td>
                 <td>
-                    <input type="email" name="email" th:value="${#authentication.principal.memberEmail}">
+                    <input type="email" name="memberEmail" th:value="${#authentication.principal.memberEmail}">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td>성별</td>
                 <td>
-                    <input type="radio" name="gender" value="M" th:checked="${#strings.equals(#authentication.principal.memberGender, '남자')}"> 남자
-                    <input type="radio" name="gender" value="F" th:checked="${#strings.equals(#authentication.principal.memberGender, '여자')}"> 여자
+                    <input type="radio" name="memberGender" value="M" th:checked="${#strings.equals(#authentication.principal.memberGender, '남자')}"> 남자
+                    <input type="radio" name="memberGender" value="F" th:checked="${#strings.equals(#authentication.principal.memberGender, '여자')}"> 여자
                 </td>
             </tr>
             <tr>
                 <td>생년월일</td>
                 <td>
-                    <input type="text" name="birthday" th:value="${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}">
+                    <input type="text" name="memberBirthday" th:value="${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}">
                 </td>
             </tr>
             <tr>
                 <td> 전화번호 </td>
                 <td>
-                    <input type="tel" name="phone" th:value="${#authentication.principal.memberPhoneNumber}">
+                    <input type="tel" name="memberPhoneNumber" th:value="${#authentication.principal.memberPhoneNumber}">
                 </td>
                 <td></td>
             </tr>

@@ -3,6 +3,7 @@ package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class Member {
     private String memberEmail;
 
     @Column(name = "member_gender", length = 1, nullable = false)
-    private Character memberGender;
+    private String memberGender;
 
     @Column(name = "member_birthday", nullable = false)
     private Date memberBirthday;
@@ -83,4 +84,31 @@ public class Member {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_no")
     public List<MemberRole> memberRoleList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberNo=" + memberNo +
+                ", memberId='" + memberId + '\'' +
+                ", memberPw='" + memberPw + '\'' +
+                ", memberNickname='" + memberNickname + '\'' +
+                ", memberName='" + memberName + '\'' +
+                ", memberEmail='" + memberEmail + '\'' +
+                ", memberGender=" + memberGender +
+                ", memberBirthday=" + memberBirthday +
+                ", memberEnrollDate=" + memberEnrollDate +
+                ", memberCurrentStatus='" + memberCurrentStatus + '\'' +
+                ", memberPhoneNumber='" + memberPhoneNumber + '\'' +
+                ", tutorSchoolAuthorize='" + tutorSchoolAuthorize + '\'' +
+                ", tutorMiddleSchool='" + tutorMiddleSchool + '\'' +
+                ", tutorHighSchool='" + tutorHighSchool + '\'' +
+                ", tutorUni='" + tutorUni + '\'' +
+                ", tutorUniIsEnrolled='" + tutorUniIsEnrolled + '\'' +
+                ", tutorMajor='" + tutorMajor + '\'' +
+                ", tutorMajorNum=" + tutorMajorNum +
+                ", tutorAuthorize='" + tutorAuthorize + '\'' +
+                ", myKey='" + myKey + '\'' +
+                ", memberRoleList=" + memberRoleList +
+                '}';
+    }
 }

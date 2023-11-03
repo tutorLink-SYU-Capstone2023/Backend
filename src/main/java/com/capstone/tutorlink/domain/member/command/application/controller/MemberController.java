@@ -115,21 +115,22 @@ public class MemberController {
                                RedirectAttributes rttr) {
 
         log.info("[MemberController] modifyMember ==============================");
-
-        //updateMember.setMemberPw(loginMember.getMemberPw());
-        updateMember.setMemberNickname(loginMember.getMemberNickname());
-        updateMember.setMemberEmail(loginMember.getMemberEmail());
-        updateMember.setMemberGender(loginMember.getMemberGender());
-        updateMember.setMemberBirthday(loginMember.getMemberBirthday());
-        updateMember.setMemberPhoneNumber(loginMember.getMemberPhoneNumber().replace("-", ""));
-        //updateMember.setMyKey(loginMember.getMyKey());
-
+        log.info("매개변수로 넘어온 멤버", loginMember);
+        // 업데이트된 정보를 loginMember에 반영
+        loginMember.setMemberNickname(updateMember.getMemberNickname());
+        loginMember.setMemberEmail(updateMember.getMemberEmail());
+        updateMember.setMemberGender("M");
+        loginMember.setMemberGender(updateMember.getMemberGender());
+        loginMember.setMemberBirthday(updateMember.getMemberBirthday());
+        loginMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-", ""));
+        // updateMember.setMyKey(updateMember.getMyKey()); // 필요하다면 처리
+        log.info("수정 후 멤버", loginMember);
         log.info("[MemberController] modifyMember request Member : {}", updateMember);
 
-        memberService.modifyMember(updateMember);
+        // memberService를 통해 회원 정보 업데이트
+        memberService.modifyMember(updateMember,loginMember);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication, loginMember.getMemberId()));
+        // 변경된 회원 정보로 Authentication을 업데이트
 
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.modify"));
 
@@ -137,6 +138,7 @@ public class MemberController {
 
         return "redirect:/member/mypage";
     }
+
 
     @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
