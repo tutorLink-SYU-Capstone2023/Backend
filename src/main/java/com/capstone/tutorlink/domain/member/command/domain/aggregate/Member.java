@@ -1,9 +1,11 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
-import com.capstone.tutorlink.domain.member.command.domain.aggregate.MemberRole;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import javax.persistence.*;
 @Table(name = "MEMBER")
 @Getter
 @Setter
+@NoArgsConstructor
+@DynamicInsert
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +34,7 @@ public class Member {
     @Column(name = "member_name", length = 45, nullable = false)
     private String memberName;
 
-    @Column(name = "member_email", length = 45, nullable = false)
+    @Column(name = "member_email", length = 100, nullable = false)
     private String memberEmail;
 
     @Column(name = "member_gender", length = 1, nullable = false)
@@ -39,43 +43,44 @@ public class Member {
     @Column(name = "member_birthday", nullable = false)
     private Date memberBirthday;
 
-    @Column(name = "enroll_date", columnDefinition = "datetime default now()", nullable = false)
-    private Date enrollDate;
+    @Column(name = "member_enroll_date")
+    private Date memberEnrollDate;
 
-    @Column(name = "member_status")
-    private String memberStatus;
 
-    @Column(name = "member_phonenumber", nullable = false)
-    private Integer memberPhoneNumber;
+    @Column(name = "member_current_status", nullable = false)
+    private String memberCurrentStatus = "A"; // 기본값 설정
 
-    @Column(name = "tutor_school_authorize", length = 1, nullable = false)
-    private Character tutorSchoolAuthorize;
+    @Column(name = "member_phone_number", nullable = false)
+    private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
-    @Column(name = "tutor_midleschool", length = 45)
+    @Column(name = "tutor_school_authorize", nullable = false)
+    private String tutorSchoolAuthorize ="N";
+
+    @Column(name = "tutor_middle_school", length = 45)
     private String tutorMiddleSchool;
 
-    @Column(name = "tutor_highschool", length = 45)
+    @Column(name = "tutor_high_school", length = 45)
     private String tutorHighSchool;
 
     @Column(name = "tutor_uni", length = 45)
     private String tutorUni;
 
-    @Column(name = "tutor_uni_is_enrolled", length = 1)
-    private Character tutorUniIsEnrolled;
+    @Column(name = "tutor_uni_is_enrolled")
+    private String  tutorUniIsEnrolled;
 
     @Column(name = "tutor_major", length = 45)
     private String tutorMajor;
 
     @Column(name = "tutor_major_num")
-    private Integer tutorMajorNum;
+    private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
 
     @Column(name = "tutor_authorize", length = 45)
     private String tutorAuthorize;
 
-    @Column(name = "key", length = 255, nullable = false)
-    private String key;
+    @Column(name = "my_key", length = 255, nullable = false)
+    private String myKey; // my_key를 myKey로 수정
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_no")
-    public List<MemberRole> memberRoleList;
+    public List<MemberRole> memberRoleList = new ArrayList<>();
 }

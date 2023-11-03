@@ -6,16 +6,12 @@ import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepo
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,7 +29,7 @@ public class AuthenticationService implements UserDetailsService {
         log.info("[AuthenticationService] =====================================================");
         log.info("[AuthenticationService] memberId : " + memberId);
 
-        Member selectedMember = memberRepository.findByMemberIdAndMemberStatus(memberId, "Y").orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
+        Member selectedMember = memberRepository.findByMemberIdAndMemberCurrentStatus(memberId, "A").orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
 
         MemberDTO member = modelMapper.map(selectedMember, MemberDTO.class);
 

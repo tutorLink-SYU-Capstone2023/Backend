@@ -1,89 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <script type="text/javascript" th:src="@{/js/event.js}"></script>
+    <meta charset="UTF-8">
+    <title>mypage</title>
 </head>
 <body>
-
-<div>
-    <h1>회원 정보 수정</h1>
-
-    <form th:action="@{/member/mypage}" method="post">
-        <table>
-            <tr>
-                <td>* 아이디</td>
-                <td><p th:text="${#authentication.principal.memberId}"></p></td>
-            </tr>
-            <tr>
-                <td>* 닉네임</td>
-                <td><input type="text" maxlength="5" name="nickname" th:value="${#authentication.principal.nickname}" required></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>연락처</td>
-                <td><input type="tel" name="phone" th:value="${#authentication.principal.phone}"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>이메일</td>
-                <td><input type="email" name="email" th:value="${#authentication.principal.email}"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>우편번호</td>
-                <td><input type="text" name="zipCode" id="zipCode"
-                           th:value="${#strings.listSplit(#authentication.principal.address,'$').size() > 0 ? #strings.listSplit(#authentication.principal.address,'$')[0] : '' }"
-                           readonly>
-                </td>
-                <td><input type="button" value="검색" class="btn btn-yg" id="searchZipCode"></td>
-            </tr>
-            <tr>
-                <td>주소</td>
-                <td><input type="text" name="address1" id="address1"
-                           th:value="${#strings.listSplit(#authentication.principal.address,'$').size() > 1 ? #strings.listSplit(#authentication.principal.address,'$')[1] : '' }"
-                           readonly>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>상세주소</td>
-                <td><input type="text" name="address2" id="address2"
-                           th:value="${#strings.listSplit(#authentication.principal.address,'$').size() > 2 ? #strings.listSplit(#authentication.principal.address,'$')[2] : '' }"></td>
-                <td></td>
-            </tr>
-        </table>
-        <br>
-        <div class="btns">
-            <input type="submit" value="수정하기">
-            <input type="button" value="탈퇴하기" id="deleteMember">
-        </div>
-    </form>
-</div>
-
-<div th:replace="common/footer.html"></div>
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script>
-    const $searchZipCode = document.getElementById("searchZipCode");
-    const $goMain = document.getElementById("goMain");
-
-    $searchZipCode.onclick = function() {
-
-        /* 다음 우편번호 검색 창을 오픈하면서 동작할 콜백 메소드를 포함한 객체를 매개변수로 전달한다. */
-        new daum.Postcode({
-            oncomplete: function(data){
-                /* 팝업에서 검색결과 항목을 클릭했을 시 실행할 코드를 작성하는 부분 */
-                document.getElementById("zipCode").value = data.zonecode;
-                document.getElementById("address1").value = data.address;
-                document.getElementById("address2").focus();
-            }
-        }).open();
-    }
-
-    $goMain.onclick = function() {
-        location.href = "/";
-    }
-</script>
+<h1>마이 페이지</h1>
+<th:block sec:authorize="isAuthenticated()">
+    <h3>principal : <span sec:authentication="principal"></span></h3>
+    <h3>principal.username : <span sec:authentication="principal.username"></span></h3>
+    <h3>principal.memberNo : <span sec:authentication="principal.memberNo"></span></h3>
+    <h3>principal.memberId : <span sec:authentication="principal.memberId"></span></h3>
+    <h3>[[${#authentication.principal.memberName}]]님 환영합니다.</h3>
+</th:block>
 </body>
 </html>

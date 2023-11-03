@@ -1,7 +1,9 @@
 package com.capstone.tutorlink.domain.member.command.application.controller;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
+import com.capstone.tutorlink.domain.member.command.application.service.AuthenticationService;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +13,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Slf4j
 @Controller
@@ -23,9 +30,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
     private final MemberService memberService;
     private final MessageSourceAccessor messageSourceAccessor;
-    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor) {
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationService authenticationService;
+
+    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.memberService = memberService;
         this.messageSourceAccessor = messageSourceAccessor;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationService = authenticationService;
+
     }
     @GetMapping("/login")
     public void loginPage() {}
@@ -42,12 +55,30 @@ public class MemberController {
     public void joinPage(){ }
 
     @PostMapping("/join")
-    public String joinPage(MemberDTO memberInfo, RedirectAttributes rttr) {
-        memberService.joinMember(memberInfo);
+    public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
+
+        log.info("[MemberController] joinMember ==============================");
+
+        member.setMemberId(member.getMemberId());
+        member.setMemberPw(member.getMemberPw());
+        member.setMemberNickname(member.getMemberNickname());
+        member.setMemberName(member.getMemberName());
+        member.setMemberEmail(member.getMemberEmail());
+        member.setMemberGender(member.getMemberGender());
+        member.setMemberBirthday(member.getMemberBirthday());
+        member.setMemberPhoneNumber(member.getMemberPhoneNumber().replace("-", ""));
+        member.setMyKey(member.getMyKey());
+
+        log.info("[MemberController] joinMember request Member : " + member);
+
+        memberService.joinMember(member);
+
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+
+        log.info("[MemberController] joinMember ==============================");
+
         return "redirect:/";
     }
-
 
     @PostMapping("/idDupCheck")
     public ResponseEntity<String> checkDuplication(@RequestBody MemberDTO member, RedirectAttributes rttr) {

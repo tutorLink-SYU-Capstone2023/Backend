@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EntityScan(basePackages = "com.ohgiraffers.tutorlinktest")
+@EntityScan(basePackages = "com.capstone.tutorlink")
 @EnableJpaRepositories(basePackages = "com.capstone.tutorlink")
 public class JPAConfiguration {
 }
