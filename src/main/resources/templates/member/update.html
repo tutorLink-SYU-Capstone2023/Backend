@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
+<!-- 다른 HTML 코드 위에 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+<script type="text/javascript">
+    function updateMemberInfo() {
+        // 입력된 정보 가져오기
+        var nickname = $("input[name='nickname']").val();
+        var email = $("input[name='email']").val();
+        var gender = $("input[name='gender']:checked").val();
+        var birthday = $("input[name='birthday']").val();
+        var phone = $("input[name='phone']").val();
+
+        // 서버로 데이터 전송
+        $.ajax({
+            type: "POST",
+            url: "/update",
+            data: {
+                nickname: nickname,
+                email: email,
+                gender: gender,
+                birthday: birthday,
+                phone: phone
+            },
+            success: function(response) {
+                // 업데이트가 성공하면 마이 페이지로 리디렉션
+                window.location.href = "/member/mypage";
+            },
+            error: function() {
+                // 오류 처리
+                alert("업데이트 실패");
+            }
+        });
+    }
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .btns {
+            margin-top: 20px;
+        }
+
+        .btns a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .btns button {
+            background: none;
+            color: gray;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<h1>마이 페이지 (수정)</h1>
+<div class="container">
+    <th:block sec:authorize="isAuthenticated()">
+        <table>
+            <tr>
+                <td>아이디</td>
+                <td>
+                    <span th:text="${#authentication.principal.memberId}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td>
+                    <span th:text="${#authentication.principal.memberName}"></span>
+                </td>
+            </tr>
+                <td>닉네임</td>
+                <td>
+                    <input type="text" name="nickname" th:value="${#authentication.principal.memberNickname}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>이메일 </td>
+                <td>
+                    <input type="email" name="email" th:value="${#authentication.principal.memberEmail}">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>성별</td>
+                <td>
+                    <input type="radio" name="gender" value="M" th:checked="${#strings.equals(#authentication.principal.memberGender, '남자')}"> 남자
+                    <input type="radio" name="gender" value="F" th:checked="${#strings.equals(#authentication.principal.memberGender, '여자')}"> 여자
+                </td>
+            </tr>
+            <tr>
+                <td>생년월일</td>
+                <td>
+                    <input type="text" name="birthday" th:value="${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}">
+                </td>
+            </tr>
+            <tr>
+                <td> 전화번호 </td>
+                <td>
+                    <input type="tel" name="phone" th:value="${#authentication.principal.memberPhoneNumber}">
+                </td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>My Key</td>
+                <td>
+                    <span th:text="${#authentication.principal.myKey}"></span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="btns">
+            <input type="submit" value="저장하기" id="saveButton" onclick="updateMemberInfo()">
+            <input type="button" value="탈퇴하기" id="deleteMember">
+            <a href="/member/mypage">마이 페이지로 돌아가기</a>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

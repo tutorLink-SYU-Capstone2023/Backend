@@ -36,48 +36,26 @@ public class MemberService {
         return memberRepository.findByMemberIdAndMemberCurrentStatus(memberId, "A").isPresent();
     }
 
-    /*
-    @Transactional
-    public void joinMember(MemberDTO memberInfo) {
-        Member member = modelMapper.map(memberInfo, Member.class);
-        member.setMemberId(memberInfo.getMemberId());
-        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
-        member.setMemberNickname(memberInfo.getMemberNickname());
-        member.setMemberName(memberInfo.getMemberName());
-        member.setMemberEmail(memberInfo.getMemberEmail());
-        member.setMemberGender(memberInfo.getMemberGender());
-        member.setMemberBirthday(memberInfo.getMemberBirthday());
-        member.setMemberEnrollDate(new Date());
-        member.setMemberCurrentStatus("A");
-        member.setMemberPhoneNumber(memberInfo.getMemberPhoneNumber());
-        member.setMyKey(memberInfo.getMyKey());
-        // 권한 설정
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-        member.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
-        member.setMemberPw(passwordEncoder.encode(memberInfo.getMemberPw()));
-
-         // 회원 엔티티에 권한 설정
-        member.setMemberRoleList(Collections.singletonList(memberRole));
-
-        // 회원 저장
-        memberRepository.save(member);
-    }
-    */
     @Transactional
     public void joinMember(MemberDTO member) {
-        // MemberDTO를 Member로 변환
-        Member memberEntity = modelMapper.map(member, Member.class);
+        try {
+            // MemberDTO를 Member로 변환
+            Member memberEntity = modelMapper.map(member, Member.class);
 
-        // 비밀번호 암호화
-        String encryptedPassword = passwordEncoder.encode(member.getMemberPw());
-        memberEntity.setMemberPw(encryptedPassword);
+            // 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(member.getMemberPw());
+            memberEntity.setMemberPw(encryptedPassword);
 
-        // 권한 설정
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-        memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
+            // 권한 설정
+            Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
+            memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
 
-        // 회원 저장
-        memberRepository.save(memberEntity);
+            // 회원 저장
+            memberRepository.save(memberEntity);
+        } catch (Exception e) {
+            // 예외 처리 - 예외 메시지를 로그에 기록
+            log.error("Error in joinMember: " + e.getMessage());
+        }
     }
 
 
@@ -88,13 +66,21 @@ public class MemberService {
         memberRepository.save(modelMapper.map(member, Member.class));
     }
 
+    @Transactional
     public void modifyMember(MemberDTO updateMember) {
 
         Member savedMember = memberRepository.findByMemberNo((long) updateMember.getMemberNo());
+        //savedMember.setMemberPw(updateMember.getMemberPw());
         savedMember.setMemberNickname(updateMember.getMemberNickname());
-        savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber());
+        //savedMember.setMemberName(updateMember.getMemberName());
         savedMember.setMemberEmail(updateMember.getMemberEmail());
         savedMember.setMemberGender(updateMember.getMemberGender());
+        savedMember.setMemberBirthday(updateMember.getMemberBirthday());
+        savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber());
+        //savedMember.setMyKey(updateMember.getMyKey());
+
+        // 변경사항을 저장
+        memberRepository.save(savedMember);
 
     }
 

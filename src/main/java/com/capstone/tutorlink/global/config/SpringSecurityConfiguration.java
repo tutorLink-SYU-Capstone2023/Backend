@@ -41,8 +41,8 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests()
                 .antMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 /* hasRole 안에 전달하는 값은 "ROLE_" 가 자동으로 붙는다. */
-                .antMatchers("/order/**", "/member/update", "/member/delete").hasAnyAuthority("ROLE_TUTEE", "ROLE_ADMIN","ROLE_TUTOR","ROLE_BOTH")
-                .antMatchers("/**", "/member/**").permitAll()
+                .antMatchers("/order/**", "/member/delete").hasAnyAuthority("ROLE_TUTEE", "ROLE_ADMIN","ROLE_TUTOR","ROLE_BOTH")
+                .antMatchers("/**", "/member/login", "/member/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/menu/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 /* 위에 서술 된 내용 외의 모든 요청은 허가함 (인증 되지 않은 사용자도 요청 가능) */
