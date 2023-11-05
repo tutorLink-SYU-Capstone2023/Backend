@@ -113,23 +113,24 @@ public class MemberController {
     public String modifyMember(@ModelAttribute MemberDTO updateMember,
                                @AuthenticationPrincipal MemberDTO loginMember,
                                RedirectAttributes rttr) {
-
         log.info("[MemberController] modifyMember ==============================");
+        log.info("매개변수로 넘어온 멤버", loginMember);
 
-        //updateMember.setMemberPw(loginMember.getMemberPw());
-        updateMember.setMemberNickname(loginMember.getMemberNickname());
-        updateMember.setMemberEmail(loginMember.getMemberEmail());
-        updateMember.setMemberGender(loginMember.getMemberGender());
-        updateMember.setMemberBirthday(loginMember.getMemberBirthday());
-        updateMember.setMemberPhoneNumber(loginMember.getMemberPhoneNumber().replace("-", ""));
-        //updateMember.setMyKey(loginMember.getMyKey());
+        // 업데이트된 정보를 loginMember에 반영
+        loginMember.setMemberNickname(updateMember.getMemberNickname());
+        loginMember.setMemberEmail(updateMember.getMemberEmail());
+        loginMember.setMemberBirthday(updateMember.getMemberBirthday());
+        loginMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-", ""));
+        loginMember.setMemberGender(updateMember.getMemberGender()); // 수정된 성별을 반영
+        // updateMember.setMyKey(updateMember.getMyKey()); // 필요하다면 처리
 
+        log.info("수정 후 멤버", loginMember);
         log.info("[MemberController] modifyMember request Member : {}", updateMember);
 
-        memberService.modifyMember(updateMember);
+        // memberService를 통해 회원 정보 업데이트
+        memberService.modifyMember(updateMember, loginMember);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication, loginMember.getMemberId()));
+        // 변경된 회원 정보로 Authentication을 업데이트
 
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.modify"));
 
@@ -137,6 +138,7 @@ public class MemberController {
 
         return "redirect:/member/mypage";
     }
+
 
     @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
@@ -177,6 +179,23 @@ public class MemberController {
             String detail = e.getMessage();
             return new ResponseEntity<>(new ErrorResponse(code, description, detail), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/leave")
+    public String leaveMember(@AuthenticationPrincipal MemberDTO member, RedirectAttributes rttr) {
+
+        log.info("[MemberController] leaveMember ==========================================================");
+        log.info("[MemberController] member : " + member);
+
+        memberService.removeMember(member);
+
+        SecurityContextHolder.clearContext();
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.leave"));
+
+        log.info("[MemberController] leaveMember ==========================================================");
+
+        return "redirect:/";
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

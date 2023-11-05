@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Date;
@@ -59,34 +60,38 @@ public class MemberService {
     }
 
 
+    @Transactional
+    public Member modifyMember(MemberDTO updateMember, MemberDTO loginMember) {
+        try {
+            Member savedMember = memberRepository.findByMemberNo(loginMember.getMemberNo());
 
+            if (savedMember != null) {
+                savedMember.setMemberNickname(updateMember.getMemberNickname());
+                savedMember.setMemberEmail(updateMember.getMemberEmail());
+                savedMember.setMemberGender(loginMember.getMemberGender()); // 성별은 loginMember에서 가져오기
+                savedMember.setMemberBirthday(updateMember.getMemberBirthday());
+                savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber().replace("-",""));
 
-    public void registMember(MemberDTO member) {
+                // 변경사항을 저장
+                memberRepository.save(savedMember);
 
-        memberRepository.save(modelMapper.map(member, Member.class));
+                return savedMember;
+            } else {
+                // 사용자를 찾을 수 없음
+                throw new EntityNotFoundException("User not found with ID: " + loginMember.getMemberNo());
+            }
+        } catch (Exception e) {
+            // 예외 처리 - 예외 메시지를 로그에 기록
+            log.error("Error in modifyMember: " + e.getMessage());
+            throw e; // 예외 다시 던지기
+        }
     }
+
 
     @Transactional
-    public void modifyMember(MemberDTO updateMember) {
-
-        Member savedMember = memberRepository.findByMemberNo((long) updateMember.getMemberNo());
-        //savedMember.setMemberPw(updateMember.getMemberPw());
-        savedMember.setMemberNickname(updateMember.getMemberNickname());
-        //savedMember.setMemberName(updateMember.getMemberName());
-        savedMember.setMemberEmail(updateMember.getMemberEmail());
-        savedMember.setMemberGender(updateMember.getMemberGender());
-        savedMember.setMemberBirthday(updateMember.getMemberBirthday());
-        savedMember.setMemberPhoneNumber(updateMember.getMemberPhoneNumber());
-        //savedMember.setMyKey(updateMember.getMyKey());
-
-        // 변경사항을 저장
-        memberRepository.save(savedMember);
-
-    }
-
     public void removeMember(MemberDTO member) {
 
-        Member savedMember = memberRepository.findByMemberNo((long) member.getMemberNo());
+        Member savedMember = memberRepository.findByMemberNo(member.getMemberNo());
         savedMember.setMemberCurrentStatus("D");
 
     }

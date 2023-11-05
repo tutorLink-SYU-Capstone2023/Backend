@@ -31,7 +31,7 @@ public class MemberDTO implements UserDetails {
     private String memberName;
 
     private String memberEmail;
-    private char memberGender;
+    private String memberGender;
 
     @NotNull(message = "생년월일은 반드시 입력되어야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -53,6 +53,11 @@ public class MemberDTO implements UserDetails {
     private String myKey; // my_key를 myKey로 수정
 
     private Collection<? extends GrantedAuthority> authorities;
+    // MemberDTO.java에서 getMemberNo()의 반환 유형을 Long으로 변경
+    public int getMemberNo() {
+        return memberNo;
+    }
+
 
     public void setMemberEnrollDate(Date memberEnrollDate) {
         this.memberEnrollDate = memberEnrollDate;
