@@ -2,36 +2,39 @@
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-<!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
     <meta charset="UTF-8">
-    <title>main</title>
+    <title>Tutor Link Project</title>
+    <style>
+        /* 스타일 시트 추가 */
+    </style>
     <script>
         const message = '[[${message}]]';
         message && alert(message);
     </script>
 </head>
 <body>
-<h1>Tutor Link Project에 오신 것을 환영합니다!</h1>
-<div>
-    <th:block sec:authorize="isAuthenticated()">
-        <button onclick="location.href='/member/mypage'">마이페이지</button>
-        <button onclick="location.href='/member/logout'">로그아웃</button>
-        <button onclick="location.href='/member/tutee'">튜티찾기</button>
-        <button onclick="location.href='/member/tutor'">튜터찾기</button>
-    </th:block>
-    <th:block sec:authorize="isAnonymous()">
-        <h3>로그인이 필요한 서비스입니다.</h3>
-        <button onclick="location.href='/member/login'">로그인</button>
-        <button onclick="location.href='/member/join'">회원가입</button>
-        <button onclick="location.href='/member/tutee'">튜티찾기</button>
-        <button onclick="location.href='/member/tutor'">튜터찾기</button>
+<!-- 헤더(header) 부분 -->
+<header>
+    <h1>Tutor Link Project에 오신 것을 환영합니다!</h1>
+    <div>
+        <th:block sec:authorize="isAuthenticated()">
+            <button onclick="location.href='/member/mypage'">마이페이지</button>
+            <button onclick="location.href='/member/logout'">로그아웃</button>
+            <button onclick="location.href='/member/tutee'">튜티찾기</button>
+            <button onclick="location.href='/member/tutor'">튜터찾기</button>
+        </th:block>
+        <th:block sec:authorize="isAnonymous()">
+            <h3>로그인이 필요한 서비스입니다.</h3>
+            <button onclick="location.href='/member/login'">로그인</button>
+            <button onclick="location.href='/member/join'">회원가입</button>
+            <button onclick="location.href='/member/tutee'">튜티찾기</button>
+            <button onclick="location.href='/member/tutor'">튜터찾기</button>
+        </th:block>
+    </div>
+</header>
 
-    </th:block>
-</div>
-<div>
+<!-- 내비게이션(navigation) 부분 -->
+<nav>
     <button onclick="location.href='/menu/list'">메뉴보기</button>
     <th:block sec:authorize="hasAnyRole('MEMBER', 'ADMIN')">
         <button onclick="location.href='/order/regist'">주문하기</button>
@@ -39,6 +42,16 @@
     <th:block sec:authorize="hasRole('ADMIN')">
         <button onclick="location.href='/admin/dashboard'">관리자메뉴</button>
     </th:block>
-</div>
+</nav>
+
+<!-- 본문(section) 부분 -->
+<section>
+    <!-- 본문 내용을 여기에 추가하세요 -->
+</section>
+
+<!-- 바닥글(footer) 부분 -->
+<footer>
+    <p>&copy; 2023 Tutor Link Project</p>
+</footer>
 </body>
 </html>
