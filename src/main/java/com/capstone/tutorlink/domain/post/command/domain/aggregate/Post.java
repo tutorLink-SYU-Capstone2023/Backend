@@ -5,17 +5,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Getter
-@Setter
 @Entity
+@Getter @Setter
 @Table(name = "POST")
 public class Post {
     @Id
     @Column(name = "post_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postNum;
+    private Long postNum;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_no", name = "post_writer")
@@ -32,12 +32,12 @@ public class Post {
     private String postContent;
 
     @Column(name = "post_regist_date")
-    private Date postRegistDate;
+    private LocalDateTime postRegistDate;
 
     @Column(name = "post_update_date")
-    private Date postUpdateDate;
+    private LocalDateTime postUpdateDate;
     @Column(name = "post_delete_date")
-    private Date postDeleteDate;
+    private LocalDateTime postDeleteDate;
     @Column(name = "post_is_deleted")
     private char postIsDeleted;
     @Column(name = "post_count")

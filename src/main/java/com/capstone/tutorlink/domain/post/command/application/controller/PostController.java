@@ -1,5 +1,6 @@
 package com.capstone.tutorlink.domain.post.command.application.controller;
 
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.application.service.BoardCategoryService;
@@ -22,7 +23,7 @@ public class PostController {
 
     //게시글 카테고리 생성
     @PostMapping("/regist")
-    public String registNewPost(PostDTO newPost){
+    public String registNewPost(Member member, PostDTO newPost){
         postService.registNewPost(newPost);
         return "redirect:/post/list";
     }
