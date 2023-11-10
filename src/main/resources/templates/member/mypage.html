@@ -57,10 +57,12 @@
         <h3>이름: <span sec:authentication="principal.memberName"></span></h3>
         <h3>이메일: <span sec:authentication="principal.memberEmail"></span></h3>
         <h3>성별: <span sec:authentication="principal.memberGender"></span></h3>
-        <h3>생년월일: <span sec:authentication="principal.memberBirthday"></span></h3>
+        <h3>생년월일: <span th:with="formattedBirthday=${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}" th:text="${formattedBirthday}"></span></h3>
         <h3>전화번호: <span sec:authentication="principal.memberPhoneNumber"></span></h3>
         <h3>My Key: <span sec:authentication="principal.myKey"></span></h3>
-    <div class="btns">
+
+
+        <div class="btns">
         <button onclick="location.href='/member/update'">수정하기</button>
         <button onclick="location.href='/'">돌아가기</button>
     </div>

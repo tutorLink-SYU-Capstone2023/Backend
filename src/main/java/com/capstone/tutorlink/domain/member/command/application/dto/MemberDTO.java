@@ -50,32 +50,25 @@ public class MemberDTO implements UserDetails {
     private String tutorMajor;
     private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
     private String tutorAuthorize;
+
+    private String selectedField; // 사용자가 선택한 field 값
     private String myKey; // my_key를 myKey로 수정
 
+    // getter 및 setter 추가
+
     private Collection<? extends GrantedAuthority> authorities;
-    // MemberDTO.java에서 getMemberNo()의 반환 유형을 Long으로 변경
+
+    public String getSelectedField() {
+        return selectedField;
+    }
+
+    public void setSelectedField(String selectedField) {
+        this.selectedField = selectedField;
+    }
+
     public int getMemberNo() {
         return memberNo;
     }
-
-
-    public void setMemberEnrollDate(Date memberEnrollDate) {
-        this.memberEnrollDate = memberEnrollDate;
-    }
-
-    public void setMemberCurrentStatus(String memberCurrentStatus) {
-        this.memberCurrentStatus = memberCurrentStatus;
-    }
-
-    public void setMemberPhoneNumber(String memberPhoneNumber) {
-        this.memberPhoneNumber = memberPhoneNumber;
-    }
-
-    public void setMyKey(String myKey) {
-        this.myKey = myKey;
-    }
-
-    // 나머지 getter, setter, 메소드는 그대로 유지합니다.
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -16,7 +16,7 @@ public class MemberRole {
     private int memberRoleCode;
 
     @ManyToOne
-    @JoinColumn(name = "authority_num")
+    @JoinColumn(name = "authority_num", referencedColumnName = "authority_num")
     private Authority authority;
 
     @ManyToOne

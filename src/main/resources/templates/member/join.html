@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript" th:src="@{/js/event.js}"></script>
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>튜티 회원가입</title>
 </head>
 <body>
-<h1>회원가입 페이지</h1>
+<h1>튜티 회원가입 페이지</h1>
 <form action="/member/join" method="post">
     <div>
         <span>아이디: </span>
-        <input type="text" name="memberId">
+        <input type="text" name="memberId" id="memberId">
+        <input type="button" value="중복확인" class="btn btn-bs" id="duplicationCheck"></td>
     </div>
+    <div id="messageDiv"></div>
     <div>
         <span>비밀번호: </span>
         <input type="password" name="memberPw">
@@ -42,9 +45,18 @@
         <input type="tel" name="memberPhoneNumber">
     </div>
     <div>
-        <span>회원 키: </span>
-        <input type="text" name="myKey">
+        <span>회원 유형: </span>
+        <!-- 선택한 유형을 selectedField로 설정 -->
+        <select name="selectedField">
+            <option value="정시">정시</option>
+            <option value="수시-학종">수시-학종</option>
+            <option value="수시-교과">수시-교과</option>
+            <option value="논술">논술</option>
+            <option value="적성">적성</option>
+        </select>
+
     </div>
+
 
     <div>
         <button>회원가입</button>

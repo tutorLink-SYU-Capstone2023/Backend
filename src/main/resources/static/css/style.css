@@ -1,0 +1,42 @@
+body {
+    font-family: sans-serif;
+    background-color: #fff;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.search h2 {
+    margin-top: 0;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+input[type="submit"] {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border: none;
+}

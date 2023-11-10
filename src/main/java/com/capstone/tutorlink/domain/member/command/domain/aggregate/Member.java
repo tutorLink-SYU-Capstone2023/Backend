@@ -1,10 +1,12 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
+import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +49,6 @@ public class Member {
     @Column(name = "member_enroll_date")
     private Date memberEnrollDate;
 
-
     @Column(name = "member_current_status", nullable = false)
     private String memberCurrentStatus = "A"; // 기본값 설정
 
@@ -67,7 +68,7 @@ public class Member {
     private String tutorUni;
 
     @Column(name = "tutor_uni_is_enrolled")
-    private String  tutorUniIsEnrolled;
+    private String tutorUniIsEnrolled;
 
     @Column(name = "tutor_major", length = 45)
     private String tutorMajor;
@@ -78,37 +79,28 @@ public class Member {
     @Column(name = "tutor_authorize", length = 45)
     private String tutorAuthorize;
 
-    @Column(name = "my_key", length = 255, nullable = false)
-    private String myKey; // my_key를 myKey로 수정
+    @Column(name = "my_key") // Member 엔티티에서 myKey를 직접 매핑
+    private String myKey;
+    @ManyToOne
+    @JoinColumn(name = "my_key", insertable = false, updatable = false) // 이 줄 추가
+    private AcceptedTypeCategory acceptedTypeCategory;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberRole> memberRoleList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_no")
-    public List<MemberRole> memberRoleList = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "memberNo=" + memberNo +
-                ", memberId='" + memberId + '\'' +
-                ", memberPw='" + memberPw + '\'' +
-                ", memberNickname='" + memberNickname + '\'' +
-                ", memberName='" + memberName + '\'' +
-                ", memberEmail='" + memberEmail + '\'' +
-                ", memberGender=" + memberGender +
-                ", memberBirthday=" + memberBirthday +
-                ", memberEnrollDate=" + memberEnrollDate +
-                ", memberCurrentStatus='" + memberCurrentStatus + '\'' +
-                ", memberPhoneNumber='" + memberPhoneNumber + '\'' +
-                ", tutorSchoolAuthorize='" + tutorSchoolAuthorize + '\'' +
-                ", tutorMiddleSchool='" + tutorMiddleSchool + '\'' +
-                ", tutorHighSchool='" + tutorHighSchool + '\'' +
-                ", tutorUni='" + tutorUni + '\'' +
-                ", tutorUniIsEnrolled='" + tutorUniIsEnrolled + '\'' +
-                ", tutorMajor='" + tutorMajor + '\'' +
-                ", tutorMajorNum=" + tutorMajorNum +
-                ", tutorAuthorize='" + tutorAuthorize + '\'' +
-                ", myKey='" + myKey + '\'' +
-                ", memberRoleList=" + memberRoleList +
-                '}';
+    public AcceptedTypeCategory getAcceptedTypeCategory() {
+        return acceptedTypeCategory;
+    }
+    public void setAcceptedTypeCategory(AcceptedTypeCategory acceptedTypeCategory) {
+        this.acceptedTypeCategory = acceptedTypeCategory;
+    }
+
+
+    public void setMyKey(String myKey) {
+        this.myKey = myKey;
+    }
+
+    public String getMyKey() {
+        return myKey;
     }
 }

@@ -3,11 +3,14 @@ package com.capstone.tutorlink.domain.member.command.application.controller;
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.application.service.AuthenticationService;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.AcceptedTypeCategory;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
 import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -37,12 +40,14 @@ public class MemberController {
     private final MessageSourceAccessor messageSourceAccessor;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authenticationService;
+    private AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
 
-    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
+    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository) {
         this.memberService = memberService;
         this.messageSourceAccessor = messageSourceAccessor;
         this.passwordEncoder = passwordEncoder;
         this.authenticationService = authenticationService;
+        this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
 
     }
     @GetMapping("/login")
@@ -61,29 +66,70 @@ public class MemberController {
 
     @PostMapping("/join")
     public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
-
         log.info("[MemberController] joinMember ==============================");
 
-        member.setMemberId(member.getMemberId());
-        member.setMemberPw(member.getMemberPw());
-        member.setMemberNickname(member.getMemberNickname());
-        member.setMemberName(member.getMemberName());
-        member.setMemberEmail(member.getMemberEmail());
-        member.setMemberGender(member.getMemberGender());
-        member.setMemberBirthday(member.getMemberBirthday());
-        member.setMemberPhoneNumber(member.getMemberPhoneNumber().replace("-", ""));
-        member.setMyKey(member.getMyKey());
+        // 사용자가 선택한 field 값
+        String selectedField = member.getSelectedField();
 
-        log.info("[MemberController] joinMember request Member : " + member);
+        // AcceptedTypeCategory를 참조하여 myKey 설정
+        AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
 
-        memberService.joinMember(member);
+        if (acceptedTypeCategory == null) {
+            // 사용자가 선택한 field 값이 유효하지 않은 경우에 대한 처리
+            rttr.addFlashAttribute("error", "Invalid selected field: " + selectedField);
+        } else {
+            // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
+            member.setMyKey(acceptedTypeCategory.getMyKey());
 
-        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+            // 회원 가입을 시도
+            try {
+                memberService.joinMember(member);
+                rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+            } catch (Exception e) {
+                // 회원 가입 실패 시 예외 처리
+                rttr.addFlashAttribute("error", "회원 가입에 실패했습니다.");
+            }
+        }
 
         log.info("[MemberController] joinMember ==============================");
 
         return "redirect:/";
     }
+    @GetMapping("/join2")
+    public void join2Page(){ }
+
+    @PostMapping("/join2")
+    public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
+        log.info("[MemberController] join2Member ==============================");
+
+        // 사용자가 선택한 field 값
+        String selectedField = member.getSelectedField();
+
+        // AcceptedTypeCategory를 참조하여 myKey 설정
+        AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
+
+        if (acceptedTypeCategory == null) {
+            // 사용자가 선택한 field 값이 유효하지 않은 경우에 대한 처리
+            rttr.addFlashAttribute("error", "Invalid selected field: " + selectedField);
+        } else {
+            // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
+            member.setMyKey(acceptedTypeCategory.getMyKey());
+
+            // 회원 가입을 시도
+            try {
+                memberService.join2Member(member);
+                rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+            } catch (Exception e) {
+                // 회원 가입 실패 시 예외 처리
+                rttr.addFlashAttribute("error", "회원 가입에 실패했습니다.");
+            }
+        }
+
+        log.info("[MemberController] join2Member ==============================");
+
+        return "redirect:/";
+    }
+
 
     @PostMapping("/idDupCheck")
     public ResponseEntity<String> checkDuplication(@RequestBody MemberDTO member, RedirectAttributes rttr) {
@@ -147,12 +193,18 @@ public class MemberController {
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
     @GetMapping("/tutee")
-    public String findAllTutee(@PageableDefault Pageable pageable, Model model){
-       return "/member/tutee";
+    public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
+        Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
+        model.addAttribute("tuteePage", tuteePage);
+        return "member/tutee";
     }
+
+
     @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        return "/member/tutor";
+        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
+        model.addAttribute("tutorPage", tutorPage);
+        return "member/tutor";
     }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
