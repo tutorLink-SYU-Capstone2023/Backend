@@ -94,6 +94,40 @@ public class MemberController {
 
         return "redirect:/";
     }
+    @GetMapping("/join2")
+    public void join2Page(){ }
+
+    @PostMapping("/join2")
+    public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
+        log.info("[MemberController] join2Member ==============================");
+
+        // 사용자가 선택한 field 값
+        String selectedField = member.getSelectedField();
+
+        // AcceptedTypeCategory를 참조하여 myKey 설정
+        AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
+
+        if (acceptedTypeCategory == null) {
+            // 사용자가 선택한 field 값이 유효하지 않은 경우에 대한 처리
+            rttr.addFlashAttribute("error", "Invalid selected field: " + selectedField);
+        } else {
+            // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
+            member.setMyKey(acceptedTypeCategory.getMyKey());
+
+            // 회원 가입을 시도
+            try {
+                memberService.join2Member(member);
+                rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+            } catch (Exception e) {
+                // 회원 가입 실패 시 예외 처리
+                rttr.addFlashAttribute("error", "회원 가입에 실패했습니다.");
+            }
+        }
+
+        log.info("[MemberController] join2Member ==============================");
+
+        return "redirect:/";
+    }
 
 
     @PostMapping("/idDupCheck")

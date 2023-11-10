@@ -79,10 +79,8 @@ public class MemberService {
             throw e; // 예외를 다시 던집니다.
         }
     }
-
-    /*
     @Transactional
-    public void joinMember(MemberDTO member) {
+    public void join2Member(MemberDTO member) {
         try {
             // MemberDTO를 Member로 변환
             Member memberEntity = modelMapper.map(member, Member.class);
@@ -92,11 +90,15 @@ public class MemberService {
             memberEntity.setMemberPw(encryptedPassword);
 
             // 권한 설정
-            Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-            memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority));
+            Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTOR");
+            MemberRole memberRole = new MemberRole(authority);
+            memberRole.setMember(memberEntity);
+
+            // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
+            memberEntity.getMemberRoleList().add(memberRole);
 
             // 사용자가 선택한 field 값
-            String selectedField = member.getSelectedField(); // 이 부분을 사용자가 선택한 값으로 변경
+            String selectedField = member.getSelectedField();
 
             // AcceptedTypeCategory를 참조하여 myKey 설정
             AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
@@ -110,15 +112,14 @@ public class MemberService {
             } else {
                 // 사용자가 선택한 field 값이 유효하지 않은 경우 예외 처리
                 log.error("Invalid selected field: " + selectedField);
+                throw new IllegalArgumentException("Invalid selected field: " + selectedField);
             }
-
         } catch (Exception e) {
             // 예외 처리 - 예외 메시지를 로그에 기록
             log.error("Error in joinMember: " + e.getMessage());
+            throw e; // 예외를 다시 던집니다.
         }
     }
-
-     */
 
 
     @Transactional
