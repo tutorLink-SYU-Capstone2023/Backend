@@ -10,6 +10,7 @@ import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -192,12 +193,18 @@ public class MemberController {
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
     @GetMapping("/tutee")
-    public String findAllTutee(@PageableDefault Pageable pageable, Model model){
-       return "/member/tutee";
+    public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
+        Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
+        model.addAttribute("tuteePage", tuteePage);
+        return "member/tutee";
     }
+
+
     @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        return "/member/tutor";
+        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
+        model.addAttribute("tutorPage", tutorPage);
+        return "member/tutor";
     }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {

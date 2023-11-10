@@ -4,8 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Tutor Link Project</title>
-    <style>
-        /* 스타일 시트 추가 */
+    <style>/* Reset 기본 스타일링 */
+    body, h1, h2, h3, p {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        background-color: #f4f4f4;
+    }
+
+    /* 헤더 스타일링 */
+    header {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* 내비게이션 스타일링 */
+    nav {
+        background-color: #555;
+        padding: 10px;
+        text-align: center;
+    }
+
+    nav button, .dropdown button, .dropdown-content button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* 본문 스타일링 */
+    section {
+        padding: 20px;
+    }
+
+    /* 바닥글 스타일링 */
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
     </style>
     <script>
         const message = '[[${message}]]';
@@ -16,26 +90,32 @@
 <!-- 헤더(header) 부분 -->
 <header>
     <h1>Tutor Link Project에 오신 것을 환영합니다!</h1>
-    <div>
-        <th:block sec:authorize="isAuthenticated()">
-            <button onclick="location.href='/member/mypage'">마이페이지</button>
-            <button onclick="location.href='/member/logout'">로그아웃</button>
-            <button onclick="location.href='/member/tutee'">튜티찾기</button>
-            <button onclick="location.href='/member/tutor'">튜터찾기</button>
-        </th:block>
-        <th:block sec:authorize="isAnonymous()">
-            <h3>로그인이 필요한 서비스입니다.</h3>
-            <button onclick="location.href='/member/login'">로그인</button>
-            <button onclick="location.href='/member/join'">회원가입</button>
-            <button onclick="location.href='/member/join2'">회원가입2</button>
-            <button onclick="location.href='/member/tutee'">튜티찾기</button>
-            <button onclick="location.href='/member/tutor'">튜터찾기</button>
-        </th:block>
-    </div>
 </header>
 
 <!-- 내비게이션(navigation) 부분 -->
 <nav>
+    <div>
+        <th:block sec:authorize="isAuthenticated()">
+            <button onclick="location.href='/member/tutee'">튜티찾기</button>
+            <button onclick="location.href='/member/tutor'">튜터찾기</button>
+            <button onclick="location.href='/member/mypage'">마이페이지</button>
+            <button onclick="location.href='/member/logout'">로그아웃</button>
+        </th:block>
+        <th:block sec:authorize="isAnonymous()">
+            <h3>로그인이 필요한 서비스입니다.</h3>
+            <button onclick="location.href='/member/login'">로그인</button>
+            <button onclick="location.href='/member/tutee'">튜티찾기</button>
+            <button onclick="location.href='/member/tutor'">튜터찾기</button>
+            <!-- Dropdown for 회원가입 options -->
+            <div class="dropdown">
+                <button class="dropbtn">회원가입</button>
+                <div class="dropdown-content">
+                    <button onclick="location.href='/member/join'">튜티 회원가입</button>
+                    <button onclick="location.href='/member/join2'">튜터 회원가입</button>
+                </div>
+            </div>
+        </th:block>
+    </div>
     <button onclick="location.href='/menu/list'">메뉴보기</button>
     <th:block sec:authorize="hasAnyRole('MEMBER', 'ADMIN')">
         <button onclick="location.href='/order/regist'">주문하기</button>

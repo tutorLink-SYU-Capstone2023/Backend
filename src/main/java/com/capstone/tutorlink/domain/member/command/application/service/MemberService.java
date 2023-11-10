@@ -10,11 +10,13 @@ import com.capstone.tutorlink.domain.member.command.domain.repository.AuthorityR
 import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.util.Collections;
 import java.util.Date;
 
@@ -40,6 +42,20 @@ public class MemberService {
 
         return memberRepository.findByMemberIdAndMemberCurrentStatus(memberId, "A").isPresent();
     }
+    @Transactional
+    public Page<MemberDTO> findAllTutee(org.springframework.data.domain.Pageable pageable) {
+        Page<Member> tuteePage = memberRepository.findAllTutee(pageable);
+        return tuteePage.map(member -> modelMapper.map(member, MemberDTO.class));
+    }
+    @Transactional
+    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
+        Page<Member> tutorPage = memberRepository.findAllTutor(pageable);
+        return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
+    }
+
+
+
+
 
     @Transactional
     public void joinMember(MemberDTO member) {
@@ -53,7 +69,11 @@ public class MemberService {
 
             // 권한 설정
             Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
-            memberEntity.setMemberRoleList(Collections.singletonList(new MemberRole(authority)));
+            MemberRole memberRole = new MemberRole(authority);
+            memberRole.setMember(memberEntity);
+
+            // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
+            memberEntity.getMemberRoleList().add(memberRole);
 
             // 사용자가 선택한 field 값
             String selectedField = member.getSelectedField();
@@ -72,7 +92,6 @@ public class MemberService {
                 log.error("Invalid selected field: " + selectedField);
                 throw new IllegalArgumentException("Invalid selected field: " + selectedField);
             }
-
         } catch (Exception e) {
             // 예외 처리 - 예외 메시지를 로그에 기록
             log.error("Error in joinMember: " + e.getMessage());

@@ -1,10 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Tutee 페이지</title>
+    <title>TutorLink</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #fff;
+        }
+
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        .search h2 {
+            margin-top: 0;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            border: none;
+        }
+
+    </style>
 </head>
 <body>
-<h1>튜티 찾기 페이지 입니다</h1>
+<header>
+    <h1>TutorLink</h1>
+</header>
+<main>
+    <section class="menu">
+        <a href="#">튜터찾기</a>
+        <a href="#">듀티찾기</a>
+        <a href="#">자유게시판</a>
+    </section>
+    <section class="search">
+        <h2>튜터 찾기</h2>
+        <form action="#">
+            <input type="text" name="search" placeholder="검색어">
+            <select name="region">
+                <option value="전체">전체</option>
+                <option value="서울">서울</option>
+                <option value="경기">경기</option>
+                <option value="인천">인천</option>
+                <option value="강원">강원</option>
+                <option value="충청북도">충청북도</option>
+                <option value="충청남도">충청남도</option>
+                <option value="전라북도">전라북도</option>
+                <option value="전라남도">전라남도</option>
+                <option value="경상북도">경상북도</option>
+                <option value="경상남도">경상남도</option>
+                <option value="제주특별자치도">제주특별자치도</option>
+            </select>
+            <select name="subject">
+                <option value="전체">전체</option>
+                <option value="국어">국어</option>
+                <option value="영어">영어</option>
+                <option value="수학">수학</option>
+                <option value="과학">과학</option>
+                <option value="사회">사회</option>
+                <option value="예술">예술</option>
+                <option value="기타">기타</option>
+            </select>
+            <select name="school">
+                <option value="전체">전체</option>
+                <option value="삼육대학교">삼육대학교</option>
+                <option value="서울대학교">서울대학교</option>
+                <option value="연세대학교">연세대학교</option>
+                <option value="고려대학교">고려대학교</option>
+                <option value="카이스트">카이스트</option>
+                <option value="포항공대">포항공대</option>
+                <option value="한양대학교">한양대학교</option>
+                <option value="중앙대학교">중앙대학교</option>
+            </select>
+            <select name="gender">
+                <option value="전체">전체</option>
+                <option value="남자">남자</option>
+                <option value="여자">여자</option>
+            </select>
+            <input type="submit" value="검색하기">
+        </form>
+    </section>
+    <table>
+        <thead>
+        <tr>
+            <th>회원 번호</th>
+            <th>아이디</th>
+            <th>닉네임</th>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>성별</th>
+            <th>생년월일</th>
+            <th>전화번호</th>
+            <th>My Key</th>
+            <!-- 기타 필요한 필드 추가... -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tutee : ${tuteePage.content}">
+            <td th:text="${tutee.memberNo}"></td>
+            <td th:text="${tutee.memberId}"></td>
+            <td th:text="${tutee.memberNickname}"></td>
+            <td th:text="${tutee.memberName}"></td>
+            <td th:text="${tutee.memberEmail}"></td>
+            <td th:text="${tutee.memberGender}"></td>
+            <td th:text="${#dates.format(tutee.memberBirthday, 'yyyy-MM-dd')}"></td>
+            <td th:text="${tutee.memberPhoneNumber}"></td>
+            <td th:text="${tutee.myKey}"></td>
+            <!-- 기타 필요한 필드 값 추가... -->
+        </tr>
+        </tbody>
+    </table>
+    </section>
+</main>
 </body>
 </html>
+
+
+
