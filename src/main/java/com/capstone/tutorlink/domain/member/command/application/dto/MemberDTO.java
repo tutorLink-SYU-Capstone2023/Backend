@@ -51,6 +51,8 @@ public class MemberDTO implements UserDetails {
     private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
     private String tutorAuthorize;
 
+    private String selectedUnivName; // 사용자가 선택한 대학
+
     private String selectedField; // 사용자가 선택한 field 값
     private String myKey; // my_key를 myKey로 수정
 
@@ -66,6 +68,13 @@ public class MemberDTO implements UserDetails {
         this.selectedField = selectedField;
     }
 
+    public String getSelectedUnivName() {
+        return selectedUnivName;
+    }
+
+    public void setSelectedUnivName(String selectedUnivName) {
+        this.selectedUnivName = selectedUnivName;
+    }
     public int getMemberNo() {
         return memberNo;
     }

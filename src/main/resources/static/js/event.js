@@ -9,9 +9,7 @@ window.onload = function() {
     }
 
     if (document.getElementById("duplicationCheck")) {
-
         const $duplication = document.getElementById("duplicationCheck");
-
         $duplication.onclick = function () {
             let memberId = document.getElementById("memberId").value.trim();
 
@@ -28,6 +26,20 @@ window.onload = function() {
 
         }
     }
+
+    // 페이지 로딩 시 대학교 목록을 가져와서 동적으로 추가
+    fetch('/api/universities/list')
+        .then(response => response.json())
+        .then(data => {
+            const selectElement = document.querySelector('select[name="selectedUnivCode"]');
+            data.forEach(university => {
+                const option = document.createElement('option');
+                option.value = university.univCode;
+                option.text = university.univName;
+                selectElement.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching universities:', error));
 
     if (document.getElementById("login")) {
         const $login = document.getElementById("login");

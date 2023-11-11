@@ -74,13 +74,18 @@ public class Member {
     private String tutorMajor;
 
     @Column(name = "tutor_major_num")
-    private Integer tutorMajorNum; // 데이터 타입을 Integer로 변경
+    private Double tutorMajorNum;
 
     @Column(name = "tutor_authorize", length = 45)
     private String tutorAuthorize;
 
     @Column(name = "my_key") // Member 엔티티에서 myKey를 직접 매핑
     private String myKey;
+
+    @ManyToOne
+    @JoinColumn(name = "tutor_uni", insertable = false, updatable = false)
+    private University university;
+
     @ManyToOne
     @JoinColumn(name = "my_key", insertable = false, updatable = false) // 이 줄 추가
     private AcceptedTypeCategory acceptedTypeCategory;
