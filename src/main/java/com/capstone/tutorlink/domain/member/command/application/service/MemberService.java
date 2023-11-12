@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 
 @Slf4j
 @Service
@@ -45,8 +46,8 @@ public class MemberService {
         return tuteePage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
     @Transactional
-    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
-        Page<Member> tutorPage = memberRepository.findAllTutor(pageable);
+    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable, String memberGender, String tutorUni, String myKey) {
+        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable, memberGender, tutorUni, myKey);
         return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
 

@@ -193,27 +193,13 @@ public class MemberController {
         return "redirect:/member/mypage";
     }
 
-
     @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/tutee")
-    public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
-        Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
-        model.addAttribute("tuteePage", tuteePage);
-        return "member/tutee";
-    }
 
-
-    @GetMapping("/tutor")
-    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
-        model.addAttribute("tutorPage", tutorPage);
-        return "member/tutor";
-    }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
         boolean check = true;
