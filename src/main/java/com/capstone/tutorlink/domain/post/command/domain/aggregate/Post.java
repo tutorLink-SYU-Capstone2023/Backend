@@ -1,6 +1,7 @@
 package com.capstone.tutorlink.domain.post.command.domain.aggregate;
 
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @Entity
 @Getter @Setter
 @Table(name = "POST")
+@EqualsAndHashCode(of = "post_num")
 public class Post {
     @Id
     @Column(name = "post_num")

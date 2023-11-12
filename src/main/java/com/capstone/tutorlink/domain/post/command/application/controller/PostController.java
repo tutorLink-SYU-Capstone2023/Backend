@@ -20,6 +20,9 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping("/list")
+    public void BoardPage() {}
+
     //게시글 카테고리 생성
     @PostMapping("/regist")
     public String registNewPost(PostDTO newPost){
