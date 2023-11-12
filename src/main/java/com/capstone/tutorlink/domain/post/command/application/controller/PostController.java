@@ -5,6 +5,7 @@ import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.application.service.BoardCategoryService;
 import com.capstone.tutorlink.domain.post.command.application.service.PostService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,12 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public void BoardPage() {}
+    public String postList(Model model) {
+        List<PostDTO> postList = postService.postList();
+        model.addAttribute("postList", postList);
+        return "post/list";
+
+    }
 
     //게시글 카테고리 생성
     @PostMapping("/regist")

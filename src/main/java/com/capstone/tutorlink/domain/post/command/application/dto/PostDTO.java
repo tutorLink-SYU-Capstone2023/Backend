@@ -1,5 +1,7 @@
 package com.capstone.tutorlink.domain.post.command.application.dto;
 
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,9 +13,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
-    private Long postNum;
-    private Long postWriter;
-    private String category;
+    private String postNum;
+    private Member postWriter;
+    private BoardCategory category;
     private String postTitle;
     private String postContent;
     private LocalDateTime postRegistDate;
