@@ -4,135 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Tutor Link Project</title>
-    <style>/* Reset 기본 스타일링 */
-    body, h1, h2, h3, p {
-        margin: 0;
-        padding: 0;
-    }
+    <style>
+        footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 7rem;
+            background: yellow;
+        }
+        .wraping {
+            display: flex;
+        }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        line-height: 1.6;
-        background-color: #f4f4f4;
-    }
-
-    /* 헤더 스타일링 */
-    header {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 20px;
-    }
-
-    /* 내비게이션 스타일링 */
-    nav {
-        background-color: #555;
-        padding: 10px;
-        text-align: center;
-    }
-
-    nav button, .dropdown button, .dropdown-content button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-        margin: 5px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-        z-index: 1;
-    }
-
-    .dropdown-content button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        text-align: left;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    /* 본문 스타일링 */
-    section {
-        padding: 20px;
-    }
-
-    /* 바닥글 스타일링 */
-    footer {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 10px;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
+        .main-img {
+            width: 320px;
+            height: 320px;
+            overflow: hidden;
+            padding: 20px;
+        }
     </style>
-    <script>
-        const message = '[[${message}]]';
-        message && alert(message);
-    </script>
 </head>
 <body>
 <!-- 헤더(header) 부분 -->
 <header>
-    <h1>Tutor Link Project에 오신 것을 환영합니다!</h1>
 </header>
 
 <!-- 내비게이션(navigation) 부분 -->
 <nav>
     <div>
         <th:block sec:authorize="isAuthenticated()">
-            <button onclick="location.href='../member/findTutee'">튜티찾기</button>
-            <button onclick="location.href='../member/findTutor'">튜터찾기</button>
-            <button onclick="location.href='../member/myPage'">마이페이지</button>
-            <button onclick="location.href='../member/logout'">로그아웃</button>
+            <div th:replace="common/globalNavAfterLogin"></div>
         </th:block>
         <th:block sec:authorize="isAnonymous()">
-            <h3>로그인이 필요한 서비스입니다.</h3>
-            <button onclick="location.href='../member/signIn'">로그인</button>
-            <button onclick="location.href='../member/findTutor'">튜티찾기</button>
-            <button onclick="location.href='../member/findTutee'">튜터찾기</button>
-            <!-- Dropdown for 회원가입 options -->
-            <div class="dropdown">
-                <button class="dropbtn">회원가입</button>
-                <div class="dropdown-content">
-                    <button onclick="location.href='/member/signUpAsTutee'">튜티 회원가입</button>
-                    <button onclick="location.href='/member/signUpAsTutor'">튜터 회원가입</button>
-                </div>
-            </div>
+            <div th:replace="common/globalNavBeforeLogin"></div>
         </th:block>
     </div>
-    <button onclick="location.href='/menu/list'">메뉴보기</button>
-    <th:block sec:authorize="hasAnyRole('MEMBER', 'ADMIN')">
-        <button onclick="location.href='/order/regist'">주문하기</button>
-    </th:block>
-    <th:block sec:authorize="hasRole('ADMIN')">
-        <button onclick="location.href='/admin/dashboard'">관리자메뉴</button>
-    </th:block>
 </nav>
 
 <!-- 본문(section) 부분 -->
-<section>
-    <!-- 본문 내용을 여기에 추가하세요 -->
+<section class="scroll-section" id="scroll-section-0">
+    <!--section0 :: 자체 광고-->
 </section>
 
+
+<section class="scroll-section" id="scroll-section-1">
+    <!--section1 :: 인기 튜터-->
+    <h2>인기 튜터</h2>
+    <div class="wraping">
+        <div class="popular-tutor" id="popularTutor1">
+            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 1위" />
+        </div>
+        <div class="popular-tutor" id="popularTutor2">
+            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 2위" />
+        </div>
+        <div class="popular-tutor" id="popularTutor3">
+            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 3위" />
+        </div>
+    </div>
+</section>
+
+
+<section class="scroll-section" id="scroll-section-2">
+    <!--section2 :: 튜터링크 게시판-->
+    <div class="">
+        <h2>튜터링크 게시판에 물어보세요.</h2>
+    </div>
+</section>
+
+<section class="scroll-section" id="scroll-section-3">
+    <!--section3 :: 튜터 캐스트-->
+    <div>
+        <h2>튜터 캐스트</h2>
+    </div>
+</section>
 <!-- 바닥글(footer) 부분 -->
 <footer>
-    <p>&copy; 2023 Tutor Link Project</p>
+    <div th:replace="common/footer"></div>
 </footer>
 </body>
 </html>
