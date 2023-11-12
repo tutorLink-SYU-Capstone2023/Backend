@@ -96,22 +96,22 @@
 <nav>
     <div>
         <th:block sec:authorize="isAuthenticated()">
-            <button onclick="location.href='/member/tutee'">튜티찾기</button>
-            <button onclick="location.href='/member/tutor'">튜터찾기</button>
-            <button onclick="location.href='/member/mypage'">마이페이지</button>
-            <button onclick="location.href='/member/logout'">로그아웃</button>
+            <button onclick="location.href='../member/findTutee'">튜티찾기</button>
+            <button onclick="location.href='../member/findTutor'">튜터찾기</button>
+            <button onclick="location.href='../member/myPage'">마이페이지</button>
+            <button onclick="location.href='../member/logout'">로그아웃</button>
         </th:block>
         <th:block sec:authorize="isAnonymous()">
             <h3>로그인이 필요한 서비스입니다.</h3>
-            <button onclick="location.href='/member/login'">로그인</button>
-            <button onclick="location.href='/member/tutee'">튜티찾기</button>
-            <button onclick="location.href='/member/tutor'">튜터찾기</button>
+            <button onclick="location.href='../member/signIn'">로그인</button>
+            <button onclick="location.href='../member/findTutor'">튜티찾기</button>
+            <button onclick="location.href='../member/findTutee'">튜터찾기</button>
             <!-- Dropdown for 회원가입 options -->
             <div class="dropdown">
                 <button class="dropbtn">회원가입</button>
                 <div class="dropdown-content">
-                    <button onclick="location.href='/member/join'">튜티 회원가입</button>
-                    <button onclick="location.href='/member/join2'">튜터 회원가입</button>
+                    <button onclick="location.href='/member/signUpAsTutee'">튜티 회원가입</button>
+                    <button onclick="location.href='/member/signUpAsTutor'">튜터 회원가입</button>
                 </div>
             </div>
         </th:block>
