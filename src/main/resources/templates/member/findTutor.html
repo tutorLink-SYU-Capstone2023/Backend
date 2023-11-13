@@ -47,6 +47,24 @@
         }
 
     </style>
+    <script>
+        function prepareForm() {
+            var genderSelect = document.getElementsByName("memberGender")[0];
+            if (genderSelect.value === "전체") {
+                genderSelect.value = null;
+            }
+
+            var uniSelect = document.getElementsByName("tutorUni")[0];
+            if (uniSelect.value === "전체") {
+                uniSelect.value = null;
+            }
+
+            var myKeySelect = document.getElementsByName("myKey")[0];
+            if (myKeySelect.value === "전체") {
+                myKeySelect.value = null;
+            }
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -57,19 +75,21 @@
         <a href="#">튜터찾기</a>
         <a href="#">튜티찾기</a>
         <a href="#">자유게시판</a>
+        <button onclick="location.href='/'">돌아가기</button>
     </section>
     <section class="search">
         <h2>튜터 찾기</h2>
-        <form th:action="@{/member/tutor}" method="get">
+        <form th:action="@{/member/tutor}" method="get" onsubmit="prepareForm()">
+            <!--
             <input type="text" name="search" placeholder="검색">
-            <select name="region">
-                <option value="전체">전체</option>
-                <!-- 나머지 옵션들... -->
+             <select name="region">
+                 <option value="전체">전체</option>
+
             </select>
             <select name="subject" placeholder="과목">
                 <option value="전체">전체</option>
-                <!-- 나머지 옵션들... -->
-            </select>
+                -->
+            </select> -->
             <select name="memberGender" placeholder="성별">
                 <option value="전체">전체</option>
                 <option value="M">남자</option>
@@ -77,10 +97,26 @@
             </select>
             <select name="tutorUni" placeholder="대학교">
                 <option value="전체">전체</option>
-                <!-- 나머지 옵션들... -->
+                    <option value="서울대학교">서울대학교</option>
+                    <option value="고려대학교(본캠)">고려대학교(본캠)</option>
+                    <option value="연세대학교(본캠)">연세대학교(본캠)</option>
+                    <option value="서강대학교">서강대학교</option>
+                    <option value="성균관대학교">성균관대학교</option>
+                    <option value="한양대학교">한양대학교</option>
+                    <option value="중앙대학교">중앙대학교</option>
+                    <option value="경희대학교">경희대학교</option>
+                    <option value="한국외국어대학교">한국외국어대학교</option>
+                    <option value="서울시립대학교">서울시립대학교</option>
+                    <option value="국민대학교">국민대학교</option>
+                    <option value="숭실대학교">숭실대학교</option>
+                    <option value="세종대학교">세종대학교</option>
             </select>
-            <select name="myKey" placeholder="My Key">
-                <!-- 나머지 옵션들... -->
+            <select name="myKey">
+                <option value="정시">정시</option>
+                <option value="수시-학종">수시-학종</option>
+                <option value="수시-교과">수시-교과</option>
+                <option value="논술">논술</option>
+                <option value="적성">적성</option>
             </select>
             <input type="submit" value="검색하기">
         </form>
@@ -97,6 +133,11 @@
             <th>생년월일</th>
             <th>전화번호</th>
             <th>My Key</th>
+            <th>중학교</th>
+            <th>고등학교</th>
+            <th>대학교</th>
+            <th>대학전공</th>
+            <th>전공학점</th>
             <!-- 기타 필요한 필드 추가... -->
         </tr>
         </thead>
@@ -111,7 +152,14 @@
             <td th:text="${#dates.format(tutor.memberBirthday, 'yyyy-MM-dd')}"></td>
             <td th:text="${tutor.memberPhoneNumber}"></td>
             <td th:text="${tutor.myKey}"></td>
+            <td th:text="${tutor.tutorMiddleSchool}"></td>
+            <td th:text="${tutor.tutorHighSchool}"></td>
+            <td th:text="${tutor.tutorUni}"></td>
+            <td th:text="${tutor.tutorMajor}"></td>
+            <td th:text="${tutor.tutorMajorNum}"></td>
             <!-- 기타 필요한 필드 값 추가... -->
+            <td><a th:href="@{'/member/tutorDetail/' + ${tutor.memberNo}}">자세히 보기</a></td>
+
         </tr>
         </tbody>
     </table>

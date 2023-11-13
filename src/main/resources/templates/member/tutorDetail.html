@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>TutorLink</title>
+  <style>
+    <!-- 이전 스타일 코드 유지 -->
+  </style>
+</head>
+<body>
+<!-- 이전 HTML 코드 유지 -->
+
+<section>
+  <h2>튜터 상세 정보</h2>
+  <table>
+    <tr>
+      <th>회원 번호</th>
+      <td th:text="${tutor.memberNo}"></td>
+    </tr>
+    <tr>
+      <th>아이디</th>
+      <td th:text="${tutor.memberId}"></td>
+    </tr>
+    <tr>
+      <th>닉네임</th>
+      <td th:text="${tutor.memberNickname}"></td>
+    </tr>
+    <!-- 다른 필드들 추가 -->
+  </table>
+</section>
+
+<!-- 이후 코드 유지 -->
+</body>
+</html>
