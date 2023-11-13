@@ -20,11 +20,13 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Page<Member> findAllTutee(org.springframework.data.domain.Pageable pageable);
 
 
-    @Query("SELECT m FROM Member m WHERE " +
-            "(:memberGender IS NULL OR m.memberGender = :memberGender) AND " +
-            "(:tutorUni IS NULL OR m.tutorUni = :tutorUni) AND " +
-            "(:myKey IS NULL OR m.myKey = :myKey)")
+    @Query("SELECT m FROM Member m " +
+            "JOIN MemberRole mr ON m.memberNo = mr.memberNo " +
+            "JOIN Authority a ON mr.authorityNum = a.authorityNum " +
+            "WHERE (:memberGender IS NULL OR m.memberGender = :memberGender) " +
+            "AND (:tutorUni IS NULL OR m.tutorUni = :tutorUni) " +
+            "AND (:myKey IS NULL OR m.myKey = :myKey) " +
+            "AND a.authorityName = 'ROLE_TUTOR'")
     Page<Member> findAllTutorWithConditions(Pageable pageable, String memberGender, String tutorUni, String myKey);
-
 
 }

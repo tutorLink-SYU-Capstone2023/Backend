@@ -177,4 +177,9 @@ public class MemberService {
         savedMember.setMemberCurrentStatus("D");
 
     }
+    @Transactional
+    public Member getTutorByMemberNo(int memberNo) {
+        return memberRepository.findByMemberNo(memberNo);
+    }
+
 }
