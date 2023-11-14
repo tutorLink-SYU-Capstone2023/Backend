@@ -12,12 +12,11 @@ import java.util.Date;
 @Entity
 @Getter @Setter
 @Table(name = "POST")
-@EqualsAndHashCode(of = "post_num")
 public class Post {
     @Id
     @Column(name = "post_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postNum;
+    private String postNum;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_no", name = "post_writer")
