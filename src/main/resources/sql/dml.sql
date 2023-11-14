@@ -25,3 +25,28 @@ VALUES ('감사합니다', '2023-10-31 14:22:21', 'N', 0, NULL, '2db2c1b8-7e4b-1
        ('네~ 열공하세요', '2023-11-01 16:28:21', 'N', 0, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001),
        ('네~ 열공하세요', '2023-11-01 20:58:21', 'Y', 0, '2023-11-01 21:05:36', '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001);
 select * from COMMENT;
+
+#합격전형카테고리
+INSERT INTO ACCEPTEDTYPE_CATEGORY (my_key, Field)
+VALUES  (1, '정시'),
+        (2, '수시-학종'),
+        (3, '수시-교과'),
+        (4, '적성'),
+        (5, '논술');
+
+#권한 정보
+INSERT INTO `AUTHORITY` (authority_name,authority_desc)
+VALUES  (1,'관리자'),
+        (2,'튜티'),
+        (3,'튜터');
+
+#멤버 권한
+
+INSERT INTO MEMBER_ROLE (authority_num,member_id)
+VALUES     (1,'10000000'),
+           (2,'10000001'),
+           (2,'10000002'),
+           (3,'10000003'),
+           (3,'10000004'),
+           (3,'10000005'),
+           (2,'10000006');
