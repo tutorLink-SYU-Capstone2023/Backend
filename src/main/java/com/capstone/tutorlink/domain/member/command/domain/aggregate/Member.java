@@ -8,9 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
@@ -91,6 +89,18 @@ public class Member {
     private AcceptedTypeCategory acceptedTypeCategory;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberRole> memberRoleList = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "likedMembers")
+    private Set<Member> likedByMembers = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "LIKED_MEMBERS",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "liked_member_id")
+    )
+    private Set<Member> likedMembers = new HashSet<>();
+
 
 
     public AcceptedTypeCategory getAcceptedTypeCategory() {

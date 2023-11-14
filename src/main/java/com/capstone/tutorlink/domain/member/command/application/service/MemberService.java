@@ -182,4 +182,30 @@ public class MemberService {
         return memberRepository.findByMemberNo(memberNo);
     }
 
+    // 다른 회원을 좋아요 하는 메서드
+    @Transactional
+    public void likeMember(int memberId, int likedMemberId) {
+        Member member = memberRepository.findByMemberNo(memberId);
+        Member likedMember = memberRepository.findByMemberNo(likedMemberId);
+
+        // 이미 좋아요한 경우 중복 좋아요를 방지하기 위해 확인
+        if (!member.getLikedMembers().contains(likedMember)) {
+            member.getLikedMembers().add(likedMember);
+            likedMember.getLikedByMembers().add(member);
+        }
+    }
+
+    // 좋아요를 취소하는 메서드
+    @Transactional
+    public void unlikeMember(int memberId, int likedMemberId) {
+        Member member = memberRepository.findByMemberNo(memberId);
+        Member likedMember = memberRepository.findByMemberNo(likedMemberId);
+
+        // 좋아요를 취소하는 경우
+        member.getLikedMembers().remove(likedMember);
+        likedMember.getLikedByMembers().remove(member);
+    }
+
+
+
 }
