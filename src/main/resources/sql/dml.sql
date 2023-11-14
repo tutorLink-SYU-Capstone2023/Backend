@@ -19,9 +19,9 @@ VALUES(10000001, 'CATEGORY001', '2023생윤 자료 공유해요', '직접 제작
       (10000092, 'CATEGORY003', '3개월만에 영어 6->2 가능합니다.', '제 방식을 따라 온 친구들은 ..', 'N', '2023-10-20 19:11:45', NULL, NULL);
 select * from POST;
 
-INSERT INTO COMMENT(comment_content, comment_regist_date, commnet_is_deleted, comment_update_date, comment_delete_date, post_num, member_no)
-VALUES ('감사합니다', '2023-10-31 14:22:21', 'N', NULL, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000002),
-       ('네~ 열공하세요', '2023-10-31 14:28:21', 'N', NULL, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001),
-       ('네~ 열공하세요', '2023-11-01 16:28:21', 'N', NULL, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001),
-       ('네~ 열공하세요', '2023-11-01 20:58:21', 'Y', NULL, '2023-11-01 21:05:36', '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001);
+INSERT INTO COMMENT(comment_content, comment_regist_time, comment_is_deleted, comment_report_cumulated_num, comment_delete, post_num, member_no)
+VALUES ('감사합니다', '2023-10-31 14:22:21', 'N', 0, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000002),
+       ('네~ 열공하세요', '2023-10-31 14:28:21', 'N', 0, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001),
+       ('네~ 열공하세요', '2023-11-01 16:28:21', 'N', 0, NULL, '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001),
+       ('네~ 열공하세요', '2023-11-01 20:58:21', 'Y', 0, '2023-11-01 21:05:36', '2db2c1b8-7e4b-11ee-8272-4bc2e949b19f', 10000001);
 select * from COMMENT;
