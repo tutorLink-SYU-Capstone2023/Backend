@@ -61,7 +61,7 @@
     <section class="search">
         <h2>튜터 찾기</h2>
         <form action="#">
-            <input type="text" name="search" placeholder="검색어">
+            <input type="text" name="search" placeholder="지역">
             <select name="region">
                 <option value="전체">전체</option>
                 <option value="서울">서울</option>
@@ -76,7 +76,7 @@
                 <option value="경상남도">경상남도</option>
                 <option value="제주특별자치도">제주특별자치도</option>
             </select>
-            <select name="subject">
+            <select name="subject" placeholder="과목">
                 <option value="전체">전체</option>
                 <option value="국어">국어</option>
                 <option value="영어">영어</option>
@@ -86,7 +86,7 @@
                 <option value="예술">예술</option>
                 <option value="기타">기타</option>
             </select>
-            <select name="school">
+            <select name="school" placeholder="대학교">
                 <option value="전체">전체</option>
                 <option value="삼육대학교">삼육대학교</option>
                 <option value="서울대학교">서울대학교</option>
@@ -97,10 +97,10 @@
                 <option value="한양대학교">한양대학교</option>
                 <option value="중앙대학교">중앙대학교</option>
             </select>
-            <select name="gender">
+            <select name="memberGender" placeholder="성별">
                 <option value="전체">전체</option>
-                <option value="남자">남자</option>
-                <option value="여자">여자</option>
+                <option value="M">남자</option>
+                <option value="F">여자</option>
             </select>
             <input type="submit" value="검색하기">
         </form>
@@ -121,16 +121,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="tutor : ${tutorPage.content}">
-            <td th:text="${tutor.memberNo}"></td>
-            <td th:text="${tutor.memberId}"></td>
-            <td th:text="${tutor.memberNickname}"></td>
-            <td th:text="${tutor.memberName}"></td>
-            <td th:text="${tutor.memberEmail}"></td>
-            <td th:text="${tutor.memberGender}"></td>
-            <td th:text="${#dates.format(tutor.memberBirthday, 'yyyy-MM-dd')}"></td>
-            <td th:text="${tutor.memberPhoneNumber}"></td>
-            <td th:text="${tutor.myKey}"></td>
+        <tr th:each="tutee : ${tuteePage.content}">
+            <td th:text="${tutee.memberNo}"></td>
+            <td th:text="${tutee.memberId}"></td>
+            <td th:text="${tutee.memberNickname}"></td>
+            <td th:text="${tutee.memberName}"></td>
+            <td th:text="${tutee.memberEmail}"></td>
+            <td th:text="${tutee.memberGender}"></td>
+            <td th:text="${#dates.format(tutee.memberBirthday, 'yyyy-MM-dd')}"></td>
+            <td th:text="${tutee.memberPhoneNumber}"></td>
+            <td th:text="${tutee.myKey}"></td>
             <!-- 기타 필요한 필드 값 추가... -->
         </tr>
         </tbody>
@@ -139,3 +139,6 @@
 </main>
 </body>
 </html>
+
+
+

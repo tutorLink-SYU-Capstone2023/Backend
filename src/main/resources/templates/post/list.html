@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div th:replace="common/globalNavAfterLogin"></div>
+    <div th:replace="common/globalNavBeforeLogin"></div>
+    <h1>자유게시판</h1>
+    <div class="postList">
+        <table>
+            <tr>
+                <th>카테고리</th>
+                <th>글 제목</th>
+                <th>작성자</th>
+                <th>조회수</th>
+            </tr>
+
+            <tr th:each="post : ${postList}">
+                <td th:text="${post.postNum}"></td>
+                <td th:text="${post.category.categoryName}"></td>
+                <td th:text="${post.postTitle}"></td>
+                <td th:text="${post.postWriter.memberName}"></td>
+                <td th:text="${post.postCount}"></td>
+            </tr>
+
+        </table>
+    </div>
+</body>
+</html>

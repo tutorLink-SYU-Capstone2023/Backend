@@ -60,6 +60,15 @@
         <h3>생년월일: <span th:with="formattedBirthday=${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}" th:text="${formattedBirthday}"></span></h3>
         <h3>전화번호: <span sec:authentication="principal.memberPhoneNumber"></span></h3>
         <h3>My Key: <span sec:authentication="principal.myKey"></span></h3>
+        <div th:block sec:authorize="hasRole('TOTOR')">
+            <!-- 튜터 회원 정보 입력 폼 -->
+            <h3>중학교: <span th:text="${authentication.principal.tutorMiddleSchool}"></span></h3>
+            <h3>고등학교: <span th:text="${authentication.principal.tutorHighSchool}"></span></h3>
+            <h3>대학교: <span th:text="${authentication.principal.tutorUni}"></span></h3>
+            <h3>전공: <span th:text="${authentication.principal.tutorMajor}"></span></h3>
+            <h3>전공 학점: <span th:text="${authentication.principal.tutorMajorNum}"></span></h3>
+        </div>
+
 
 
         <div class="btns">

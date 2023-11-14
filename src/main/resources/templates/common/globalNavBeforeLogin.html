@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap"
+          rel="stylesheet"
+    />
+    <title>Title</title>
+    <style>
+        html {
+            font-family: "Noto Sans KR", sans-serif;
+            font-size: 14px;
+        }
+
+        #globalNavArea {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 44px;
+            padding: 0 1rem;
+        }
+
+        .global-nav {
+            list-style: none;
+            display: flex;
+        }
+
+        .global_nav_item {
+            position: relative;
+            width: 120px; /* Set a fixed width, adjust as needed */
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .global_nav_item a {
+            text-decoration: none;
+            color: rgb(29, 29, 31);
+            display: flex;
+            align-items: center;
+            width: 100%;
+            cursor: pointer; /* Add cursor pointer for better UX */
+        }
+
+        .global_nav_item span {
+            margin-left: 5px; /* Adjust as needed */
+        }
+
+        .join_option {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .global_nav_item:hover .join_option {
+            display: block;
+        }
+
+        .join_option a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Optional: Adjust styling for the main home link */
+        .global_nav_item.home-link a {
+            margin-right: auto;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        body {
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div id="globalNavArea" class="global_nav_area" role="region">
+    <ul class="global-nav">
+        <li class="global_nav_item home-link">
+            <a href="../main">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">메인으로</span>
+            </a>
+        </li>
+        <li class="global_nav_item">
+            <a href="../member/findTutor">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">튜터찾기</span>
+            </a>
+        </li>
+        <li class="global_nav_item">
+            <a href="../member/findTutee">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">튜티찾기</span>
+            </a>
+        </li>
+        <li class="global_nav_item">
+            <a href="../post/list">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">자유게시판</span>
+            </a>
+        </li>
+        <li class="global_nav_item">
+            <a href="../member/signIn">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">로그인</span>
+            </a>
+        </li>
+        <li class="global_nav_item">
+            <a href="#" class="join-trigger">
+                <span class="global_nav_img"></span>
+                <span class="global_nav_name">회원가입</span>
+                <div class="join_option">
+                    <a href="../member/signUpAsTutor">튜터로 회원가입 👩🏻‍🏫</a>
+                    <a href="../member/signUpAsTutee">튜티로 회원가입 👩🏻‍🎓</a>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
