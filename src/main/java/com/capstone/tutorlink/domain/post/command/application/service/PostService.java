@@ -32,7 +32,7 @@ public class PostService {
 
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
     public List<PostDTO> postList(){
-        List<Post> postList = postRepository.findAll(Sort.by("post_num").descending());
+        List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
         return postList.stream().map(post -> modelMapper.map(post, PostDTO.class))
                 .collect(Collectors.toList());
     }

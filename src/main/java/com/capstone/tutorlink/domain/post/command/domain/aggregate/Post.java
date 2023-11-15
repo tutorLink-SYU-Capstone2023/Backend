@@ -16,15 +16,16 @@ public class Post {
     @Id
     @Column(name = "post_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String postNum;
+    private Integer postNum;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_no", name = "post_writer")
     private Member postWriter;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "category_code")
+    @JoinColumn(referencedColumnName = "category_code", name = "category_code")
     private BoardCategory category;
+
 
     @Column(name = "post_title")
     private String postTitle;
