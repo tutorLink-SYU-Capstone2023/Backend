@@ -8,6 +8,7 @@ import com.capstone.tutorlink.domain.post.command.domain.repositoroy.BoardCatego
 import com.capstone.tutorlink.domain.post.command.domain.repositoroy.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,11 @@ public class PostService {
     }
 
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
-    public List<PostDTO> postList(){
-        List<Post> postList = postRepository.findAll(Sort.by("post_num").descending());
-        return postList.stream().map(post -> modelMapper.map(post, PostDTO.class))
-                .collect(Collectors.toList());
+    @Transactional
+    public Page<PostDTO> findAllPost(org.springframework.data.domain.Pageable pageable){
+//        Page<Post> postPage = postRepository.findAll(Sort.by("postNum").descending());
+        Page<Post> postPage = postRepository.findAllPost(pageable);
+        return postPage.map(post -> modelMapper.map(post, PostDTO.class));
     }
 
     //신규 게시글 추가
@@ -44,6 +46,7 @@ public class PostService {
     }
 
     //카테고리 조회(글 등록 시 필요)
+    @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
         List<BoardCategory> categoryList = boardCategoryRepository.findAllCategory();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());

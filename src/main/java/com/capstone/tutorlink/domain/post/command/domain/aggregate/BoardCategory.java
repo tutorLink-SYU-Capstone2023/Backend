@@ -13,8 +13,8 @@ import javax.persistence.*;
 public class BoardCategory {
 
     @Id
-    @Column(name = "category_code")
-    private String categoryCode;
+    @OneToMany(mappedBy = "category")
+    private enum categoryCode
 
     @Column(name = "category_name")
     private String categoryName;

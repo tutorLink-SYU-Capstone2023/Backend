@@ -1,9 +1,13 @@
 package com.capstone.tutorlink.domain.post.command.application.controller;
 
+import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.application.service.BoardCategoryService;
 import com.capstone.tutorlink.domain.post.command.application.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +26,13 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public String postList(Model model) {
-        List<PostDTO> postList = postService.postList();
-        model.addAttribute("postList", postList);
+    public String findAllPost(@PageableDefault Pageable pageable, Model model) {
+        Page<PostDTO> postPage = postService.findAllPost(pageable);
+        model.addAttribute("postList", postPage);
         return "post/list";
 
     }
+
 
     //게시글 카테고리 생성
     @PostMapping("/regist")

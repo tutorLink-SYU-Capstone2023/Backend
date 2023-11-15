@@ -1,13 +1,11 @@
 package com.capstone.tutorlink.domain.post.command.domain.aggregate;
 
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter @Setter
@@ -23,7 +21,7 @@ public class Post {
     private Member postWriter;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "category_code")
+    @JoinColumn(name = "category_code", referencedColumnName = "category_code")
     private BoardCategory category;
 
     @Column(name = "post_title")
@@ -37,12 +35,19 @@ public class Post {
 
     @Column(name = "post_update_date")
     private LocalDateTime postUpdateDate;
+
     @Column(name = "post_delete_date")
     private LocalDateTime postDeleteDate;
+
     @Column(name = "post_is_deleted")
     private char postIsDeleted;
+
     @Column(name = "post_count")
     private int postCount;
+
     @Column(name = "post_reported_count")
     private int postReportedCount;
+
+    @Column(name = "post_status")
+    private char postStatus;
 }
