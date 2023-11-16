@@ -185,7 +185,7 @@ public class MemberController {
 
         log.info("[MemberController] modifyMember ==============================");
 
-        return "redirect:/member/mypage";
+        return "redirect:/member/myPage";
     }
 
 
