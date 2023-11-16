@@ -8,6 +8,9 @@ import com.capstone.tutorlink.domain.post.command.domain.repositoroy.BoardCatego
 import com.capstone.tutorlink.domain.post.command.domain.repositoroy.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
+    Logger logger = LoggerFactory.getLogger(getClass());
     public PostService(BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
         this.boardCategoryRepository = boardCategoryRepository;
         this.postRepository = postRepository;
@@ -31,10 +35,11 @@ public class PostService {
     }
 
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
-    public List<PostDTO> postList(){
-        List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
-        return postList.stream().map(post -> modelMapper.map(post, PostDTO.class))
-                .collect(Collectors.toList());
+    @Transactional
+    public List<PostDTO> getAllPost(){
+//        Page<Post> postPage = postRepository.findAll(Sort.by("postNum").descending());
+        List<Post> postList = postRepository.findAll();
+        return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
     }
 
     //신규 게시글 추가
@@ -44,6 +49,7 @@ public class PostService {
     }
 
     //카테고리 조회(글 등록 시 필요)
+    @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
         List<BoardCategory> categoryList = boardCategoryRepository.findAllCategory();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());

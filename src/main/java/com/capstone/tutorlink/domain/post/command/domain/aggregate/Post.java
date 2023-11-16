@@ -1,13 +1,12 @@
 package com.capstone.tutorlink.domain.post.command.domain.aggregate;
 
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.attoparser.dom.Text;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter @Setter
@@ -16,7 +15,7 @@ public class Post {
     @Id
     @Column(name = "post_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer postNum;
+    private Long postNum;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_no", name = "post_writer")
@@ -26,24 +25,30 @@ public class Post {
     @JoinColumn(referencedColumnName = "category_code", name = "category_code")
     private BoardCategory category;
 
-
     @Column(name = "post_title")
     private String postTitle;
 
     @Column(name = "post_content")
-    private String postContent;
+    private Text postContent;
 
     @Column(name = "post_regist_date")
-    private LocalDateTime postRegistDate;
+    private LocalDateTime postRegistdDate;
 
     @Column(name = "post_update_date")
-    private LocalDateTime postUpdateDate;
+    private LocalDateTime postUpdatedDate;
+
     @Column(name = "post_delete_date")
-    private LocalDateTime postDeleteDate;
+    private LocalDateTime postDeletedDate;
+
     @Column(name = "post_is_deleted")
-    private char postIsDeleted;
+    private Character postIsDeleted;
+
     @Column(name = "post_count")
-    private int postCount;
+    private Integer postCount;
+
     @Column(name = "post_reported_count")
-    private int postReportedCount;
+    private Integer postReportedCount;
+
+    @Column(name = "post_status")
+    private Character postStatus;
 }

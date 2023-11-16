@@ -1,8 +1,13 @@
 package com.capstone.tutorlink.domain.member.command.application.controller;
 
+import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,18 +22,29 @@ public class LikeController {
         this.memberService = memberService;
     }
 
-    // 다른 회원을 좋아요 하는 요청 처리
+    // 좋아요 폼에서 memberNo를 전달받는 컨트롤러 메서드
+    @PostMapping("/member/like")
+    public String likeMember(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
+        // 좋아요 로직 구현
+        memberService.likeMember(member.getMemberNo(), likedMemberId);
+
+        return "redirect:/tutorDetail"; // 좋아요 후 다시 튜터 상세 페이지로 이동하도록 설정
+    }
+
+    // 좋아요 취소 폼에서 memberNo를 전달받는 컨트롤러 메서드
+    @PostMapping("/member/unlike")
+    public String unlikeMember(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
+        // 좋아요 취소 로직 구현
+        memberService.unlikeMember(member.getMemberNo(), likedMemberId);
+
+        return "redirect:/tutorDetail"; // 좋아요 취소 후 다시 튜터 상세 페이지로 이동하도록 설정
+    }
+    // 좋아요 처리를 위한 컨트롤러 메서드
     @PostMapping("/like")
-    public ResponseEntity<String> likeMember(@RequestParam int memberId, @RequestParam int likedMemberId) {
-        memberService.likeMember(memberId, likedMemberId);
+    public ResponseEntity<String> likeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
+        memberService.likeMember(member.getMemberNo(), likedMemberId);
         return ResponseEntity.ok("Liked successfully");
     }
 
-    // 좋아요를 취소하는 요청 처리
-    @PostMapping("/unlike")
-    public ResponseEntity<String> unlikeMember(@RequestParam int memberId, @RequestParam int likedMemberId) {
-        memberService.unlikeMember(memberId, likedMemberId);
-        return ResponseEntity.ok("Unliked successfully");
-    }
 }
 

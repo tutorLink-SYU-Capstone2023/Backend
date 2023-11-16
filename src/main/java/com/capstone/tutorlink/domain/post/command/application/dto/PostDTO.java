@@ -1,27 +1,60 @@
 package com.capstone.tutorlink.domain.post.command.application.dto;
 
-import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
-import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import lombok.*;
+import org.attoparser.dom.Text;
+import org.hibernate.annotations.Check;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PostDTO {
-    private String postNum;
-    private Member postWriter;
-    private BoardCategory category;
+
+    private Long postNum;
+
+    @NotNull(message = "아이디는 반드시 입력되어야 합니다.")
+    private String postWriter;
+
+    @NotNull(message = "카테고리는 반드시 입력되어야 합니다.")
+    private String category;
+
+    @NotNull(message = "글 제목은 반드시 입력되어야 합니다.")
     private String postTitle;
-    private String postContent;
-    private LocalDateTime postRegistDate;
-    private LocalDateTime postUpdateDate;
-    private LocalDateTime postDeleteDate;
-    private char postIsDeleted;
-    private int postCount;
-    private int postReportedCount;
+
+    @NotNull(message = "글 내용은 반드시 입력되어야 합니다.")
+    private Text postContent;
+
+    @NotNull(message = "글 등록일은 반드시 입력되어야 합니다.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime postRegistdDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime postUpdatedDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime postDeletedDate;
+
+    @NotNull(message = "게시글 삭제 여부는 반드시 입력되어야 합니다.")
+    @Check(constraints = "postIsDeleted IN ('Y', 'N')")
+    @Builder.Default
+    private Character postIsDeleted = 'N';
+
+    @NotNull(message = "조회수는 반드시 입력되어야 합니다.")
+    @Builder.Default
+    private Integer postCount = 0;
+
+    @NotNull(message = "게시글 신고 누적 횟수는 반드시 입력되어야 합니다.")
+    @Builder.Default
+    private Integer postReportedCount = 0;
+
+    @NotNull(message = "게시글 상태는 반드시 입력되어야 합니다.")
+    @Check(constraints = "postStatus IN ('A', 'U')")
+    @Builder.Default
+    private Character postStatus = 'A';
 }

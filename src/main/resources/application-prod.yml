@@ -1,0 +1,17 @@
+# 배포용 yml 설정
+
+spring:
+  # DB config
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tutorlink
+    username : root
+    password : 1234
+
+  # JPA config
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false

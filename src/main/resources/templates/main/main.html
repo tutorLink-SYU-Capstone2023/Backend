@@ -1,88 +1,95 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta charset="UTF-8">
-    <title>Tutor Link Project</title>
-    <style>
-        footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 7rem;
-            background: yellow;
-        }
-        .wraping {
-            display: flex;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutor Link Project</title>
+        <style>
+            footer {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 7rem;
+                background: yellow;
+            }
+            .wrapping {
+                display: flex;
+            }
+            .wrapping-all{
+                align-items: center;
+                justify-content: center;
+                display: flex;
+            }
 
-        .main-img {
-            width: 320px;
-            height: 320px;
-            overflow: hidden;
-            padding: 20px;
-        }
-    </style>
-</head>
-<body>
-<!-- 헤더(header) 부분 -->
-<header>
-</header>
+            .main-img {
+                width: 320px;
+                height: 320px;
+                overflow: hidden;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 헤더(header) 부분 -->
+        <header>
+        </header>
 
-<!-- 내비게이션(navigation) 부분 -->
-<nav>
-    <div>
-        <th:block sec:authorize="isAuthenticated()">
-            <div th:replace="common/globalNavAfterLogin"></div>
-        </th:block>
-        <th:block sec:authorize="isAnonymous()">
-            <div th:replace="common/globalNavBeforeLogin"></div>
-        </th:block>
-    </div>
-</nav>
+        <!-- 내비게이션(navigation) 부분 -->
+        <nav>
+            <div>
+                <th:block sec:authorize="isAuthenticated()">
+                    <div th:replace="common/globalNavAfterLogin"></div>
+                </th:block>
+                <th:block sec:authorize="isAnonymous()">
+                    <div th:replace="common/globalNavBeforeLogin"></div>
+                </th:block>
+            </div>
+        </nav>
+        <div class="wrapping-all">
+            <!-- 본문(section) 부분 -->
+            <section class="scroll-section" id="scroll-section-0">
+                <!--section0 :: 자체 광고-->
+                <div class="main-adv">
+                    <h1>여긴 자체 광고 영역</h1>
+                </div>
+            </section>
 
-<!-- 본문(section) 부분 -->
-<section class="scroll-section" id="scroll-section-0">
-    <!--section0 :: 자체 광고-->
-    <div class="main-adv">
-        <h1>여긴 자체 광고 영역</h1>
-    </div>
-</section>
+
+            <section class="scroll-section" id="scroll-section-1">
+                <!--section1 :: 인기 튜터-->
+                <h2>인기 튜터</h2>
+                <div class="wrapping">
+                    <div class="popular-tutor" id="popularTutor1">
+                        <img class="main-img" src="" alt="인기튜터 1위" />
+                    </div>
+                    <div class="popular-tutor" id="popularTutor2">
+                        <img class="main-img" src="" alt="인기튜터 2위" />
+                    </div>
+                    <div class="popular-tutor" id="popularTutor3">
+                        <img class="main-img" src="" alt="인기튜터 3위" />
+                    </div>
+                </div>
+            </section>
 
 
-<section class="scroll-section" id="scroll-section-1">
-    <!--section1 :: 인기 튜터-->
-    <h2>인기 튜터</h2>
-    <div class="wraping">
-        <div class="popular-tutor" id="popularTutor1">
-            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 1위" />
+            <section class="scroll-section" id="scroll-section-2">
+                <!--section2 :: 튜터링크 게시판-->
+                <div class="">
+                    <h2>튜터링크 게시판에 물어보세요.</h2>
+                </div>
+            </section>
+
+            <section class="scroll-section" id="scroll-section-3">
+                <!--section3 :: 튜터 캐스트-->
+                <div>
+                    <h2>튜터 캐스트</h2>
+                </div>
+            </section>
         </div>
-        <div class="popular-tutor" id="popularTutor2">
-            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 2위" />
-        </div>
-        <div class="popular-tutor" id="popularTutor3">
-            <img class="main-img" src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTNfMTc1/MDAxNTgxNTYxNTcyMTA0.0ZI3U3gDPpeIZwrLk_hBKaj4AX2toVC7qWttISky_I4g.S3dtcNwSLhN2iakYm3hhfubQTRhD4NRiVOREpSi41MQg.PNG.lccthebox4/image.png?type=w800" alt="인기튜터 3위" />
-        </div>
-    </div>
-</section>
 
-
-<section class="scroll-section" id="scroll-section-2">
-    <!--section2 :: 튜터링크 게시판-->
-    <div class="">
-        <h2>튜터링크 게시판에 물어보세요.</h2>
-    </div>
-</section>
-
-<section class="scroll-section" id="scroll-section-3">
-    <!--section3 :: 튜터 캐스트-->
-    <div>
-        <h2>튜터 캐스트</h2>
-    </div>
-</section>
-<!-- 바닥글(footer) 부분 -->
-<footer>
-    <div th:replace="common/footer"></div>
-</footer>
-</body>
+    <!-- 바닥글(footer) 부분 -->
+        <footer>
+            <div th:replace="common/footer"></div>
+        </footer>
+    </body>
 </html>

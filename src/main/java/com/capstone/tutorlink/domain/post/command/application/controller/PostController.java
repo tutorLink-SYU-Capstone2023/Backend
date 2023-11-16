@@ -2,8 +2,9 @@ package com.capstone.tutorlink.domain.post.command.application.controller;
 
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
-import com.capstone.tutorlink.domain.post.command.application.service.BoardCategoryService;
 import com.capstone.tutorlink.domain.post.command.application.service.PostService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,18 +22,15 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/list")
-    public String postList(Model model) {
-        List<PostDTO> postList = postService.postList();
+    @GetMapping("/all")
+    public String findAllPost(@PageableDefault Pageable pageable, Model model) {
+        List<PostDTO> postList = postService.getAllPost();
         model.addAttribute("postList", postList);
-        return "post/list";
+        return "post/all";
 
     }
 
-    @GetMapping("/regist")
-    public String registNewPost(){
-        return "post/regist";
-    }
+
     //게시글 카테고리 생성
     @PostMapping("/regist")
     public String registNewPost(PostDTO newPost){
@@ -42,5 +40,9 @@ public class PostController {
     //게시글 카테고리 수정
     //게시글 카테고리 삭제
 
-
+    @GetMapping(value = "/category", produces = "application/json; charset+UTF-8")
+    @ResponseBody
+    public List<BoardCategoryDTO> findCategoryList(){
+        return postService.findAllCategory();
+    }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -8,7 +9,6 @@
     <div th:replace="common/globalNavAfterLogin"></div>
     <div th:replace="common/globalNavBeforeLogin"></div>
     <h1>자유게시판</h1>
-    <button onclick="location.href='../post/regist'">새 글 작성하기</button>
     <div class="postList">
         <table>
             <tr>
