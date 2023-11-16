@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>Regist New post</h1>
+
+  <form action="/post/regist" method="post">
+    <label>글 제목: </label><input type="text" name="postTitle"><br>
+    <label>글 내용: </label><input type="text" name="postContent"><br>
+    <label>카테고리: </label>
+    <select name="categoryCode" id="categoryCode"></select><br>
+    <input type="submit" value="등록">
+  </form>
+
+  <script>
+    fetch('/board/category')
+            .then(res => res.json())
+            .then(data => {
+                const $categoryCode = document.getElementById('categoryCode');
+                console.log($categoryCode)
+                for(let index in data){
+                  const $option = document.createElement('option');
+                  $option.value = data[index].categoryCode;
+                  $option.textContent = data[index].categoryName;
+                  $categoryCode.appendChild($option);
+                }
+                });
+  </script>
+</body>
+</html>
