@@ -11,9 +11,11 @@ import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +29,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -48,7 +53,7 @@ public class MemberController {
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }
-    @GetMapping("/signIn")
+    @GetMapping("/login")
     public void loginPage() {}
 
     @PostMapping("/loginfail")
@@ -56,13 +61,13 @@ public class MemberController {
 
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
 
-        return "redirect:/member/signIn";
+        return "redirect:/member/login";
     }
 
-    @GetMapping("/signUpAsTutee")
+    @GetMapping("/join")
     public void joinPage(){ }
 
-    @PostMapping("/signUpAsTutee")
+    @PostMapping("/join")
     public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] joinMember ==============================");
 
@@ -93,10 +98,10 @@ public class MemberController {
 
         return "redirect:/";
     }
-    @GetMapping("/signUpAsTutor")
+    @GetMapping("/join2")
     public void join2Page(){ }
 
-    @PostMapping("/signUpAsTutor")
+    @PostMapping("/join2")
     public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] join2Member ==============================");
 
@@ -189,25 +194,25 @@ public class MemberController {
     }
 
 
-    @GetMapping("/myPage")
+    @GetMapping("/mypage")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/findTutee")
+    @GetMapping("/tutee")
     public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
         Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
         model.addAttribute("tuteePage", tuteePage);
-        return "findTutee";
+        return "member/tutee";
     }
 
 
-    @GetMapping("/findTutor")
+    @GetMapping("/tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
         Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
         model.addAttribute("tutorPage", tutorPage);
-        return "findTutor";
+        return "member/tutor";
     }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
