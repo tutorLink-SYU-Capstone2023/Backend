@@ -16,10 +16,10 @@ public class AuthErrorController {
     public AuthErrorController(MessageSourceAccessor messageSourceAccessor) {
         this.messageSourceAccessor = messageSourceAccessor;
     }
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public String loginFailed(RedirectAttributes rttr) {
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
-        return "redirect:/member/login";
+        return "redirect:/member/signin";
     }
 
     @GetMapping("/denied")

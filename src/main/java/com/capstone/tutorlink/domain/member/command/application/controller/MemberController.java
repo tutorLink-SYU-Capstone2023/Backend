@@ -53,7 +53,7 @@ public class MemberController {
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }
-    @GetMapping("/login")
+    @GetMapping("/signin")
     public void loginPage() {}
 
     @PostMapping("/loginfail")
@@ -61,13 +61,13 @@ public class MemberController {
 
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
 
-        return "redirect:/member/login";
+        return "redirect:/member/signin";
     }
 
-    @GetMapping("/join")
+    @GetMapping("/signup_as_tutee")
     public void joinPage(){ }
 
-    @PostMapping("/join")
+    @PostMapping("/signup_as_tutee")
     public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] joinMember ==============================");
 
@@ -98,10 +98,10 @@ public class MemberController {
 
         return "redirect:/";
     }
-    @GetMapping("/join2")
+    @GetMapping("/signup_as_tutor")
     public void join2Page(){ }
 
-    @PostMapping("/join2")
+    @PostMapping("/signup_as_tutor")
     public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] join2Member ==============================");
 
