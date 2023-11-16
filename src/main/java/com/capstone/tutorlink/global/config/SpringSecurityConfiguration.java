@@ -46,7 +46,7 @@ public class SpringSecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/menu/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 // 탈퇴한 사용자가 로그인하지 못하도록 로그인 페이지 권한 제거
-                .antMatchers("/member/login", "/member/**").permitAll()
+                .antMatchers("/member/signin", "/member/**").permitAll()
                 /* 위에 서술 된 내용 외의 모든 요청은 허가함 (인증 되지 않은 사용자도 요청 가능) */
                 .anyRequest().permitAll()
                 .and()
