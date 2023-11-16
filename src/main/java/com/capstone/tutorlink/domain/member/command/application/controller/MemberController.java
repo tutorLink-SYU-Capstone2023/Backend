@@ -48,7 +48,7 @@ public class MemberController {
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }
-    @GetMapping("/signIn")
+    @GetMapping("/signin")
     public void loginPage() {}
 
     @PostMapping("/loginfail")
@@ -56,13 +56,13 @@ public class MemberController {
 
         rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
 
-        return "redirect:/member/signIn";
+        return "redirect:/member/signin";
     }
 
-    @GetMapping("/signUpAsTutee")
+    @GetMapping("/signup_as_tutee")
     public void joinPage(){ }
 
-    @PostMapping("/signUpAsTutee")
+    @PostMapping("/signup_as_tutee")
     public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] joinMember ==============================");
 
@@ -93,10 +93,10 @@ public class MemberController {
 
         return "redirect:/";
     }
-    @GetMapping("/signUpAsTutor")
+    @GetMapping("/signup_as_tutor")
     public void join2Page(){ }
 
-    @PostMapping("/signUpAsTutor")
+    @PostMapping("/signup_as_tutor")
     public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] join2Member ==============================");
 
@@ -185,29 +185,29 @@ public class MemberController {
 
         log.info("[MemberController] modifyMember ==============================");
 
-        return "redirect:/member/mypage";
+        return "redirect:/member/my_page";
     }
 
 
-    @GetMapping("/myPage")
+    @GetMapping("/my_page")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/findTutee")
+    @GetMapping("/find_tutee")
     public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
         Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
         model.addAttribute("tuteePage", tuteePage);
-        return "findTutee";
+        return "find_tutee";
     }
 
 
-    @GetMapping("/findTutor")
+    @GetMapping("/find_tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
         Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
         model.addAttribute("tutorPage", tutorPage);
-        return "findTutor";
+        return "member/find_tutor";
     }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
