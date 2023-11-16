@@ -1,7 +1,5 @@
 package com.capstone.tutorlink.domain.post.command.application.dto;
 
-import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
-import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import lombok.*;
 import org.attoparser.dom.Text;
 import org.hibernate.annotations.Check;
