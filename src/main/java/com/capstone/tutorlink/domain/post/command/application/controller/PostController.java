@@ -1,11 +1,8 @@
 package com.capstone.tutorlink.domain.post.command.application.controller;
 
-import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
-import com.capstone.tutorlink.domain.post.command.application.service.BoardCategoryService;
 import com.capstone.tutorlink.domain.post.command.application.service.PostService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -25,11 +22,11 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/list")
+    @GetMapping("/all")
     public String findAllPost(@PageableDefault Pageable pageable, Model model) {
-        Page<PostDTO> postPage = postService.findAllPost(pageable);
-        model.addAttribute("postList", postPage);
-        return "post/list";
+        List<PostDTO> postList = postService.getAllPost();
+        model.addAttribute("postList", postList);
+        return "post/all";
 
     }
 

@@ -8,6 +8,8 @@ import com.capstone.tutorlink.domain.post.command.domain.repositoroy.BoardCatego
 import com.capstone.tutorlink.domain.post.command.domain.repositoroy.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
+    Logger logger = LoggerFactory.getLogger(getClass());
     public PostService(BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
         this.boardCategoryRepository = boardCategoryRepository;
         this.postRepository = postRepository;
@@ -33,10 +36,10 @@ public class PostService {
 
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
     @Transactional
-    public Page<PostDTO> findAllPost(org.springframework.data.domain.Pageable pageable){
+    public List<PostDTO> getAllPost(){
 //        Page<Post> postPage = postRepository.findAll(Sort.by("postNum").descending());
-        Page<Post> postPage = postRepository.findAllPost(pageable);
-        return postPage.map(post -> modelMapper.map(post, PostDTO.class));
+        List<Post> postList = postRepository.findAll();
+        return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
     }
 
     //신규 게시글 추가

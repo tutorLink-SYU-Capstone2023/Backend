@@ -11,7 +11,7 @@ CREATE TABLE `BOARD_CATEGORY` (
 # 게시글
 #DROP TABLE IF EXISTS `POST`;
 CREATE TABLE `POST` (
-    `post_num`	varchar(36) default (uuid()) PRIMARY KEY,
+    `post_num`	LONG AUTO_INCREMENT PRIMARY KEY,
     `member_no`	BIGINT	NULL,
     `category_code`	ENUM('CATEGORY001', 'CATEGORY002', 'CATEGORY003', 'CATEGORY004', 'CATEGORY005')	NOT NULL,
     `post_title`	VARCHAR(45)	NOT NULL,
