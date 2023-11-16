@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
@@ -27,6 +26,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
             "AND (:tutorUni IS NULL OR m.tutorUni = :tutorUni) " +
             "AND (:myKey IS NULL OR m.myKey = :myKey) " +
             "AND a.authorityName = 'ROLE_TUTOR'")
-    Page<Member> findAllTutorWithConditions(Pageable pageable, String memberGender, String tutorUni, String myKey);
+    Page<Member> findAllTutorWithConditions(Pageable pageable);
 
 }
