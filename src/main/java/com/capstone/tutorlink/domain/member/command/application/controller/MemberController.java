@@ -190,17 +190,17 @@ public class MemberController {
 
         log.info("[MemberController] modifyMember ==============================");
 
-        return "redirect:/member/myPage";
+        return "redirect:/member/my_page";
     }
 
 
-    @GetMapping("/mypage")
+    @GetMapping("/my_page")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/tutee")
+    @GetMapping("/find_tutee")
     public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
         Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
         model.addAttribute("tuteePage", tuteePage);
@@ -208,11 +208,11 @@ public class MemberController {
     }
 
 
-    @GetMapping("/tutor")
+    @GetMapping("/find_tutor")
     public String findAllTutor(@PageableDefault Pageable pageable, Model model){
         Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
         model.addAttribute("tutorPage", tutorPage);
-        return "member/tutor";
+        return "member/find_tutor";
     }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {

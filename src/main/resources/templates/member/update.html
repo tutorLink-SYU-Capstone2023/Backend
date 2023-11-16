@@ -29,7 +29,7 @@
             },
             success: function(response) {
                 // 업데이트가 성공하면 마이 페이지로 리디렉션
-                window.location.href = "/member/mypage";
+                window.location.href = "/member/my_page";
             },
             error: function() {
                 // 오류 처리
@@ -166,7 +166,7 @@
         <div class="btns">
             <input type="submit" value="저장하기" id="saveButton" onclick="updateMemberInfo()">
             <input type="button" value="탈퇴하기" id="deleteMember" onclick="leaveMember()">
-            <a href="/member/mypage">마이 페이지로 돌아가기</a>
+            <a href="/member/myPage">마이 페이지로 돌아가기</a>
         </div>
     </th:block>
 </div>
