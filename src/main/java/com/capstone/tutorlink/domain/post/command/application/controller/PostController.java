@@ -29,6 +29,10 @@ public class PostController {
 
     }
 
+    @GetMapping("/regist")
+    public String registNewPost(){
+        return "post/regist";
+    }
     //게시글 카테고리 생성
     @PostMapping("/regist")
     public String registNewPost(PostDTO newPost){
@@ -38,9 +42,5 @@ public class PostController {
     //게시글 카테고리 수정
     //게시글 카테고리 삭제
 
-    @GetMapping(value = "/category", produces = "application/json; charset+UTF-8")
-    @ResponseBody
-    public List<BoardCategoryDTO> findCategoryList(){
-        return postService.findAllCategory();
-    }
+
 }

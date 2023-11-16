@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +23,6 @@ public class BoardCategoryService {
         this.boardCategoryRepository = boardCategoryRepository;
         this.modelMapper = modelMapper;
     }
-
 
     //신규 게시글 카테고리 등록 처리
     @Transactional
