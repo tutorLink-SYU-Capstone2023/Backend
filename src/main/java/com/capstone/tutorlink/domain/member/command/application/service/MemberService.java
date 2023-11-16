@@ -2,10 +2,7 @@ package com.capstone.tutorlink.domain.member.command.application.service;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.*;
-import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
-import com.capstone.tutorlink.domain.member.command.domain.repository.AuthorityRepository;
-import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
-import com.capstone.tutorlink.domain.member.command.domain.repository.UniversityRepository;
+import com.capstone.tutorlink.domain.member.command.domain.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,14 +21,16 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private final UniversityRepository universityRepository;
+    private final LikedMemberRepository likedMemberRepository;
     public MemberService(MemberRepository memberRepository, AuthorityRepository authorityRepository,
-                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
+                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository) {
         this.memberRepository = memberRepository;
         this.authorityRepository = authorityRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
+        this.likedMemberRepository = likedMemberRepository;
     }
 
     @Transactional
@@ -45,8 +44,8 @@ public class MemberService {
         return tuteePage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
     @Transactional
-    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
-        Page<Member> tutorPage = memberRepository.findAllTutor(pageable);
+    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable, String memberGender, String tutorUni, String myKey) {
+        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable);
         return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
 
@@ -175,5 +174,47 @@ public class MemberService {
         Member savedMember = memberRepository.findByMemberNo(member.getMemberNo());
         savedMember.setMemberCurrentStatus("D");
 
+    }
+    @Transactional
+    public Member getTutorByMemberNo(int memberNo) {
+        return memberRepository.findByMemberNo(memberNo);
+    }
+
+    // 다른 회원을 좋아요 하는 메서드
+    @Transactional
+    public void likeMember(int memberId, int likedMemberId) {
+        Member member = memberRepository.findByMemberNo(memberId);
+        Member likedMember = memberRepository.findByMemberNo(likedMemberId);
+
+        // 이미 좋아요한 경우 중복 좋아요를 방지하기 위해 확인
+        if (!member.getLikedMembers().contains(likedMember)) {
+            member.getLikedMembers().add(likedMember);
+            likedMember.getLikedByMembers().add(member);
+
+            // 추가된 좋아요 관계를 데이터베이스에 반영
+            LikedMember likedMemberEntity = new LikedMember();
+            likedMemberEntity.setMemberId(memberId);
+            likedMemberEntity.setLikedMemberId(likedMemberId);
+            likedMemberRepository.save(likedMemberEntity);
+        }
+    }
+    @Transactional
+    public void unlikeMember(int memberId, int likedMemberId) {
+        Member member = memberRepository.findByMemberNo(memberId);
+        Member likedMember = memberRepository.findByMemberNo(likedMemberId);
+
+        // 좋아요를 취소하는 경우
+        member.getLikedMembers().remove(likedMember);
+        likedMember.getLikedByMembers().remove(member);
+
+        // 좋아요 취소된 관계를 데이터베이스에서 삭제
+        likedMemberRepository.deleteByMemberIdAndLikedMemberId(memberId, likedMemberId);
+    }
+
+
+    @Transactional
+    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
+        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable);
+        return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    function likeMember() {
+      // 폼 데이터 가져오기
+      var formData = $("#likeForm").serialize();
+
+      // AJAX 요청 수행
+      $.ajax({
+        type: "POST",
+        url: "/member/like",
+        data: formData,
+        success: function(response) {
+          // 성공 처리, 예를 들어 메시지 표시
+          alert(response);
+        },
+        error: function(error) {
+          // 에러 처리, 예를 들어 에러 메시지 표시
+          alert("Error: " + error.responseText);
+        }
+      });
+    }
+  </script>
+  <title>TutorLink</title>
+  <style>
+    <!-- 이전 스타일 코드 유지 -->
+  </style>
+</head>
+<body>
+<!-- 이전 HTML 코드 유지 -->
+
+<section>
+  <h2>튜터 상세 정보</h2>
+  <table>
+    <tr>
+      <th>회원 번호</th>
+      <td th:text="${tutor.memberNo}"></td>
+    </tr>
+    <tr>
+      <th>아이디</th>
+      <td th:text="${tutor.memberId}"></td>
+    </tr>
+    <tr>
+      <th>닉네임</th>
+      <td th:text="${tutor.memberNickname}"></td>
+    </tr>
+    <!-- 다른 필드들 추가 -->
+  </table>
+
+  <!-- 좋아요 버튼 폼 -->
+  <th:block sec:authorize="isAuthenticated()">
+  <form action="/member/like" method="post">
+    <!-- 현재 로그인한 회원의 memberNo를 전달하는 input -->
+    <input type="input" name="memberId" th:value="${#authentication.principal.memberNo}" />
+    <!-- 튜터의 memberNo를 전달하는 input -->
+    <input type="input" name="likedMemberId" th:value="${tutor.memberNo}" />
+    <!-- 좋아요 버튼 -->
+    <button type="submit" onclick="likeMember()">좋아요</button>
+  </form>
+
+  <!-- 좋아요 취소 버튼 폼 -->
+  <form action="/member/unlike" method="post">
+    <!-- 현재 로그인한 회원의 memberNo를 전달하는 input -->
+    <input type="input" name="memberId" th:value="${#authentication.principal.memberNo}" />
+    <!-- 튜터의 memberNo를 전달하는 input -->
+    <input type="input" name="likedMemberId" th:value="${tutor.memberNo}" />
+    <!-- 좋아요 취소 버튼 -->
+    <button type="submit">좋아요 취소</button>
+  </form>
+  </th:block>
+</section>
+
+<!-- 이후 코드 유지 -->
+</body>
+</html>

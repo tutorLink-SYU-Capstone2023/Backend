@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
@@ -19,7 +18,14 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     @Query("SELECT m FROM Member m JOIN m.memberRoleList r WHERE r.authority.authorityName = 'ROLE_TUTEE'")
     Page<Member> findAllTutee(org.springframework.data.domain.Pageable pageable);
 
-    @Query("SELECT m FROM Member m JOIN m.memberRoleList r WHERE r.authority.authorityName = 'ROLE_TUTOR'")
-    Page<Member> findAllTutor(org.springframework.data.domain.Pageable pageable);
+
+    @Query("SELECT m FROM Member m " +
+            "JOIN MemberRole mr ON m.memberNo = mr.memberNo " +
+            "JOIN Authority a ON mr.authorityNum = a.authorityNum " +
+            "WHERE (:memberGender IS NULL OR m.memberGender = :memberGender) " +
+            "AND (:tutorUni IS NULL OR m.tutorUni = :tutorUni) " +
+            "AND (:myKey IS NULL OR m.myKey = :myKey) " +
+            "AND a.authorityName = 'ROLE_TUTOR'")
+    Page<Member> findAllTutorWithConditions(Pageable pageable);
 
 }
