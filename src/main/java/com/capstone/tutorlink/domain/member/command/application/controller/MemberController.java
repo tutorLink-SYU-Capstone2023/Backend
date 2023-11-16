@@ -200,20 +200,13 @@ public class MemberController {
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/find_tutee")
-    public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
-        Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
-        model.addAttribute("tuteePage", tuteePage);
-        return "member/find_tutee";
-    }
 
-
-    @GetMapping("/find_tutor")
-    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
-        model.addAttribute("tutorPage", tutorPage);
-        return "member/find_tutor";
-    }
+//    @GetMapping("/find_tutor")
+//    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
+//        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
+//        model.addAttribute("tutorPage", tutorPage);
+//        return "member/find_tutor";
+//    }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
         boolean check = true;
