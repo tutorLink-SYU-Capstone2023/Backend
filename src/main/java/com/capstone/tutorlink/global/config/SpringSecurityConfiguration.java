@@ -42,22 +42,22 @@ public class SpringSecurityConfiguration {
                 .antMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 /* hasRole 안에 전달하는 값은 "ROLE_" 가 자동으로 붙는다. */
                 .antMatchers("/order/**", "/member/delete").hasAnyAuthority("ROLE_TUTEE", "ROLE_ADMIN","ROLE_TUTOR","ROLE_BOTH")
-                .antMatchers("/**", "/member/login", "/member/**").permitAll()
+                .antMatchers("/**", "/member/signin", "/member/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/menu/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 // 탈퇴한 사용자가 로그인하지 못하도록 로그인 페이지 권한 제거
-                .antMatchers("/member/login", "/member/**").permitAll()
+                .antMatchers("/member/signin", "/member/**").permitAll()
                 /* 위에 서술 된 내용 외의 모든 요청은 허가함 (인증 되지 않은 사용자도 요청 가능) */
                 .anyRequest().permitAll()
                 .and()
                 /* 로그인 설정 */
                 .formLogin()
                 /* 로그인 페이지 설정 */
-                .loginPage("/member/login")
+                .loginPage("/member/signin")
                 /* 성공 시 랜딩 페이지 설정 */
                 .successForwardUrl("/")
                 /* 로그인 실패 시 랜딩 페이지 설정 */
-                .failureForwardUrl("/error/login")
+                .failureForwardUrl("/error/signin")
                 .and()
                 /* 로그아웃 설정 */
                 .logout()
