@@ -23,7 +23,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "category_code", name = "category_code")
-    private BoardCategory category;
+    private BoardCategory categoryName;
 
     @Column(name = "post_title")
     private String postTitle;

@@ -21,9 +21,9 @@
 
             <tr th:each="post : ${postList}">
                 <td th:text="${post.postNum}"></td>
-                <td th:text="${post.category.categoryName}"></td>
+                <td th:text="${post.categoryName.getCategoryName()}"></td>
                 <td th:text="${post.postTitle}"></td>
-                <td th:text="${post.postWriter.memberName}"></td>
+                <td th:text="${post.postWriter.getMemberName()}"></td>
                 <td th:text="${post.postCount}"></td>
             </tr>
 
