@@ -1,12 +1,15 @@
 package com.capstone.tutorlink.domain.post.command.domain.aggregate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
 @Entity
 @Table(name = "BOARD_CATEGORY")
 

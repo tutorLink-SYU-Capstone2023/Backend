@@ -40,8 +40,8 @@ public class PostService {
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
     @Transactional
     public List<PostDTO> getAllPost(){
-//        Page<Post> postPage = postRepository.findAll(Sort.by("postNum").descending());
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
+//        List<Post> postList = postRepository.findAll();
         return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
     }
 
@@ -52,9 +52,8 @@ public class PostService {
     }
 
     //카테고리 조회(글 등록 시 필요)
-    @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
-        List<BoardCategory> categoryList = boardCategoryRepository.findAllCategory();
+        List<BoardCategory> categoryList = boardCategoryRepository.findAll();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());
     }
 }

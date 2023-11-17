@@ -30,12 +30,14 @@ public class PostController {
 
     }
 
+    @GetMapping("/regist")
+    public void registNewPost() {}
 
     //게시글 카테고리 생성
     @PostMapping("/regist")
     public String registNewPost(PostDTO newPost){
         postService.registNewPost(newPost);
-        return "redirect:/post/list";
+        return "redirect:/post/all";
     }
     //게시글 카테고리 수정
     //게시글 카테고리 삭제

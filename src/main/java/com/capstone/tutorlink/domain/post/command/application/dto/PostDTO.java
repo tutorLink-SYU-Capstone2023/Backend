@@ -33,8 +33,9 @@ public class PostDTO {
     private String postContent;
 
     @NotNull(message = "글 등록일은 반드시 입력되어야 합니다.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime postRegistdDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Builder.Default
+    private LocalDateTime postRegistdDate = LocalDateTime.now();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime postUpdatedDate;
