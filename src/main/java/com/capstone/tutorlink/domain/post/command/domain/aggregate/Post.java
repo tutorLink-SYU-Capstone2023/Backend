@@ -29,7 +29,7 @@ public class Post {
     private String postTitle;
 
     @Column(name = "post_content")
-    private Text postContent;
+    private String postContent;
 
     @Column(name = "post_regist_date")
     private LocalDateTime postRegistdDate;

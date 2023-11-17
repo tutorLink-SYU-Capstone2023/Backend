@@ -1,5 +1,6 @@
 package com.capstone.tutorlink.domain.post.command.application.service;
 
+import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
@@ -24,12 +25,14 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private final BoardCategoryRepository boardCategoryRepository;
+    private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    public PostService(BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
+    public PostService(MemberRepository memberRepository, BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
         this.boardCategoryRepository = boardCategoryRepository;
+        this.memberRepository = memberRepository;
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
     }

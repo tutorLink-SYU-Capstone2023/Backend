@@ -28,7 +28,7 @@ public class PostDTO {
     private String postTitle;
 
     @NotNull(message = "글 내용은 반드시 입력되어야 합니다.")
-    private Text postContent;
+    private String postContent;
 
     @NotNull(message = "글 등록일은 반드시 입력되어야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
