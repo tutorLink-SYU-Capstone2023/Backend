@@ -14,21 +14,26 @@
     <button type="submit" onclick="">조회수 정렬</button>
     <div class="postList">
         <table>
-            <tr>
-                <th>글 번호</th>
-                <th>카테고리</th>
-                <th>글 제목</th>
-                <th>작성자</th>
-                <th>조회수</th>
-            </tr>
-
+            <thead>
+                <tr>
+                    <th>글 번호</th>
+                    <th>카테고리</th>
+                    <th>글 제목</th>
+                    <th>작성자</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
             <tr th:each="post : ${postList}">
                 <td th:text="${post.postNum}"></td>
                 <td th:text="${post.categoryName.getCategoryName()}"></td>
-                <td th:text="${post.postTitle}"></td>
+                <td>
+                    <a th:text="${post.postTitle}" th:href="@{/post/${post.postNum}}"></a>
+                </td>
                 <td th:text="${post.postWriter.getMemberName()}"></td>
                 <td th:text="${post.postCount}"></td>
             </tr>
+            </tbody>
 
         </table>
     </div>

@@ -41,8 +41,15 @@ public class PostService {
     @Transactional
     public List<PostDTO> getAllPost(){
         List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
-//        List<Post> postList = postRepository.findAll();
+//        Page<Post> postPage = postRepository.findAll();
         return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    }
+
+    //게시글 상세 조회
+    @Transactional
+    public PostDTO findPostByNum(Long postNum){
+        Post post = postRepository.findById(postNum).orElseThrow(IllegalArgumentException::new);
+        return modelMapper.map(post, PostDTO.class);
     }
 
     //신규 게시글 추가
