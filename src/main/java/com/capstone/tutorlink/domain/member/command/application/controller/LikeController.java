@@ -28,7 +28,7 @@ public class LikeController {
         // 좋아요 로직 구현
         memberService.likeMember(member.getMemberNo(), likedMemberId);
 
-        return "redirect:/tutorDetail"; // 좋아요 후 다시 튜터 상세 페이지로 이동하도록 설정
+        return "redirect:/member/tutorDetail/" + likedMemberId; // 좋아요 후 다시 튜터 상세 페이지로 이동하도록 설정
     }
 
     // 좋아요 취소 폼에서 memberNo를 전달받는 컨트롤러 메서드
@@ -37,8 +37,9 @@ public class LikeController {
         // 좋아요 취소 로직 구현
         memberService.unlikeMember(member.getMemberNo(), likedMemberId);
 
-        return "redirect:/tutorDetail"; // 좋아요 취소 후 다시 튜터 상세 페이지로 이동하도록 설정
+        return "redirect:/member/tutorDetail/" + likedMemberId; // 좋아요 취소 후 다시 튜터 상세 페이지로 이동하도록 설정
     }
+
     // 좋아요 처리를 위한 컨트롤러 메서드
     @PostMapping("/like")
     public ResponseEntity<String> likeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
@@ -46,5 +47,10 @@ public class LikeController {
         return ResponseEntity.ok("Liked successfully");
     }
 
+    // 좋아요 취소 처리를 위한 컨트롤러 메서드
+    @PostMapping("/unlike")
+    public ResponseEntity<String> unlikeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
+        memberService.unlikeMember(member.getMemberNo(), likedMemberId);
+        return ResponseEntity.ok("Unliked successfully");
+    }
 }
-
