@@ -29,13 +29,13 @@ public class Member {
     @Column(name = "member_pw", length = 100, nullable = false)
     private String memberPw;
 
-    @Column(name = "member_nickname", length = 45, nullable = false)
+    @Column(name = "member_nickname", length = 45, nullable = false, unique = true)
     private String memberNickname;
 
     @Column(name = "member_name", length = 45, nullable = false)
     private String memberName;
 
-    @Column(name = "member_email", length = 100, nullable = false)
+    @Column(name = "member_email", length = 100, nullable = false, unique = true)
     private String memberEmail;
 
     @Column(name = "member_gender", length = 1, nullable = false)
@@ -50,7 +50,7 @@ public class Member {
     @Column(name = "member_current_status", nullable = false)
     private String memberCurrentStatus = "A"; // 기본값 설정
 
-    @Column(name = "member_phone_number", nullable = false)
+    @Column(name = "member_phone_number", nullable = false, unique = true)
     private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
     @Column(name = "tutor_school_authorize", nullable = false)

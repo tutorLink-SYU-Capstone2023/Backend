@@ -7,7 +7,39 @@
 <script>
   const message = '[[${message}]]';
   message && alert(message);
+  function showOptions() {
+    document.getElementById("joinOptions").style.display = "block";
+  }
+
+  function hideOptions() {
+    document.getElementById("joinOptions").style.display = "none";
+  }
 </script>
+<style>
+  .join-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .join_option {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .join_option a {
+    color: black;
+    padding: 12px 16px;
+    display: block;
+  }
+
+  .join_option a:hover {
+    background-color: #ddd;
+  }
+</style>
+
 <body>
 <h1>로그인</h1>
 
@@ -36,6 +68,7 @@
 </form>
 
 <div class="btns">
+  <button style="width: 100px; border: none; background: none; color: gray; cursor: pointer;" onclick="location.href='/member/signup_as_tutor'">회원가입</button>
   <span class="global_nav_name">회원가입</span>
   <div class="join_option">
     <a href="../member/signup_as_tutor">튜터로 회원가입 👩🏻‍🏫</a>

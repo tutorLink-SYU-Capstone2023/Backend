@@ -83,11 +83,16 @@ public class MemberController {
         } else {
             // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
             member.setMyKey(acceptedTypeCategory.getMyKey());
-
+            // memberCurrentStatus 값이 없으면 기본값으로 설정
+            if (member.getMemberCurrentStatus() == null) {
+                member.setMemberCurrentStatus("A");
+            }
             // 회원 가입을 시도
             try {
                 memberService.joinMember(member);
+
                 rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
+                log.info("22");
             } catch (Exception e) {
                 // 회원 가입 실패 시 예외 처리
                 rttr.addFlashAttribute("error", "회원 가입에 실패했습니다.");

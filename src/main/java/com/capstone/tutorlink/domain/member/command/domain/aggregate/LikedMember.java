@@ -10,30 +10,29 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "liked_members")
+@Table(name = "LIKED_MEMBERS")
 public class LikedMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "member_id")
-    private Integer memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", referencedColumnName = "member_no", nullable = false)
+    private Member member;
 
-    @Column(name = "liked_member_id")
-    private Integer likedMemberId;
-
+    @ManyToOne
+    @JoinColumn(name = "liked_member_id", referencedColumnName = "member_no", nullable = false)
+    private Member likedMember;
 
     // Constructors, getters, setters, etc.
-    // LikedMember 엔티티
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
-    public void setLikedMemberId(int likedMemberId) {
-        this.likedMemberId = likedMemberId;
+    public void setLikedMember(Member likedMember) {
+        this.likedMember = likedMember;
     }
-
-
 }

@@ -45,7 +45,7 @@ public class MemberService {
     }
     @Transactional
     public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable, String memberGender, String tutorUni, String myKey) {
-        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable);
+        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(memberGender, tutorUni, myKey, pageable);
         return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
 
@@ -190,31 +190,17 @@ public class MemberService {
         if (!member.getLikedMembers().contains(likedMember)) {
             member.getLikedMembers().add(likedMember);
             likedMember.getLikedByMembers().add(member);
-
-            // 추가된 좋아요 관계를 데이터베이스에 반영
-            LikedMember likedMemberEntity = new LikedMember();
-            likedMemberEntity.setMemberId(memberId);
-            likedMemberEntity.setLikedMemberId(likedMemberId);
-            likedMemberRepository.save(likedMemberEntity);
         }
     }
-    @Transactional
+
     public void unlikeMember(int memberId, int likedMemberId) {
-        Member member = memberRepository.findByMemberNo(memberId);
-        Member likedMember = memberRepository.findByMemberNo(likedMemberId);
-
-        // 좋아요를 취소하는 경우
-        member.getLikedMembers().remove(likedMember);
-        likedMember.getLikedByMembers().remove(member);
-
-        // 좋아요 취소된 관계를 데이터베이스에서 삭제
-        likedMemberRepository.deleteByMemberIdAndLikedMemberId(memberId, likedMemberId);
+        likedMemberRepository.deleteByMember_MemberNoAndLikedMember_MemberNo(memberId, likedMemberId);
     }
 
 
-    @Transactional
-    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
-        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable);
-        return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
-    }
+//    @Transactional
+//    public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable) {
+//        Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(pageable);
+//        return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
+//    }
 }

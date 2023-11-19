@@ -4,7 +4,7 @@ window.onload = function() {
     if (document.getElementById("join")) {
         const $regist = document.getElementById("join");
         $regist.onclick = function () {
-            location.href = "/member/join";
+            location.href = "/member/signup_as_tutee";
         }
     }
 
@@ -44,7 +44,7 @@ window.onload = function() {
     if (document.getElementById("login")) {
         const $login = document.getElementById("login");
         $login.onclick = function () {
-            location.href = "/member/login";
+            location.href = "/member/signin";
         }
     }
 

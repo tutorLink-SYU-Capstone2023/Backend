@@ -39,10 +39,10 @@ public class MemberDTO implements UserDetails {
 
     private Date memberEnrollDate; // member_enroll_date를 memberEnrollDate로 수정
 
-    private String memberCurrentStatus; // member_current_status를 memberCurrentStatus로 수정
+    private String memberCurrentStatus = "A"; // member_current_status를 memberCurrentStatus로 수정
     private String memberPhoneNumber; // 데이터 타입을 String으로 변경
 
-    private String tutorSchoolAuthorize;
+    private String tutorSchoolAuthorize ="N";
     private String tutorMiddleSchool;
     private String tutorHighSchool;
     private String tutorUni;
