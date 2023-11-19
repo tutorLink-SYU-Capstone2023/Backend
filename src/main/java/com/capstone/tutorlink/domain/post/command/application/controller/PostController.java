@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class PostController {
         this.postService = postService;
     }
 
+    //전체 게시글 조회
     @GetMapping("/all")
     public String findAllPost(@PageableDefault Pageable pageable, Model model) {
         List<PostDTO> postList = postService.getAllPost();
@@ -30,16 +28,27 @@ public class PostController {
 
     }
 
+    //게시글 상세
+    @GetMapping({"/detail/{postNum}"})
+    public String findByCode(@PathVariable Long postNum, Model model){
+        PostDTO post = postService.findPostByNum(postNum);
+        model.addAttribute("post", post);
+        return "post/detail";
+    }
 
-    //게시글 카테고리 생성
+    //게시글 등록 페이지로 이동
+    @GetMapping("/regist")
+    public void registNewPost() {}
+
+    //게시글 등록 정보 전달
     @PostMapping("/regist")
     public String registNewPost(PostDTO newPost){
         postService.registNewPost(newPost);
-        return "redirect:/post/list";
+        return "redirect:/post/all";
     }
-    //게시글 카테고리 수정
-    //게시글 카테고리 삭제
 
+
+    //글 등록 시 카테고리 조회
     @GetMapping(value = "/category", produces = "application/json; charset+UTF-8")
     @ResponseBody
     public List<BoardCategoryDTO> findCategoryList(){

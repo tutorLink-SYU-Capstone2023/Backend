@@ -38,7 +38,9 @@ public class TutorController {
         return "member/tutor";
     }
     */
-   @GetMapping("/tutor")
+
+
+   @GetMapping("/find_tutor")
    public String findAllTutor(
            @PageableDefault Pageable pageable,
            @RequestParam(name = "memberGender", required = false) String memberGender,
@@ -48,7 +50,7 @@ public class TutorController {
    ) {
        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable, memberGender, tutorUni, myKey);
        model.addAttribute("tutorPage", tutorPage);
-       return "member/tutor";
+       return "member/find_tutor";
    }
     @GetMapping("/tutorDetail/{memberNo}")
     public String getTutorDetail(@PathVariable int memberNo, Model model) {

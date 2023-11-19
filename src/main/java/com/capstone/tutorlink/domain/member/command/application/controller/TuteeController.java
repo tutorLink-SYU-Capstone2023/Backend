@@ -21,10 +21,10 @@ public class TuteeController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/tutee")
+    @GetMapping("/find_tutee")
     public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
         Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
         model.addAttribute("tuteePage", tuteePage);
-        return "member/tutee";
+        return "member/find_tutee";
     }
 }

@@ -11,9 +11,11 @@ import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +29,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -185,7 +190,7 @@ public class MemberController {
 
         log.info("[MemberController] modifyMember ==============================");
 
-        return "redirect:/member/myPage";
+        return "redirect:/member/my_page";
     }
 
 
@@ -195,20 +200,13 @@ public class MemberController {
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
     }
-    @GetMapping("/find_tutee")
-    public String findAllTutee(@PageableDefault Pageable pageable, Model model) {
-        Page<MemberDTO> tuteePage = memberService.findAllTutee(pageable);
-        model.addAttribute("tuteePage", tuteePage);
-        return "/member/find_tutee";
-    }
 
-
-    @GetMapping("/find_tutor")
-    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
-        model.addAttribute("tutorPage", tutorPage);
-        return "/member/find_tutor";
-    }
+//    @GetMapping("/find_tutor")
+//    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
+//        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
+//        model.addAttribute("tutorPage", tutorPage);
+//        return "member/find_tutor";
+//    }
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
         boolean check = true;
