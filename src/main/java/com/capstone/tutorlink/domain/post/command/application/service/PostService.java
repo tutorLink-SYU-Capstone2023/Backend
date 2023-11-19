@@ -51,7 +51,7 @@ public class PostService {
     //카테고리 조회(글 등록 시 필요)
     @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
-        List<BoardCategory> categoryList = boardCategoryRepository.findAllCategory();
+        List<BoardCategory> categoryList = boardCategoryRepository.findAll();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());
     }
 }
