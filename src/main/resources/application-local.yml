@@ -18,6 +18,7 @@ spring:
   # JPA config
   jpa:
     #database: mysql
+    database: h2
     hibernate:
       ddl-auto: update
     open-in-view: false

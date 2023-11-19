@@ -1,5 +1,6 @@
 package com.capstone.tutorlink.domain.post.command.application.service;
 
+import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
@@ -24,12 +25,14 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private final BoardCategoryRepository boardCategoryRepository;
+    private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    public PostService(BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
+    public PostService(MemberRepository memberRepository, BoardCategoryRepository boardCategoryRepository, PostRepository postRepository, ModelMapper modelMapper){
         this.boardCategoryRepository = boardCategoryRepository;
+        this.memberRepository = memberRepository;
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
     }
@@ -37,9 +40,16 @@ public class PostService {
     //게시글 리스트, post_num기준으로 내림차순 정렬(최신순 조회)
     @Transactional
     public List<PostDTO> getAllPost(){
-//        Page<Post> postPage = postRepository.findAll(Sort.by("postNum").descending());
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
+//        Page<Post> postPage = postRepository.findAll();
         return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    }
+
+    //게시글 상세 조회
+    @Transactional
+    public PostDTO findPostByNum(Long postNum){
+        Post post = postRepository.findById(postNum).orElseThrow(IllegalArgumentException::new);
+        return modelMapper.map(post, PostDTO.class);
     }
 
     //신규 게시글 추가
@@ -49,9 +59,8 @@ public class PostService {
     }
 
     //카테고리 조회(글 등록 시 필요)
-    @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
-        List<BoardCategory> categoryList = boardCategoryRepository.findAllCategory();
+        List<BoardCategory> categoryList = boardCategoryRepository.findAll();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());
     }
 }
