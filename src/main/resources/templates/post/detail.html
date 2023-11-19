@@ -24,8 +24,9 @@
             <th>글 번호</th>
             <th>카테고리</th>
             <th>글 제목</th>
-            <th>글 내용</th>
             <th>작성자</th>
+            <th>글 내용</th>
+            <th>글 등록일</th>
             <th>조회수</th>
             <th></th>
         </tr>
@@ -36,6 +37,7 @@
             <td th:text="${post.categoryName.getCategoryName()}"></td>
             <td th:text="${post.postTitle}"></td>
             <td th:text="${post.postWriter.getMemberName()}"></td>
+            <td th:text="${post.getPostContent()}"></td>
             <td th:text="${post.getPostRegistdDate()}"></td>
             <td th:text="${post.postCount}"></td>
         </tr>

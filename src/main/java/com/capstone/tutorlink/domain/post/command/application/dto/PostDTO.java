@@ -1,5 +1,7 @@
 package com.capstone.tutorlink.domain.post.command.application.dto;
 
+import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import lombok.*;
 import org.attoparser.dom.Text;
 import org.hibernate.annotations.Check;
@@ -19,16 +21,16 @@ public class PostDTO {
     private Long postNum;
 
     @NotNull(message = "아이디는 반드시 입력되어야 합니다.")
-    private String postWriter;
+    private Member postWriter;
 
     @NotNull(message = "카테고리는 반드시 입력되다어야 합니다.")
-    private String category;
+    private BoardCategory category;
 
     @NotNull(message = "글 제목은 반드시 입력되어야 합니다.")
     private String postTitle;
 
     @NotNull(message = "글 내용은 반드시 입력되어야 합니다.")
-    private Text postContent;
+    private String postContent;
 
     @NotNull(message = "글 등록일은 반드시 입력되어야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")

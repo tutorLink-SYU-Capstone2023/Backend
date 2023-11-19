@@ -26,9 +26,9 @@
             <tbody>
             <tr th:each="post : ${postList}">
                 <td th:text="${post.postNum}"></td>
-                <td th:text="${post.categoryName.getCategoryName()}"></td>
+                <td th:text="${post.category.getCategoryName()}"></td>
                 <td>
-                    <a th:text="${post.postTitle}" th:href="@{/post/${post.postNum}}"></a>
+                    <a th:text="${post.postTitle}" th:href="@{'/post/detail/' + ${post.postNum}}"></a>
                 </td>
                 <td th:text="${post.postWriter.getMemberName()}"></td>
                 <td th:text="${post.postCount}"></td>
