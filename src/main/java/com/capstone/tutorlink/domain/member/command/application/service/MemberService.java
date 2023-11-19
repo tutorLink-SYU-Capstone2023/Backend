@@ -1,10 +1,12 @@
 package com.capstone.tutorlink.domain.member.command.application.service;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
+import com.capstone.tutorlink.domain.member.command.application.event.LikeEvent;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.*;
 import com.capstone.tutorlink.domain.member.command.domain.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,9 @@ public class MemberService {
     private final AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private final UniversityRepository universityRepository;
     private final LikedMemberRepository likedMemberRepository;
+    private final ApplicationEventPublisher eventPublisher;
     public MemberService(MemberRepository memberRepository, AuthorityRepository authorityRepository,
-                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository) {
+                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository, ApplicationEventPublisher eventPublisher) {
         this.memberRepository = memberRepository;
         this.authorityRepository = authorityRepository;
         this.modelMapper = modelMapper;
@@ -31,6 +34,7 @@ public class MemberService {
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
         this.likedMemberRepository = likedMemberRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -193,6 +197,9 @@ public class MemberService {
 
         member.getLikedMembers().add(likedMember);
         likedMember.getLikedByMembers().add(member);
+
+        // 좋아요 이벤트 발생
+        eventPublisher.publishEvent(new LikeEvent(this, memberId, likedMemberId));
 
         return "Liked successfully!";
     }
