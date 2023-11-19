@@ -26,8 +26,17 @@ public class LikeController {
     @PostMapping("/member/like")
     public String likeMember(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         // 좋아요 로직 구현
-        memberService.likeMember(member.getMemberNo(), likedMemberId);
+        String resultMessage = memberService.likeMember(member.getMemberNo(), likedMemberId);
 
+        // 메시지에 따라 적절한 처리를 수행
+        if ("Already liked this member!".equals(resultMessage)) {
+            // 이미 좋아요한 경우에 대한 처리
+            // 예를 들어, alert 창을 띄우거나 특정 페이지로 리다이렉트
+            // return "redirect:/alreadyLikedPage";
+        } else {
+            // 좋아요 성공의 경우에 대한 처리
+            // return "redirect:/tutorDetail/" + likedMemberId;
+        }
         return "redirect:/member/tutorDetail/" + likedMemberId; // 좋아요 후 다시 튜터 상세 페이지로 이동하도록 설정
     }
 
