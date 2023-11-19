@@ -1,6 +1,8 @@
 package com.capstone.tutorlink.domain.member.command.domain.aggregate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Table(name = "MEMBER_ROLE")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +32,6 @@ public class MemberRole {
     @ManyToOne
     @JoinColumn(name = "member_no", insertable = false, updatable = false)
     private Member member;
-
-    public MemberRole() {
-    }
 
     public MemberRole(Authority authority) {
         this.authority = authority;
