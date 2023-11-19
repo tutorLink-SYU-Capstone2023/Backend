@@ -9,22 +9,31 @@
     <div th:replace="common/globalNavAfterLogin"></div>
     <div th:replace="common/globalNavBeforeLogin"></div>
     <h1>자유게시판</h1>
+    <button type="submit" onclick="location.href='/post/regist'">글 등록하기</button>
+    <button type="submit" onclick="">최신순 정렬</button>
+    <button type="submit" onclick="">조회수 정렬</button>
     <div class="postList">
         <table>
-            <tr>
-                <th>카테고리</th>
-                <th>글 제목</th>
-                <th>작성자</th>
-                <th>조회수</th>
-            </tr>
-
+            <thead>
+                <tr>
+                    <th>글 번호</th>
+                    <th>카테고리</th>
+                    <th>글 제목</th>
+                    <th>작성자</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
             <tr th:each="post : ${postList}">
                 <td th:text="${post.postNum}"></td>
-                <td th:text="${post.category.categoryName}"></td>
-                <td th:text="${post.postTitle}"></td>
-                <td th:text="${post.postWriter.memberName}"></td>
+                <td th:text="${post.categoryName.getCategoryName()}"></td>
+                <td>
+                    <a th:text="${post.postTitle}" th:href="@{/post/${post.postNum}}"></a>
+                </td>
+                <td th:text="${post.postWriter.getMemberName()}"></td>
                 <td th:text="${post.postCount}"></td>
             </tr>
+            </tbody>
 
         </table>
     </div>

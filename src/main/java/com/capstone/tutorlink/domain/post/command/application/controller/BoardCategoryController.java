@@ -12,6 +12,10 @@ public class BoardCategoryController {
 
     private final BoardCategoryService boardCategoryService;
 
+    @GetMapping("/")
+    public void getAllCategory(){}
+
+
     public BoardCategoryController(BoardCategoryService boardCategoryService) {
         this.boardCategoryService = boardCategoryService;
     }
