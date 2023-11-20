@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>modify</title>
 </head>
 <body>
+<h1>게시글 수정</h1>
+<form id="updateForm" method="post">
+    <label>카테고리: </label>
+    <select name="categoryCode" id="categoryCode"></select><br>
 
+    <label>제목 : </label>
+    <input type="text" name="postTitle" placeholder=""><br>
+
+    <label>내용 : </label>
+    <input type="text" name="postContent"><br>
+
+    <input type="submit" value="전송">
+</form>
+<script>
+    // 게시글 정보를 가져오는 함수
+    function getPostInfo() {
+        // 게시글을 가져오는 API 엔드포인트를 적절히 수정하세요.
+        fetch('/post/getPostInfo')
+            .then(res => res.json())
+            .then(data => {
+                // 폼 요소에 기존 정보를 설정
+                document.getElementById('categoryCode').value = data.categoryCode;
+                document.querySelector('input[name="postTitle"]').value = data.postTitle;
+                document.querySelector('input[name="postContent"]').value = data.postContent;
+            });
+    }
+
+    // 카테고리 정보를 가져오는 함수
+    function getCategoryInfo() {
+        fetch('/post/category')
+            .then(res => res.json())
+            .then(data => {
+                const $categoryCode = document.getElementById('categoryCode');
+                for (let index in data) {
+                    const $option = document.createElement('option');
+                    $option.value = data[index].categoryCode;
+                    $option.textContent = data[index].categoryName;
+
+                    $categoryCode.appendChild($option);
+                }
+
+                // 폼이 로딩되면 게시글 정보도 가져옴
+                getPostInfo();
+            });
+    }
+
+    // 폼이 로딩될 때 카테고리 정보 가져오기
+    getCategoryInfo();
+
+    // 폼 제출 시 동작 정의
+    document.getElementById('updateForm').addEventListener('submit', function (event) {
+        // 실제로는 이벤트를 막고, 수정을 위한 API로 데이터를 보내는 로직을 추가해야 합니다.
+        event.preventDefault();
+        alert('수정 요청을 보냈습니다.');
+    });
+</script>
 </body>
 </html>

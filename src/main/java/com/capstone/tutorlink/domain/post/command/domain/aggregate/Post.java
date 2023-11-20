@@ -1,15 +1,18 @@
 package com.capstone.tutorlink.domain.post.command.domain.aggregate;
 
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.attoparser.dom.Text;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "POST")
 public class Post {
     @Id
@@ -23,7 +26,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "category_code", name = "category_code")
-    private BoardCategory categoryName;
+    private BoardCategory category;
 
     @Column(name = "post_title")
     private String postTitle;
@@ -31,13 +34,13 @@ public class Post {
     @Column(name = "post_content")
     private String postContent;
 
-    @Column(name = "post_regist_date")
-    private LocalDateTime postRegistdDate;
+    @Column(name = "post_registd_date")
+    private LocalDateTime postRegistedDate;
 
-    @Column(name = "post_update_date")
+    @Column(name = "post_updated_date")
     private LocalDateTime postUpdatedDate;
 
-    @Column(name = "post_delete_date")
+    @Column(name = "post_deleted_date")
     private LocalDateTime postDeletedDate;
 
     @Column(name = "post_is_deleted")
@@ -51,4 +54,20 @@ public class Post {
 
     @Column(name = "post_status")
     private Character postStatus;
+
+    public String getPostWriterName() {
+        return postWriter.getMemberName();
+    }
+
+    public String getCategoryCode() {
+        return category.getCategoryCode();
+    }
+
+    public String getCategoryName() {
+        return category.getCategoryName();
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.category.setCategoryCode(categoryCode);
+    }
 }

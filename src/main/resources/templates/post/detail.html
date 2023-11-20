@@ -12,37 +12,51 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title></title>
 </head>
 <body>
-<div th:replace="common/globalNavAfterLogin"></div>
-<div th:replace="common/globalNavBeforeLogin"></div>
-<h1>게시글 상세보기</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>글 번호</th>
-            <th>카테고리</th>
-            <th>글 제목</th>
-            <th>작성자</th>
-            <th>글 내용</th>
-            <th>글 등록일</th>
-            <th>조회수</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="post : ${postList}">
-            <td th:text="${post.postNum}"></td>
-            <td th:text="${post.categoryName.getCategoryName()}"></td>
-            <td th:text="${post.postTitle}"></td>
-            <td th:text="${post.postWriter.getMemberName()}"></td>
-            <td th:text="${post.getPostContent()}"></td>
-            <td th:text="${post.getPostRegistdDate()}"></td>
-            <td th:text="${post.postCount}"></td>
-        </tr>
-        </tbody>
+    <div th:replace="common/globalNavAfterLogin"></div>
+    <div th:replace="common/globalNavBeforeLogin"></div>
+    <h1>게시글 상세보기</h1>
+    <div>
+        <a th:href="@{'/post/update/' + ${post.postNum}}">
+            <button>수정하기</button>
+        </a>
+        <form th:action="@{'/post/delete/'+ ${post.postNum}}" method="post">
+            <input type="hidden" name="id" th:value="${post.postNum}"/>
+            <button>삭제하기</button>
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>글 번호</th>
+                <th>카테고리</th>
+                <th>작성자</th>
+                <th>글 등록일</th>
+                <th>조회수</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${post.postNum}"></td>
+                <td th:text="${post.categoryName}"></td>
+                <td th:text="${post.postWriterName}"></td>
+                <td th:text="${#dates.format(post.postRegistedDate, 'yyyy-MM-dd HH:mm:ss.SSS')}"></td>
+                <td th:text="${post.postCount}"></td>
+            </tr>
+            </tbody>
+        </table>
 
-    </table>
+    </div>
+    <h2 th:text="${post.postTitle}"></h2>
+    <p th:text="${post.postContent}"></p>
+
+        <button type="submit" onclick="location.href='/post/all'">목록으로</button>
+
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    </script>
 </body>
 </html>

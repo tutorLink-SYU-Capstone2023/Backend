@@ -34,7 +34,7 @@ public class PostDTO {
 
     @NotNull(message = "글 등록일은 반드시 입력되어야 합니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime postRegistdDate;
+    private LocalDateTime postRegistedDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime postUpdatedDate;
@@ -59,4 +59,16 @@ public class PostDTO {
     @Check(constraints = "postStatus IN ('A', 'U')")
     @Builder.Default
     private Character postStatus = 'A';
+
+    public String getPostWriterName() {
+        return postWriter.getMemberName();
+    }
+
+    public String getCategoryCode() {
+        return category.getCategoryCode();
+    }
+
+    public String getCategoryName() {
+        return category.getCategoryName();
+    }
 }

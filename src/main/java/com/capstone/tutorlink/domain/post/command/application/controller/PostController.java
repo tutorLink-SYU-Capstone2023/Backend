@@ -3,6 +3,7 @@ package com.capstone.tutorlink.domain.post.command.application.controller;
 import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
 import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
 import com.capstone.tutorlink.domain.post.command.application.service.PostService;
+import com.capstone.tutorlink.domain.post.command.domain.aggregate.Post;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class PostController {
 
     //게시글 상세
     @GetMapping({"/detail/{postNum}"})
-    public String findByCode(@PathVariable Long postNum, Model model){
+    public String findByNum(@PathVariable Long postNum, Model model){
         PostDTO post = postService.findPostByNum(postNum);
         model.addAttribute("post", post);
         return "post/detail";
@@ -47,11 +48,33 @@ public class PostController {
         return "redirect:/post/all";
     }
 
-
     //글 등록 시 카테고리 조회
     @GetMapping(value = "/category", produces = "application/json; charset+UTF-8")
     @ResponseBody
     public List<BoardCategoryDTO> findCategoryList(){
         return postService.findAllCategory();
     }
+
+    //게시글 수정 페이지로 이동
+    @GetMapping("/update")
+    public void updatePage() {}
+
+    //게시글 수정
+    @PostMapping("/update")
+    public String updatePost(PostDTO updatePost){
+        postService.updatePost(updatePost);
+        return "redirect:/post/detail"+updatePost.getPostNum();
+    }
+
+    //게시글 삭제
+    @GetMapping("/delete")
+    public void deletePost(){}
+
+    @PostMapping("/delete/{postNum}")
+    public String deletePost(@PathVariable Long postNum) {
+        postService.deletePost(postNum);
+        return "redirect:/post/all";
+    }
+
+
 }

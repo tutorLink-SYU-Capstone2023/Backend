@@ -11,12 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +38,6 @@ public class PostService {
     @Transactional
     public List<PostDTO> getAllPost(){
         List<Post> postList = postRepository.findAll(Sort.by("postNum").descending());
-//        Page<Post> postPage = postRepository.findAll();
         return postList.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
     }
 
@@ -49,6 +45,7 @@ public class PostService {
     @Transactional
     public PostDTO findPostByNum(Long postNum){
         Post post = postRepository.findById(postNum).orElseThrow(IllegalArgumentException::new);
+        post.setPostCount(post.getPostCount()+1);
         return modelMapper.map(post, PostDTO.class);
     }
 
@@ -59,8 +56,24 @@ public class PostService {
     }
 
     //카테고리 조회(글 등록 시 필요)
+    @Transactional
     public List<BoardCategoryDTO> findAllCategory() {
         List<BoardCategory> categoryList = boardCategoryRepository.findAll();
         return categoryList.stream().map(boardCategory -> modelMapper.map(boardCategory, BoardCategoryDTO.class)).collect(Collectors.toList());
+    }
+
+    //게시글 수정(제목, 내용, 카테고리만 수정 가능)
+    @Transactional
+    public void updatePost(PostDTO updatePost){
+        Post foundPost = postRepository.findById(updatePost.getPostNum())
+                .orElseThrow(IllegalArgumentException::new);
+        foundPost.setPostTitle(updatePost.getPostTitle());
+        foundPost.setPostContent(updatePost.getPostContent());
+        foundPost.setCategoryCode(updatePost.getCategoryCode());
+    }
+
+    @Transactional
+    public void deletePost(Long postNum){
+        postRepository.deleteById(postNum);
     }
 }

@@ -22,7 +22,6 @@ public class BoardCategoryService {
         this.modelMapper = modelMapper;
     }
 
-
     //신규 게시글 카테고리 등록 처리
     @Transactional
     public void createNewPostCategory(BoardCategoryDTO newPostCategory) {

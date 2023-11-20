@@ -5,53 +5,36 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Regist New post</h1>
+    <h1>Regist New post</h1>
 
-<form action="/post/regist" method="post">
-    <label>카테고리: </label>
-    <select name="categoryCode" id="categoryCode"></select><br>
+    <form action="/post/regist" method="post" encType="multipart/form-data">
+        <label>카테고리: </label>
+        <select name="categoryCode" id="categoryCode"></select><br>
 
-    <label>작성자: </label>
-    <select name="memberNo" id="memberNo"></select><br>
+        <label>글 제목: </label><input type="text" name="postTitle"><br>
+        <label>글 내용: </label><input type="text" name="postContent"><br>
+        <br>
+        파일: <input type="file" name="multiFiles" multiple><br>
+        파일 설명: <input type="text" name="multiFileDescription" placeholder="파일 설명을 입력해주세요."><br>
+        <input type="submit" value="등록">
+    </form>
 
-    <label>글 제목: </label><input type="text" name="postTitle"><br>
-    <label>글 내용: </label><input type="text" name="postContent"><br>
-    <br>
-    <input type="submit" value="등록">
-</form>
+    <button type="submit" onclick="location.href='/post/all'">취소</button>
+    <script>
+        fetch('/post/category')
+            .then(res => res.json())
+            .then(data => {
+                const $categoryCode = document.getElementById('categoryCode');
+                console.log($categoryCode)
 
-<script>
-// 텍스트 에디터 임포트(예정)
-// src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"
-    fetch('/member/find_tutee')
-        .then(res => res.json())
-        .then(data => {
-            const $memberNo = document.getElementById('memberNo');
-            console.log($memberNo)
+                for (let index in data) {
+                    const $option = document.createElement('option');
+                    $option.value = data[index].categoryCode;
+                    $option.textContent = data[index].categoryName;
 
-            for (let index in data) {
-                const $option = document.createElement('option');
-                $option.value = data[index].memberNo;
-                $option.textContent = data[index].memberName;
-
-                $memberNo.appendChild($option);
-            }
-        });
-
-    fetch('/post/category')
-        .then(res => res.json())
-        .then(data => {
-            const $categoryCode = document.getElementById('categoryCode');
-            console.log($categoryCode)
-
-            for (let index in data) {
-                const $option = document.createElement('option');
-                $option.value = data[index].categoryCode;
-                $option.textContent = data[index].categoryName;
-
-                $categoryCode.appendChild($option);
-            }
-        });
-</script>
+                    $categoryCode.appendChild($option);
+                }
+            });
+    </script>
 </body>
 </html>
