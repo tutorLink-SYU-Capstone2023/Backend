@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap"
-        rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap" rel="stylesheet" />
   <title>Title</title>
+
   <style>
     html {
       font-family: "Noto Sans KR", sans-serif;
@@ -26,7 +26,8 @@
     }
 
     .global_nav_item {
-      width: 120px; /* Set a fixed width, adjust as needed */
+      position: relative;
+      width: 120px;
       display: flex;
       align-items: center;
       height: 100%;
@@ -39,10 +40,32 @@
       display: flex;
       align-items: center;
       width: 100%;
+      cursor: pointer; /* Add cursor pointer for better UX */
     }
 
     .global_nav_item span {
-      margin-left: 5px; /* Adjust as needed */
+      margin-left: 5px;
+    }
+
+    .my_page_option {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    .global_nav_item:hover .my_page_option {
+      display: block;
+    }
+
+    .my_page_option a {
+      display: block;
+      padding: 10px;
+      color: #333;
+      text-decoration: none;
     }
 
     /* Optional: Adjust styling for the main home link */
@@ -51,13 +74,9 @@
       font-size: 1.4rem;
       font-weight: bold;
     }
-
-    body {
-      justify-content: center;
-      align-items: center;
-    }
   </style>
 </head>
+
 <body>
 <div id="globalNavArea" class="global_nav_area" role="region">
   <ul class="global-nav">
@@ -87,10 +106,8 @@
     </li>
     <div id="search_area" class="search_area">
       <form id="search_form" name="search" role="search" action="" method="get">
-
       </form>
     </div>
-
     <li class="global_nav_item">
       <a href="../member/logout">
         <span class="global_nav_img"></span>
@@ -98,13 +115,17 @@
       </a>
     </li>
     <li class="global_nav_item">
-      <a href="../member/my_page">
+      <a href="#" class="my_page-trigger">
         <span class="global_nav_img"></span>
         <span class="global_nav_name">마이페이지</span>
+        <div class="my_page_option">
+          <a href="../member/notification">알림🔔</a>
+          <a href="../member/my_page">내정보</a>
+        </div>
       </a>
     </li>
   </ul>
 </div>
-<!-- 메인 튜터찾기 튜티찾기 자유게시판 검색 로그아웃 마이페이지 -->
 </body>
+
 </html>
