@@ -2,9 +2,27 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>WebSocket Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
+
+<script>
+    $(document).ready(function () {
+        const socket = new SockJS("http://localhost:8080/ws");
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/user/topic/likeNotifications', function (notification) {
+                console.log('Received Notification: ' + notification.body);
+                // 여기서 알림을 표시하거나 원하는 동작 수행
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

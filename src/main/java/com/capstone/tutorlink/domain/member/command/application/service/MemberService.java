@@ -25,8 +25,9 @@ public class MemberService {
     private final UniversityRepository universityRepository;
     private final LikedMemberRepository likedMemberRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final LikeNotificationService likeNotificationService;
     public MemberService(MemberRepository memberRepository, AuthorityRepository authorityRepository,
-                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository, ApplicationEventPublisher eventPublisher) {
+                         ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository, ApplicationEventPublisher eventPublisher, LikeNotificationService likeNotificationService) {
         this.memberRepository = memberRepository;
         this.authorityRepository = authorityRepository;
         this.modelMapper = modelMapper;
@@ -35,6 +36,7 @@ public class MemberService {
         this.universityRepository = universityRepository;
         this.likedMemberRepository = likedMemberRepository;
         this.eventPublisher = eventPublisher;
+        this.likeNotificationService = likeNotificationService;
     }
 
     @Transactional
@@ -201,8 +203,12 @@ public class MemberService {
         // 좋아요 이벤트 발생
         eventPublisher.publishEvent(new LikeEvent(this, memberId, likedMemberId));
 
+        // 좋아요 당한 회원에게 알림 보내기
+        likeNotificationService.sendLikeNotification(likedMemberId, "You have a new like!");
+
         return "Liked successfully!";
     }
+
 
     @Transactional
     public void unlikeMember(int memberId, int likedMemberId) {

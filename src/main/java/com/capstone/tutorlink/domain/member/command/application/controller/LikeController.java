@@ -1,13 +1,13 @@
 package com.capstone.tutorlink.domain.member.command.application.controller;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
+import com.capstone.tutorlink.domain.member.command.application.event.LikeEvent;
+import com.capstone.tutorlink.domain.member.command.application.service.LikeNotificationService;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
-import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LikeController {
 
     private final MemberService memberService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public LikeController(MemberService memberService) {
+    public LikeController(MemberService memberService, LikeNotificationService likeNotificationService, ApplicationEventPublisher eventPublisher) {
         this.memberService = memberService;
+        this.eventPublisher = eventPublisher;
     }
 
     // 좋아요 폼에서 memberNo를 전달받는 컨트롤러 메서드
@@ -52,9 +54,17 @@ public class LikeController {
     // 좋아요 처리를 위한 컨트롤러 메서드
     @PostMapping("/like")
     public ResponseEntity<String> likeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
-        memberService.likeMember(member.getMemberNo(), likedMemberId);
-        return ResponseEntity.ok("Liked successfully");
+        String resultMessage = memberService.likeMember(member.getMemberNo(), likedMemberId);
+
+        // 좋아요 이벤트 발생
+        if ("Liked successfully".equals(resultMessage)) {
+            // LikeEvent를 발행
+            eventPublisher.publishEvent(new LikeEvent(this, member.getMemberNo(), likedMemberId));
+        }
+
+        return ResponseEntity.ok(resultMessage);
     }
+
 
     // 좋아요 취소 처리를 위한 컨트롤러 메서드
     @PostMapping("/unlike")
