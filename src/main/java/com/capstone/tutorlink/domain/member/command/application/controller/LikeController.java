@@ -3,6 +3,9 @@ package com.capstone.tutorlink.domain.member.command.application.controller;
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,13 @@ public class LikeController {
     }
 
     // 좋아요 폼에서 memberNo를 전달받는 컨트롤러 메서드
+    @ApiOperation(value = "튜터에게 좋아요", notes = "튜터에게 좋아요를 표시합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "좋아요 표시 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 404, message = "튜터를 찾을 수 없음")
+    })
+
     @PostMapping("/member/like")
     public String likeMember(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         // 좋아요 로직 구현
@@ -41,6 +51,12 @@ public class LikeController {
     }
 
     // 좋아요 취소 폼에서 memberNo를 전달받는 컨트롤러 메서드
+    @ApiOperation(value = "튜터에게 좋아요 취소", notes = "튜터에게 했던 좋아요를 취소합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "좋아요 취소 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 404, message = "튜터를 찾을 수 없음")
+    })
     @PostMapping("/member/unlike")
     public String unlikeMember(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         // 좋아요 취소 로직 구현
@@ -50,6 +66,10 @@ public class LikeController {
     }
 
     // 좋아요 처리를 위한 컨트롤러 메서드
+    @ApiOperation(value = "튜터에게 좋아요 (Ajax)", notes = "Ajax를 통해 튜터에게 좋아요를 표시합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "좋아요 표시 성공")
+    })
     @PostMapping("/like")
     public ResponseEntity<String> likeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         memberService.likeMember(member.getMemberNo(), likedMemberId);
@@ -57,6 +77,10 @@ public class LikeController {
     }
 
     // 좋아요 취소 처리를 위한 컨트롤러 메서드
+    @ApiOperation(value = "튜터에게 좋아요 취소 (Ajax)", notes = "Ajax를 통해 튜터에게 했던 좋아요를 취소합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "좋아요 취소 성공")
+    })
     @PostMapping("/unlike")
     public ResponseEntity<String> unlikeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         memberService.unlikeMember(member.getMemberNo(), likedMemberId);

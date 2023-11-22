@@ -6,6 +6,9 @@ import com.capstone.tutorlink.domain.member.command.application.service.MemberSe
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
 import com.capstone.tutorlink.domain.member.command.domain.repository.UniversityRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/member")
 public class TutorController {
     private final MemberService memberService;
@@ -30,16 +33,11 @@ public class TutorController {
         this.universityRepository = universityRepository;
     }
 
-
-   /* @GetMapping("/tutor")
-    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
-        model.addAttribute("tutorPage", tutorPage);
-        return "member/tutor";
-    }
-    */
-
-
+    @ApiOperation(value = "튜터 목록 조회", notes = "튜터 목록을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "튜터 목록 조회 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청")
+    })
    @GetMapping("/find_tutor")
    public String findAllTutor(
            @PageableDefault Pageable pageable,
@@ -52,6 +50,12 @@ public class TutorController {
        model.addAttribute("tutorPage", tutorPage);
        return "member/find_tutor";
    }
+    @ApiOperation(value = "튜터 상세 정보 조회", notes = "튜터의 상세 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "튜터 상세 정보 조회 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 404, message = "튜터를 찾을 수 없음")
+    })
     @GetMapping("/tutorDetail/{memberNo}")
     public String getTutorDetail(@PathVariable int memberNo, Model model) {
         // 튜터 상세 정보 조회 로직을 구현하고, model에 필요한 데이터를 추가

@@ -9,13 +9,10 @@ import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTy
 import com.capstone.tutorlink.domain.member.command.domain.repository.UniversityRepository;
 import com.capstone.tutorlink.global.valid.ErrorResponse;
 import com.capstone.tutorlink.global.exception.UserNotFoundException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +32,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Api(tags= {"스프링 부트 스웨거 연동 멤버 컨트롤러"})
+@RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
@@ -53,6 +51,7 @@ public class MemberController {
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }
+//    @ApiOperation(value = "로그인 페이지로 이동")
     @GetMapping("/signin")
     public void loginPage() {}
 
@@ -64,9 +63,11 @@ public class MemberController {
         return "redirect:/member/signin";
     }
 
+    @ApiOperation(value = "튜티 회원 가입페이지로 이동")
     @GetMapping("/signup_as_tutee")
     public void joinPage(){ }
 
+    @ApiOperation(value = "튜티 회원 가입 처리")
     @PostMapping("/signup_as_tutee")
     public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] joinMember ==============================");
@@ -103,9 +104,11 @@ public class MemberController {
 
         return "redirect:/";
     }
+    @ApiOperation(value = "튜터 회원 가입페이지로 이동")
     @GetMapping("/signup_as_tutor")
     public void join2Page(){ }
 
+    @ApiOperation(value = "튜터 회원 가입 처리")
     @PostMapping("/signup_as_tutor")
     public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
         log.info("[MemberController] join2Member ==============================");
@@ -144,6 +147,7 @@ public class MemberController {
     }
 
 
+    @ApiOperation(value = "아이디 중복 체크")
     @PostMapping("/idDupCheck")
     public ResponseEntity<String> checkDuplication(@RequestBody MemberDTO member, RedirectAttributes rttr) {
 
@@ -163,11 +167,13 @@ public class MemberController {
 
         return ResponseEntity.ok().build();
     }
+    @ApiOperation(value = "회원 정보 수정 페이지로 이동")
     @GetMapping("/update")
     public String goModifyMember() {
 
         return "member/update";
     }
+    @ApiOperation(value = "회원 정보 수정 처리")
     @PostMapping("/update")
     public String modifyMember(@ModelAttribute MemberDTO updateMember,
                                @AuthenticationPrincipal MemberDTO loginMember,
@@ -198,7 +204,7 @@ public class MemberController {
         return "redirect:/member/my_page";
     }
 
-
+    @ApiOperation(value = "회원 조회")
     @GetMapping("/my_page")
     public void mypage(@AuthenticationPrincipal MemberDTO member) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
@@ -212,6 +218,7 @@ public class MemberController {
 //        model.addAttribute("tutorPage", tutorPage);
 //        return "member/find_tutor";
 //    }
+    @ApiOperation(value = "특정 회원 조회")
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
         boolean check = true;
@@ -220,6 +227,7 @@ public class MemberController {
         }
         return ResponseEntity.ok().build();
     }
+    @ApiOperation(value = "회원 정보 수정 페이지 조회")
     @GetMapping("/member/update")
     public String getUpdatePage(Authentication authentication) {
         for (GrantedAuthority authority : authentication.getAuthorities()) {
@@ -239,6 +247,7 @@ public class MemberController {
         }
     }
 
+    @ApiOperation(value = "회원 탈퇴")
     @GetMapping("/leave")
     public String leaveMember(@AuthenticationPrincipal MemberDTO member, RedirectAttributes rttr) {
 

@@ -4,6 +4,10 @@ import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.application.event.LikeEvent;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.*;
 import com.capstone.tutorlink.domain.member.command.domain.repository.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,6 +20,7 @@ import javax.transaction.Transactional;
 
 @Slf4j
 @Service
+@Api(tags = "회원 서비스", description = "회원과 관련된 비즈니스 로직을 처리하는 서비스입니다.")
 public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthorityRepository authorityRepository;
@@ -53,7 +58,11 @@ public class MemberService {
         return tutorPage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
 
-
+    @ApiOperation(value = "튜티 회원 가입")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "튜티 회원 가입 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청")
+    })
     @Transactional
     public void joinMember(MemberDTO member) {
         try {
@@ -96,7 +105,11 @@ public class MemberService {
         }
     }
 
-    // MemberController.java
+    @ApiOperation(value = "튜터 회원 가입")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "튜터 회원 가입 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청")
+    })
     @Transactional
     public void join2Member(MemberDTO member) {
         try {
@@ -143,7 +156,12 @@ public class MemberService {
     }
 
 
-
+    @ApiOperation(value = "회원 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 수정 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 404, message = "회원을 찾을 수 없음")
+    })
     @Transactional
     public Member modifyMember(MemberDTO updateMember, MemberDTO loginMember) {
         try {
@@ -171,7 +189,11 @@ public class MemberService {
         }
     }
 
-
+    @ApiOperation(value = "회원 탈퇴")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 탈퇴 성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청")
+    })
     @Transactional
     public void removeMember(MemberDTO member) {
 
