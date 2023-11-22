@@ -70,4 +70,10 @@ public class Post {
     public void setCategoryCode(String categoryCode) {
         this.category.setCategoryCode(categoryCode);
     }
+
+    public void update(Post post){
+        this.postTitle = post.getPostTitle();
+        this.postContent = post.getPostContent();
+        this.category = post.getCategory();
+    }
 }

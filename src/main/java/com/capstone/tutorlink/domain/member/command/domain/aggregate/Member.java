@@ -87,6 +87,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "my_key", insertable = false, updatable = false) // 이 줄 추가
     private AcceptedTypeCategory acceptedTypeCategory;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberRole> memberRoleList = new ArrayList<>();
 
