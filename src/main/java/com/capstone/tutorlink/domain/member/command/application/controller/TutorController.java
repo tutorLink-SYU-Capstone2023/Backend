@@ -47,18 +47,15 @@ public class TutorController {
     */
 
 
-   @GetMapping("/find_tutor")
-   public String findAllTutor(
-           @PageableDefault Pageable pageable,
-           @RequestParam(name = "memberGender", required = false) String memberGender,
-           @RequestParam(name = "tutorUni", required = false) String tutorUni,
-           @RequestParam(name = "myKey", required = false) String myKey,
-           Model model
-   ) {
-       Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable, memberGender, tutorUni, myKey);
-       model.addAttribute("tutorPage", tutorPage);
-       return "member/find_tutor";
-   }
+    @GetMapping("/api/find_tutor")
+    public Page<MemberDTO> findAllTutor(
+            @PageableDefault Pageable pageable,
+            @RequestParam(name = "memberGender", required = false) String memberGender,
+            @RequestParam(name = "tutorUni", required = false) String tutorUni,
+            @RequestParam(name = "myKey", required = false) String myKey
+    ) {
+        return memberService.findAllTutor(pageable, memberGender, tutorUni, myKey);
+    }
     @GetMapping("/tutorDetail/{memberNo}")
     public String getTutorDetail(@PathVariable int memberNo, Model model) {
         // 튜터 상세 정보 조회 로직을 구현하고, model에 필요한 데이터를 추가
