@@ -29,6 +29,7 @@ public class MemberDTO implements UserDetails {
     @NotNull(message = "이름은 반드시 입력되어야 합니다.")
     @Size(min=2, message="이름은 2글자 이상 입력해야 합니다.")
     private String memberName;
+    private String address;
 
     private String memberEmail;
     private String memberGender;
