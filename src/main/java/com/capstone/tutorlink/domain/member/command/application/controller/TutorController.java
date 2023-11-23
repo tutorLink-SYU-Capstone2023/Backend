@@ -5,6 +5,7 @@ import com.capstone.tutorlink.domain.member.command.application.service.Authenti
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
+import com.capstone.tutorlink.domain.member.command.domain.repository.LikedMemberRepository;
 import com.capstone.tutorlink.domain.member.command.domain.repository.UniversityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/member")
@@ -22,12 +27,14 @@ public class TutorController {
     private final AuthenticationService authenticationService;
     private AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private UniversityRepository universityRepository;
+    private LikedMemberRepository likedMemberRepository;
 
-    public TutorController(MemberService memberService, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
+    public TutorController(MemberService memberService, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository) {
         this.memberService = memberService;
         this.authenticationService = authenticationService;
         this.acceptedTypeCategoryRepository = acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
+        this.likedMemberRepository = likedMemberRepository;
     }
 
 
@@ -59,7 +66,5 @@ public class TutorController {
         model.addAttribute("tutor", tutor);
         return "member/tutorDetail";
     }
-
-
 
 }

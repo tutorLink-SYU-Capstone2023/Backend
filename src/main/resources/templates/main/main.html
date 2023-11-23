@@ -55,21 +55,35 @@
             </section>
 
 
+            <!-- main.html -->
+
+            <!-- ... (이전 코드들) ... -->
+
+            <!-- 상위 3명의 튜터 정보 표시 -->
             <section class="scroll-section" id="scroll-section-1">
-                <!--section1 :: 인기 튜터-->
                 <h2>인기 튜터</h2>
                 <div class="wrapping">
                     <div class="popular-tutor" id="popularTutor1">
-                        <img class="main-img" src="" alt="인기튜터 1위" />
+                        <!-- 첫 번째 튜터 정보 표시 -->
+<!--                        <img class="main-img" th:src="${topTutors[0].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[0].memberName}" />-->
+                        <p th:text="${topTutors[0].memberName + ' (' + topTutors[0].tutorUni + ')'}"></p>
                     </div>
                     <div class="popular-tutor" id="popularTutor2">
-                        <img class="main-img" src="" alt="인기튜터 2위" />
+                        <!-- 두 번째 튜터 정보 표시 -->
+<!--                        <img class="main-img" th:src="${topTutors[1].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[1].memberName}" />-->
+                        <p th:text="${topTutors[1].memberName + ' (' + topTutors[1].tutorUni + ')'}"></p>
                     </div>
                     <div class="popular-tutor" id="popularTutor3">
-                        <img class="main-img" src="" alt="인기튜터 3위" />
+                        <!-- 세 번째 튜터 정보 표시 -->
+<!--                        <img class="main-img" th:src="${topTutors[2].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[2].memberName}" />-->
+                        <p th:text="${topTutors[2].memberName + ' (' + topTutors[2].tutorUni + ')'}"></p>
                     </div>
                 </div>
             </section>
+
+
+            <!-- ... (이후 코드들) ... -->
+
 
 
             <section class="scroll-section" id="scroll-section-2">
