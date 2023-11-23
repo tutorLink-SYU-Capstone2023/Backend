@@ -4,7 +4,6 @@ import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.application.event.LikeEvent;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.*;
 import com.capstone.tutorlink.domain.member.command.domain.repository.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
@@ -48,8 +47,6 @@ public class MemberService {
         Page<Member> tuteePage = memberRepository.findAllTutee(pageable);
         return tuteePage.map(member -> modelMapper.map(member, MemberDTO.class));
     }
-
-    @ApiOperation(value = "튜터 조회")
     @Transactional
     public Page<MemberDTO> findAllTutor(org.springframework.data.domain.Pageable pageable, String memberGender, String tutorUni, String myKey) {
         Page<Member> tutorPage = memberRepository.findAllTutorWithConditions(memberGender, tutorUni, myKey, pageable);
