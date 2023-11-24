@@ -1,5 +1,6 @@
 package com.capstone.tutorlink.domain.post.command.application.dto;
 
+import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import lombok.*;
@@ -21,10 +22,10 @@ public class PostDTO {
     private Long postNum;
 
     @NotNull(message = "아이디는 반드시 입력되어야 합니다.")
-    private Member postWriter;
+    private MemberDTO postWriter;
 
     @NotNull(message = "카테고리는 반드시 입력되다어야 합니다.")
-    private BoardCategory category;
+    private BoardCategoryDTO category;
 
     @NotNull(message = "글 제목은 반드시 입력되어야 합니다.")
     private String postTitle;

@@ -1,28 +1,20 @@
 package com.capstone.tutorlink.domain.post.command.application.service;
 
 import com.capstone.tutorlink.domain.member.command.domain.repository.MemberRepository;
-import com.capstone.tutorlink.domain.post.command.application.dto.BoardCategoryDTO;
-import com.capstone.tutorlink.domain.post.command.application.dto.PostDTO;
-import com.capstone.tutorlink.domain.post.command.domain.aggregate.BoardCategory;
 import com.capstone.tutorlink.domain.post.command.domain.aggregate.Post;
 import com.capstone.tutorlink.domain.post.command.domain.repositoroy.BoardCategoryRepository;
 import com.capstone.tutorlink.domain.post.command.domain.repositoroy.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PostService {
     private final BoardCategoryRepository boardCategoryRepository;
