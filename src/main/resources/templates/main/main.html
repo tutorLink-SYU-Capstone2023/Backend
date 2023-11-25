@@ -1,95 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head>
-        <meta charset="UTF-8">
-        <title>Tutor Link Project</title>
-        <style>
-            footer {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 7rem;
-                background: yellow;
-            }
-            .wrapping {
-                display: flex;
-            }
-            .wrapping-all{
-                align-items: center;
-                justify-content: center;
-                display: flex;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Tutor Link Project</title>
+    <style>
+        footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 7rem;
+            background: yellow;
+        }
+        .wrapping {
+            display: flex;
+        }
+        .wrapping-all{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
 
-            .main-img {
-                width: 320px;
-                height: 320px;
-                overflow: hidden;
-                padding: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- 헤더(header) 부분 -->
-        <header>
-        </header>
+        .main-img {
+            width: 320px;
+            height: 320px;
+            overflow: hidden;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더(header) 부분 -->
+<header>
+</header>
 
-        <!-- 내비게이션(navigation) 부분 -->
-        <nav>
-            <div>
-                <th:block sec:authorize="isAuthenticated()">
-                    <div th:replace="common/globalNavAfterLogin"></div>
-                </th:block>
-                <th:block sec:authorize="isAnonymous()">
-                    <div th:replace="common/globalNavBeforeLogin"></div>
-                </th:block>
-            </div>
-        </nav>
-        <div class="wrapping-all">
-            <!-- 본문(section) 부분 -->
-            <section class="scroll-section" id="scroll-section-0">
-                <!--section0 :: 자체 광고-->
-                <div class="main-adv">
-                    <h1>여긴 자체 광고 영역</h1>
-                </div>
-            </section>
-
-
-            <section class="scroll-section" id="scroll-section-1">
-                <!--section1 :: 인기 튜터-->
-                <h2>인기 튜터</h2>
-                <div class="wrapping">
-                    <div class="popular-tutor" id="popularTutor1">
-                        <img class="main-img" src="" alt="인기튜터 1위" />
-                    </div>
-                    <div class="popular-tutor" id="popularTutor2">
-                        <img class="main-img" src="" alt="인기튜터 2위" />
-                    </div>
-                    <div class="popular-tutor" id="popularTutor3">
-                        <img class="main-img" src="" alt="인기튜터 3위" />
-                    </div>
-                </div>
-            </section>
-
-
-            <section class="scroll-section" id="scroll-section-2">
-                <!--section2 :: 튜터링크 게시판-->
-                <div class="">
-                    <h2>튜터링크 게시판에 물어보세요.</h2>
-                </div>
-            </section>
-
-            <section class="scroll-section" id="scroll-section-3">
-                <!--section3 :: 튜터 캐스트-->
-                <div>
-                    <h2>튜터 캐스트</h2>
-                </div>
-            </section>
+<!-- 내비게이션(navigation) 부분 -->
+<nav>
+    <div>
+        <th:block sec:authorize="isAuthenticated()">
+            <div th:replace="common/globalNavAfterLogin"></div>
+        </th:block>
+        <th:block sec:authorize="isAnonymous()">
+            <div th:replace="common/globalNavBeforeLogin"></div>
+        </th:block>
+    </div>
+</nav>
+<div class="wrapping-all">
+    <!-- 본문(section) 부분 -->
+    <section class="scroll-section" id="scroll-section-0">
+        <!--section0 :: 자체 광고-->
+        <div class="main-adv">
+            <h1>여긴 자체 광고 영역</h1>
         </div>
+    </section>
 
-    <!-- 바닥글(footer) 부분 -->
-        <footer>
-            <div th:replace="common/footer"></div>
-        </footer>
-    </body>
+
+    <!-- main.html -->
+
+    <!-- ... (이전 코드들) ... -->
+
+    <!-- 상위 3명의 튜터 정보 표시 -->
+    <section class="scroll-section" id="scroll-section-1">
+        <h2>인기 튜터</h2>
+        <div class="wrapping">
+            <div class="popular-tutor" id="popularTutor1">
+                <!-- 첫 번째 튜터 정보 표시 -->
+                <!--                        <img class="main-img" th:src="${topTutors[0].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[0].memberName}" />-->
+                <p th:text="${topTutors[0].memberName + ' (' + topTutors[0].tutorUni + ')'}"></p>
+            </div>
+            <div class="popular-tutor" id="popularTutor2">
+                <!-- 두 번째 튜터 정보 표시 -->
+                <!--                        <img class="main-img" th:src="${topTutors[1].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[1].memberName}" />-->
+                <p th:text="${topTutors[1].memberName + ' (' + topTutors[1].tutorUni + ')'}"></p>
+            </div>
+            <div class="popular-tutor" id="popularTutor3">
+                <!-- 세 번째 튜터 정보 표시 -->
+                <!--                        <img class="main-img" th:src="${topTutors[2].profileImage ?: '/path/to/dummy-image.jpg'}" alt="${topTutors[2].memberName}" />-->
+                <p th:text="${topTutors[2].memberName + ' (' + topTutors[2].tutorUni + ')'}"></p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ... (이후 코드들) ... -->
+
+
+
+    <section class="scroll-section" id="scroll-section-2">
+        <!--section2 :: 튜터링크 게시판-->
+        <div class="">
+            <h2>튜터링크 게시판에 물어보세요.</h2>
+        </div>
+    </section>
+
+    <section class="scroll-section" id="scroll-section-3">
+        <!--section3 :: 튜터 캐스트-->
+        <div>
+            <h2>튜터 캐스트</h2>
+        </div>
+    </section>
+</div>
+
+<!-- 바닥글(footer) 부분 -->
+<footer>
+    <div th:replace="common/footer"></div>
+</footer>
+</body>
 </html>
