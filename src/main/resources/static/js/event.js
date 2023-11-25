@@ -1,4 +1,27 @@
 window.onload = function() {
+    const $searchZipCode = document.getElementById("searchZipCode");
+    const $goMain = document.getElementById("goMain");
+
+    if ($searchZipCode) {
+        $searchZipCode.addEventListener("click", openDaumPostcode);
+    }
+
+    if ($goMain) {
+        $goMain.onclick = function() {
+            location.href = "/";
+        }
+    }
+
+    function openDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data){
+                console.log("oncomplete data:", data);
+                document.getElementById("zipCode").value = data.zonecode;
+                document.getElementById("address1").value = data.address;
+                document.getElementById("address2").focus();
+            }
+        }).open();
+    }
 
     /* 화면에 랜더링 된 태그들이 존재하지 않는 경우 에러 발생 가능성이 있어서 if문으로 태그가 존재하는지 부터 확인하고 이벤트를 연결한다. */
     if (document.getElementById("join")) {

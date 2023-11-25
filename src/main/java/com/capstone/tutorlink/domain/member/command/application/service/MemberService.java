@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -57,7 +58,7 @@ public class MemberService {
 
 
     @Transactional
-    public void joinMember(MemberDTO member) {
+    public void joinMember(MemberDTO member, AcceptedTypeCategory acceptedTypeCategory, RedirectAttributes rttr) {
         try {
             // MemberDTO를 Member로 변환
             Member memberEntity = modelMapper.map(member, Member.class);
@@ -74,29 +75,24 @@ public class MemberService {
             // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
             memberEntity.getMemberRoleList().add(memberRole);
 
-            // 사용자가 선택한 field 값
-            String selectedField = member.getSelectedField();
+            // AcceptedTypeCategory에서 myKey 값을 가져와서 memberEntity의 myKey에 설정
+            memberEntity.setMyKey(acceptedTypeCategory.getMyKey());
 
-            // AcceptedTypeCategory를 참조하여 myKey 설정
-            AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
+            // 주소 정보 설정
+            memberEntity.setAddress(member.getAddress());
 
-            if (acceptedTypeCategory != null) {
-                // AcceptedTypeCategory에서 myKey 값을 가져와서 memberEntity의 myKey에 설정
-                memberEntity.setMyKey(acceptedTypeCategory.getMyKey());
-
-                // 회원 저장
-                memberRepository.save(memberEntity);
-            } else {
-                // 사용자가 선택한 field 값이 유효하지 않은 경우 예외 처리
-                log.error("Invalid selected field: " + selectedField);
-                throw new IllegalArgumentException("Invalid selected field: " + selectedField);
-            }
+            // 회원 저장
+            memberRepository.save(memberEntity);
         } catch (Exception e) {
             // 예외 처리 - 예외 메시지를 로그에 기록
             log.error("Error in joinMember: " + e.getMessage());
-            throw e; // 예외를 다시 던집니다.
+            // 예외를 다시 던집니다.
+            rttr.addFlashAttribute("error", "회원 가입에 실패했습니다.");
+            throw e;
         }
     }
+
+
 
     // MemberController.java
     @Transactional

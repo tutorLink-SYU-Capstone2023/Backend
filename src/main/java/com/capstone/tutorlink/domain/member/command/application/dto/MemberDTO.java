@@ -31,6 +31,7 @@ public class MemberDTO implements UserDetails {
     private String memberName;
 
     private String memberEmail;
+    private String address;
     private String memberGender;
 
     @NotNull(message = "생년월일은 반드시 입력되어야 합니다.")
@@ -55,8 +56,18 @@ public class MemberDTO implements UserDetails {
 
     private String selectedField; // 사용자가 선택한 field 값
     private String myKey; // my_key를 myKey로 수정
+    // address1, address2 필드 추가
+    private String address1;
+    private String address2;
 
     // getter 및 setter 추가
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     private Collection<? extends GrantedAuthority> authorities;
 

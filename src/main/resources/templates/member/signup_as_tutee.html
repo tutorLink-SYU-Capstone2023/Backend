@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<script type="text/javascript" th:src="@{/js/event.js}"></script>
 <head>
     <meta charset="UTF-8">
     <title>튜티 회원가입</title>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" th:src="@{/js/event.js}"></script>
+    </script>
 </head>
 <body>
 <h1>튜티 회원가입 페이지</h1>
@@ -29,6 +31,19 @@
     <div>
         <span>이메일: </span>
         <input type="email" name="memberEmail">
+    </div>
+    <div>
+        <span>우편번호: </span>
+        <input type="text" name="zipCode" id="zipCode" readonly>
+        <input type="button" value="검색" class="btn btn-yg" id="searchZipCode">
+    </div>
+    <div>
+        <span>주소: </span>
+        <input type="text" name="address1" id="address1" readonly>
+    </div>
+    <div>
+        <span>상세주소: </span>
+        <input type="text" name="address2" id="address2">
     </div>
     <div>
         <span>성별: </span>

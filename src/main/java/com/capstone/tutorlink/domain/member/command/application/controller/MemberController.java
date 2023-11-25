@@ -68,7 +68,13 @@ public class MemberController {
     public void joinPage(){ }
 
     @PostMapping("/signup_as_tutee")
-    public String joinMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
+    public String joinMember(
+            @ModelAttribute MemberDTO member,
+            @RequestParam String zipCode,
+            @RequestParam String address1,
+            @RequestParam String address2,
+            RedirectAttributes rttr
+    ) {
         log.info("[MemberController] joinMember ==============================");
 
         // 사용자가 선택한 field 값
@@ -81,15 +87,12 @@ public class MemberController {
             // 사용자가 선택한 field 값이 유효하지 않은 경우에 대한 처리
             rttr.addFlashAttribute("error", "Invalid selected field: " + selectedField);
         } else {
-            // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
-            member.setMyKey(acceptedTypeCategory.getMyKey());
-            // memberCurrentStatus 값이 없으면 기본값으로 설정
-            if (member.getMemberCurrentStatus() == null) {
-                member.setMemberCurrentStatus("A");
-            }
-            // 회원 가입을 시도
+            String address = zipCode + "$" + address1 + "$" + address2;
+            member.setAddress(address);
+
             try {
-                memberService.joinMember(member);
+                // 회원 가입 시 주소 정보를 서비스로 전달
+                memberService.joinMember(member,acceptedTypeCategory, rttr);
 
                 rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
                 log.info("22");
@@ -103,6 +106,8 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+
     @GetMapping("/signup_as_tutor")
     public void join2Page(){ }
 

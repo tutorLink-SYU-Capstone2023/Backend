@@ -37,6 +37,8 @@ public class Member {
 
     @Column(name = "member_email", length = 100, nullable = false, unique = true)
     private String memberEmail;
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "member_gender", length = 1, nullable = false)
     private String memberGender;
