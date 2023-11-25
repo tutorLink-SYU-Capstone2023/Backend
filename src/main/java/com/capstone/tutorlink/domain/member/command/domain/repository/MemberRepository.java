@@ -21,8 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
 
     @Query("SELECT m FROM Member m " +
-            "JOIN MemberRole mr ON m.memberNo = mr.memberNo " +
-            "JOIN Authority a ON mr.authorityNum = a.authorityNum " +
+            "JOIN m.memberRoleList r " +
+            "JOIN r.authority a " +
             "WHERE (:memberGender IS NULL OR m.memberGender = :memberGender) " +
             "AND (:tutorUni IS NULL OR m.tutorUni = :tutorUni) " +
             "AND (:myKey IS NULL OR m.myKey = :myKey) " +

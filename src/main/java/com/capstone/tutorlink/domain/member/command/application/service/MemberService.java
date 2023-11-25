@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -70,10 +71,10 @@ public class MemberService {
             // 권한 설정
             Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
             MemberRole memberRole = new MemberRole(authority);
-            memberRole.setAuthorityNum(authority.getAuthorityNum());
+            memberRole.setMember(memberEntity);
+
             // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
             memberEntity.getMemberRoleList().add(memberRole);
-
             // AcceptedTypeCategory에서 myKey 값을 가져와서 memberEntity의 myKey에 설정
             memberEntity.setMyKey(acceptedTypeCategory.getMyKey());
 
@@ -106,11 +107,10 @@ public class MemberService {
             // 권한 설정
             Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTOR");
             MemberRole memberRole = new MemberRole(authority);
-            memberRole.setAuthorityNum(authority.getAuthorityNum());
+            memberRole.setMember(memberEntity);
 
-            // MemberRole을 MemberEntity의 MemberRole 목록에 추가
+            // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
             memberEntity.getMemberRoleList().add(memberRole);
-
             // 사용자가 선택한 field 값
             String selectedField = member.getSelectedField();
 
