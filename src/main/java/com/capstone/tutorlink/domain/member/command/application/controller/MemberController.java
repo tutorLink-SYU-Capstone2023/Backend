@@ -112,7 +112,9 @@ public class MemberController {
     public void join2Page(){ }
 
     @PostMapping("/signup_as_tutor")
-    public String join2Member(@ModelAttribute MemberDTO member, RedirectAttributes rttr) {
+    public String join2Member(@ModelAttribute MemberDTO member,@RequestParam String zipCode,
+                              @RequestParam String address1,
+                              @RequestParam String address2, RedirectAttributes rttr) {
         log.info("[MemberController] join2Member ==============================");
 
         // 사용자가 선택한 field ,univName값
@@ -127,6 +129,9 @@ public class MemberController {
             // 사용자가 선택한 field 값이 유효하지 않은 경우에 대한 처리
             rttr.addFlashAttribute("error", "Invalid selected field: " + selectedField);
         } else {
+            String address = zipCode + "$" + address1 + "$" + address2;
+            member.setAddress(address);
+
             // AcceptedTypeCategory에서 가져온 myKey를 MemberDTO에 설정
             member.setMyKey(acceptedTypeCategory.getMyKey());
 
@@ -135,7 +140,7 @@ public class MemberController {
 
             // 회원 가입을 시도
             try {
-                memberService.join2Member(member);
+                memberService.join2Member(member, acceptedTypeCategory, university, rttr);
                 rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.join"));
             } catch (Exception e) {
                 // 회원 가입 실패 시 예외 처리

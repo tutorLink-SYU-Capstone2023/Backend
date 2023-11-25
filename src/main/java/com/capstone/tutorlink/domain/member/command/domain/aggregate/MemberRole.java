@@ -26,7 +26,7 @@ public class MemberRole {
     private Authority authority;
 
     @ManyToOne
-    @JoinColumn(name = "member_no", insertable = false, updatable = false)
+    @JoinColumn(name = "member_no",referencedColumnName="member_no", insertable = false, updatable = false)
     private Member member;
 
     public MemberRole() {

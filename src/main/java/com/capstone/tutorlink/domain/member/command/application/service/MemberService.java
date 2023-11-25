@@ -70,8 +70,7 @@ public class MemberService {
             // 권한 설정
             Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTEE");
             MemberRole memberRole = new MemberRole(authority);
-            memberRole.setMember(memberEntity);
-
+            memberRole.setAuthorityNum(authority.getAuthorityNum());
             // MemberRole을 MemberEntity의 MemberRole 목록에 추가합니다.
             memberEntity.getMemberRoleList().add(memberRole);
 
@@ -83,6 +82,7 @@ public class MemberService {
 
             // 회원 저장
             memberRepository.save(memberEntity);
+
         } catch (Exception e) {
             // 예외 처리 - 예외 메시지를 로그에 기록
             log.error("Error in joinMember: " + e.getMessage());
@@ -93,10 +93,8 @@ public class MemberService {
     }
 
 
-
-    // MemberController.java
     @Transactional
-    public void join2Member(MemberDTO member) {
+    public void join2Member(MemberDTO member, AcceptedTypeCategory acceptedTypeCategory,University university, RedirectAttributes rttr) {
         try {
             // MemberDTO를 Member로 변환
             Member memberEntity = modelMapper.map(member, Member.class);
@@ -108,18 +106,14 @@ public class MemberService {
             // 권한 설정
             Authority authority = authorityRepository.findByAuthorityName("ROLE_TUTOR");
             MemberRole memberRole = new MemberRole(authority);
-            memberRole.setMember(memberEntity);
+            memberRole.setAuthorityNum(authority.getAuthorityNum());
 
             // MemberRole을 MemberEntity의 MemberRole 목록에 추가
             memberEntity.getMemberRoleList().add(memberRole);
 
             // 사용자가 선택한 field 값
             String selectedField = member.getSelectedField();
-            String selectedUnivName = member.getSelectedUnivName();
 
-            // AcceptedTypeCategory를 참조하여 myKey 설정
-            AcceptedTypeCategory acceptedTypeCategory = acceptedTypeCategoryRepository.findByField(selectedField);
-            University university = universityRepository.findByUnivName(selectedUnivName);
             // 주소 정보 설정
             memberEntity.setAddress(member.getAddress());
 
