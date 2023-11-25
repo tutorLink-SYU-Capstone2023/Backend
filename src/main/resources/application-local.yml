@@ -1,23 +1,23 @@
 # 개인 yml 설정
 
 spring:
-  # DB config(mySql)
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/tutorlink
-#    username : root
-#    password : 1234
+  #  DB config(mySql)
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost:3306/tutorlink
+  #    username : root
+  #    password : 1234
 
-  # DB config(H2)
+  #  DB config(H2)
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/tutorlink
+    url: jdbc:h2:tcp://localhost/~/tutorLink
     username: sa
     password: sa1234
 
   # JPA config
   jpa:
-    #database: mysql
+    #    database: mysql
     database: h2
     hibernate:
       ddl-auto: update
@@ -36,6 +36,10 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+      enabled: true
+      #location = 프로젝트 절대경로
+      location: C:\Users\FIVE\IdeaProjects\SYUBackend
 
 server:
   port: 8080
+

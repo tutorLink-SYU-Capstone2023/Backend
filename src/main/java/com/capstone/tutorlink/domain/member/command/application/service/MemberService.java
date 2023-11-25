@@ -14,8 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -206,29 +204,5 @@ public class MemberService {
     public void unlikeMember(int memberId, int likedMemberId) {
         likedMemberRepository.deleteByMember_MemberNoAndLikedMember_MemberNo(memberId, likedMemberId);
     }
-
-    @Transactional
-    public List<MemberDTO> getTop3LikedTutors() {
-        List<Object[]> top3LikedTutors = likedMemberRepository.findTop3LikedTutors();
-
-        List<MemberDTO> result = new ArrayList<>();
-        for (Object[] tutorInfo : top3LikedTutors) {
-            int tutorMemberNo = (int) tutorInfo[0];
-
-            // Member 엔티티에서 좋아요 튜터 정보 가져오기
-            Member tutor = memberRepository.findByMemberNo(tutorMemberNo);
-
-            // MemberDTO에 정보 매핑
-            MemberDTO tutorDTO = new MemberDTO();
-            tutorDTO.setMemberGender(tutor.getMemberGender());
-            tutorDTO.setMemberName(tutor.getMemberName());
-            tutorDTO.setTutorUni(tutor.getTutorUni());
-
-            result.add(tutorDTO);
-        }
-
-        return result;
-    }
-
 
 }
