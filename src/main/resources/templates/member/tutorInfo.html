@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
+<!-- 다른 HTML 코드 위에 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+<script type="text/javascript">
+    function updateTutorInfo() {
+        // 입력된 정보 가져오기
+        var tutorMiddleSchool = $("input[name='tutorMiddleSchool']").val();
+        var tutorHighSchool = $("input[name='tutorHighSchool']").val();
+        var tutorUni = $("input[name='tutorUni']:checked").val();
+        var tutorUniIsEnrolled = $("input[name='tutorUniIsEnrolled']").val();
+        var tutorMajor = $("input[name='tutorMajor']").val();
+        console.log(tutorMiddleSchool)
+        console.log(tutorHighSchool)
+        console.log(tutorUni)
+        console.log(tutorUniIsEnrolled)
+        console.log(tutorMajor)
+        // 서버로 데이터 전송
+        $.ajax({
+            type: "POST",
+            url: "/member/tutorInfo",
+            data: {
+                tutorMiddleSchool: tutorMiddleSchool,
+                tutorHighSchool: tutorHighSchool,
+                tutorUni: tutorUni,
+                tutorUniIsEnrolled: tutorUniIsEnrolled,
+                tutorMajor: tutorMajor
+            },
+            success: function(response) {
+                // 업데이트가 성공하면 마이 페이지로 리디렉션
+                window.location.href = "/member/my_page";
+            },
+            error: function() {
+                // 오류 처리
+                alert("업데이트 실패");
+            }
+        });
+    }
+
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>마이 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .btns {
+            margin-top: 20px;
+        }
+
+        .btns a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .btns button {
+            background: none;
+            color: gray;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<h1>튜터정보 페이지 (수정)</h1>
+<div class="container">
+    <th:block sec:authorize="isAuthenticated()">
+        <table>
+            <tr>
+                <td>중학교</td>
+                <td>
+                    <input type="text" name="tutorMiddleSchool" th:value="${#authentication.principal.tutorMiddleSchool}">
+                </td>
+            </tr>
+            <tr>
+                <td>고등학교</td>
+                <td>
+                    <input type="text" name="tutorHighSchool" th:value="${#authentication.principal.tutorHighSchool}">
+                </td>
+            </tr>
+            <tr>
+                <td>대학교</td>
+                <td>
+                    <input type="text" name="tutorUni" th:value="${#authentication.principal.tutorUni}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>학번 </td>
+                <td>
+                    <input type="text" name="tutorUniIsEnrolled" th:value="${#authentication.principal.tutorUniIsEnrolled}">
+                </td>
+            </tr>
+            <tr>
+                <td>전공</td>
+                <td>
+                    <input type="text" name="tutorMajor" th:value="${#authentication.principal.tutorMajor}">
+                </td>
+            </tr>
+
+        </table>
+
+        <div class="btns">
+            <input type="submit" value="저장하기" id="saveButton" onclick="updateTutorInfo()">
+            <a href="/member/my_page">마이 페이지로 돌아가기</a>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

@@ -210,18 +210,53 @@ public class MemberController {
 
 
     @GetMapping("/my_page")
-    public void mypage(@AuthenticationPrincipal MemberDTO member) {
+    public String mypage(@AuthenticationPrincipal MemberDTO member, Model model) {
         log.info("로그인 member 번호 : {}", member.getMemberNo());
         log.info("로그인 member 아이디 : {}", member.getMemberId());
         log.info("로그인 member 이름 : {}", member.getMemberName());
+        // 모델에 회원 정보 추가
+        model.addAttribute("member", member);
+        // 적절한 데이터를 반환
+        return "member/my_page";
     }
 
-//    @GetMapping("/find_tutor")
-//    public String findAllTutor(@PageableDefault Pageable pageable, Model model){
-//        Page<MemberDTO> tutorPage = memberService.findAllTutor(pageable);
-//        model.addAttribute("tutorPage", tutorPage);
-//        return "member/find_tutor";
-//    }
+    @GetMapping("/tutorInfo")
+    public String goModifyTutor() {
+
+        return "member/tutorInfo";
+    }
+
+    @PostMapping("/tutorInfo")
+    public String modifyTutorInfo(@ModelAttribute MemberDTO updateMember,
+                               @AuthenticationPrincipal MemberDTO loginMember,
+                               RedirectAttributes rttr) {
+        log.info("[MemberController] modifyMember ==============================");
+        log.info("매개변수로 넘어온 멤버", loginMember);
+
+        // 업데이트된 정보를 loginMember에 반영
+        loginMember.setTutorMiddleSchool(updateMember.getTutorMiddleSchool());
+        loginMember.setTutorHighSchool(updateMember.getTutorHighSchool());
+        loginMember.setTutorUni(updateMember.getTutorUni());
+        loginMember.setMemberEnrollDate(updateMember.getMemberEnrollDate());
+        loginMember.setTutorMajor(updateMember.getTutorMajor());
+        // updateMember.setMyKey(updateMember.getMyKey()); // 필요하다면 처리
+
+        log.info("수정 후 멤버", loginMember);
+        log.info("[MemberController] modifyMember request Member : {}", updateMember);
+
+        // memberService를 통해 회원 정보 업데이트
+        memberService.modifyTutorInfo(updateMember, loginMember);
+
+        // 변경된 튜터 정보로 Authentication을 업데이트
+
+        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("member.modify"));
+
+        log.info("[MemberController] modifyMember ==============================");
+
+        return "redirect:/member/my_page";
+    }
+
+
     @GetMapping("/member/{memberNo}")
     public ResponseEntity<?> findUserByNo() throws UserNotFoundException {
         boolean check = true;

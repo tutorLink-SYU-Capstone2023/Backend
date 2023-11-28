@@ -137,6 +137,35 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    public Member modifyTutorInfo(MemberDTO updateMember, MemberDTO loginMember) {
+        try {
+            Member savedMember = memberRepository.findByMemberNo(loginMember.getMemberNo());
+
+            if (savedMember != null) {
+                // 튜터 관련 정보 업데이트
+                savedMember.setTutorMiddleSchool(updateMember.getTutorMiddleSchool());
+                savedMember.setTutorHighSchool(updateMember.getTutorHighSchool());
+                savedMember.setTutorUni(updateMember.getTutorUni());
+                savedMember.setMemberEnrollDate(updateMember.getMemberEnrollDate());
+                savedMember.setTutorMajor(updateMember.getTutorMajor());
+
+                // 변경사항을 저장
+                memberRepository.save(savedMember);
+
+                return savedMember;
+            } else {
+                // 사용자를 찾을 수 없음
+                throw new EntityNotFoundException("User not found with ID: " + loginMember.getMemberNo());
+            }
+        } catch (Exception e) {
+            // 예외 처리 - 예외 메시지를 로그에 기록
+            log.error("Error in modifyTutorInfo: " + e.getMessage());
+            throw e; // 예외 다시 던지기
+        }
+    }
+
+
 
 
     @Transactional

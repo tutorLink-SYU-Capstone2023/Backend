@@ -4,78 +4,120 @@
 <head>
     <meta charset="UTF-8">
     <title>마이 페이지</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        h1 {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-        }
-
-        .btns {
-            margin-top: 20px;
-        }
-
-        .btns a {
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        .btns button {
-            background: none;
-            color: gray;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
 <h1>마이 페이지</h1>
 <div class="container">
-    <th:block sec:authorize="isAuthenticated()">
-        <h3>회원 번호: <span sec:authentication="principal.memberNo"></span></h3>
-        <h3>아이디: <span sec:authentication="principal.memberId"></span></h3>
-        <h3>닉네임: <span sec:authentication="principal.memberNickname"></span></h3>
-        <h3>이름: <span sec:authentication="principal.memberName"></span></h3>
-        <h3>이메일: <span sec:authentication="principal.memberEmail"></span></h3>
-        <h3>성별: <span sec:authentication="principal.memberGender"></span></h3>
-        <h3>생년월일: <span th:with="formattedBirthday=${#dates.format(#authentication.principal.memberBirthday, 'yyyy-MM-dd')}" th:text="${formattedBirthday}"></span></h3>
-        <h3>전화번호: <span sec:authentication="principal.memberPhoneNumber"></span></h3>
-        <h3>My Key: <span sec:authentication="principal.myKey"></span></h3>
-        <div th:block sec:authorize="hasRole('TOTOR')">
-            <!-- 튜터 회원 정보 입력 폼 -->
-            <h3>중학교: <span th:text="${authentication.principal.tutorMiddleSchool}"></span></h3>
-            <h3>고등학교: <span th:text="${authentication.principal.tutorHighSchool}"></span></h3>
-            <h3>대학교: <span th:text="${authentication.principal.tutorUni}"></span></h3>
-            <h3>전공: <span th:text="${authentication.principal.tutorMajor}"></span></h3>
-            <h3>전공 학점: <span th:text="${authentication.principal.tutorMajorNum}"></span></h3>
-        </div>
+    <div id="memberInfo" >
+        <th:block sec:authorize="isAuthenticated()">
+            <!-- Thymeleaf 템플릿 내에서 데이터를 활용하는 예시 -->
+            <h3>회원 번호: <span th:text="${member.memberNo}"></span></h3>
+            <h3>아이디: <span th:text="${member.memberId}"></span></h3>
+            <h3>닉네임: <span th:text="${member.memberNickname}"></span></h3>
+            <h3>이름: <span th:text="${member.memberName}"></span></h3>
+            <h3>이메일: <span th:text="${member.memberEmail}"></span></h3>
+            <h3>성별: <span th:text="${member.memberGender}"></span></h3>
+            <h3>생년월일: <span th:text="${#dates.format(member.memberBirthday, 'yyyy-MM-dd')}"></span></h3>
+            <h3>전화번호: <span th:text="${member.memberPhoneNumber}"></span></h3>
+            <h3>My Key: <span th:text="${member.myKey}"></span></h3>
+        </th:block>
 
 
+    </div>
 
-        <div class="btns">
+    <div id="tutorInfo" style="display: none;" >
+        <th:block sec:authorize="isAuthenticated()">
+            <!-- Thymeleaf 템플릿 내에서 데이터를 활용하는 예시 -->
+            <h3>중학교: <span th:text="${member.tutorMiddleSchool}"></span></h3>
+            <h3>고등학교: <span th:text="${member.tutorHighSchool}"></span></h3>
+            <h3>대학교: <span th:text="${member.tutorUni}"></span></h3>
+            <h3>입학년도: <span th:text="${member.tutorUniIsEnrolled}"></span></h3>
+            <h3>대학 전공: <span th:text="${member.tutorMajor}"></span></h3>
+        </th:block>
+    </div>
+
+    <!-- 버튼을 클릭하면 회원 정보 또는 튜터 정보 로딩 -->
+    <div class="btns">
+        <button id="loadMemberInfoBtn">회원 정보 로딩</button>
+        <button id="loadTutorInfoBtn">튜터 정보 로딩</button>
+        <button onclick="location.href='/member/tutorInfo'">튜터수정하기</button>
         <button onclick="location.href='/member/update'">수정하기</button>
         <button onclick="location.href='/'">돌아가기</button>
     </div>
-    </th:block>
 </div>
+
+<!-- 튜터 정보를 동적으로 로딩할 div -->
+
+<!-- jQuery 및 Ajax 스크립트 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- 스크립트 작성 -->
+<script th:inline="javascript">
+    $(document).ready(function () {
+        // 회원 정보 로딩 버튼 클릭 시 이벤트 처리
+        $("#loadMemberInfoBtn").click(function () {
+            // Ajax를 통해 회원 정보를 로딩하는 함수 호출
+            loadMemberInfo();
+        });
+
+        // 튜터 정보 로딩 버튼 클릭 시 이벤트 처리
+        $("#loadTutorInfoBtn").click(function () {
+            // Ajax를 통해 튜터 정보를 로딩하는 함수 호출
+            loadTutorInfo();
+        });
+
+        // Ajax를 통해 회원 정보를 로딩하는 함수
+        function loadMemberInfo() {
+            $.ajax({
+                type: 'GET',
+                url: '/member/my_page', // 회원 정보를 로딩하는 엔드포인트 URL
+                success: function (data) {
+                    // 로딩한 회원 정보를 회원 정보를 보여줄 div에 삽입
+                    displayMemberInfo(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load member info. Error: ' + error);
+                }
+            });
+        }
+
+        // Ajax를 통해 튜터 정보를 로딩하는 함수
+        function loadTutorInfo() {
+            $.ajax({
+                type: 'GET',
+                url: '/member/my_page', // 회원 정보를 로딩하는 엔드포인트 URL
+                success: function (data) {
+                    // 로딩한 회원 정보를 회원 정보를 보여줄 div에 삽입
+                    displayTutorInfo(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load member info. Error: ' + error);
+                }
+            });
+        }
+
+        // 회원 정보를 표시하는 함수
+        function displayMemberInfo(data) {
+            console.log(data); // data 객체 로그 출력
+            // 가져온 회원 정보를 특정 영역에 표시
+            $("#memberInfo").html();
+
+            // 회원 정보 영역을 보이도록 설정
+            $("#memberInfo").show();
+            // 튜터 정보는 가려둠
+            $("#tutorInfo").hide();
+        }
+        function displayTutorInfo(data) {
+            console.log(data); // data 객체 로그 출력
+            // 가져온 회원 정보를 특정 영역에 표시
+            $("#memberInfo").html();
+
+            // 회원 정보 영역을 보이도록 설정
+            $("#tutorInfo").show();
+            // 튜터 정보는 가려둠
+            $("#memberInfo").hide();
+        }
+    });
+</script>
 </body>
 </html>
