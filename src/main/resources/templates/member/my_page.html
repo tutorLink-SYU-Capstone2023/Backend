@@ -28,10 +28,12 @@
     <div id="tutorInfo" style="display: none;" >
         <th:block sec:authorize="isAuthenticated()">
             <!-- Thymeleaf 템플릿 내에서 데이터를 활용하는 예시 -->
+            <h3>프로필 사진: </h3>
+            <img th:src="${#authentication.principal.profileImgPath}" alt="프로필 이미지">
             <h3>중학교: <span th:text="${member.tutorMiddleSchool}"></span></h3>
             <h3>고등학교: <span th:text="${member.tutorHighSchool}"></span></h3>
             <h3>대학교: <span th:text="${member.tutorUni}"></span></h3>
-            <h3>입학년도: <span th:text="${member.tutorUniIsEnrolled}"></span></h3>
+            <h3>재학여부: <span th:text="${member.tutorUniIsEnrolled}"></span></h3>
             <h3>대학 전공: <span th:text="${member.tutorMajor}"></span></h3>
         </th:block>
     </div>
@@ -89,6 +91,8 @@
                 success: function (data) {
                     // 로딩한 회원 정보를 회원 정보를 보여줄 div에 삽입
                     displayTutorInfo(data);
+                    // 서버로부터 받은 데이터를 폼에 세팅
+                    setTutorInfoForm(data);
                 },
                 error: function (xhr, status, error) {
                     console.error('Failed to load member info. Error: ' + error);
@@ -116,7 +120,17 @@
             $("#tutorInfo").show();
             // 튜터 정보는 가려둠
             $("#memberInfo").hide();
+            // 튜터 정보를 Thymeleaf 템플릿에 맞게 표시
         }
+        // 튜터 정보를 폼에 세팅하는 함수
+        function setTutorInfoForm(member) {
+            $("#tutorMiddleSchool").val(member.tutorMiddleSchool);
+            $("#tutorHighSchool").val(member.tutorHighSchool);
+            $("#selectedUnivName").val(member.tutorUni); // 변경된 부분
+            $("input[name='tutorUniIsEnrolled'][value='" + member.tutorUniIsEnrolled + "']").prop("checked", true);
+            $("#tutorMajor").val(member.tutorMajor);
+        }
+
     });
 </script>
 </body>

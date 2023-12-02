@@ -60,6 +60,10 @@ public class MemberDTO implements UserDetails {
     private String address1;
     private String address2;
 
+    private String profileImgName;
+    private String profileImgPath;
+
+
     // getter 및 setter 추가
     public String getAddress() {
         return address;

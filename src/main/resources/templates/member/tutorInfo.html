@@ -5,28 +5,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
 <script type="text/javascript">
     function updateTutorInfo() {
-        // 입력된 정보 가져오기
-        var tutorMiddleSchool = $("input[name='tutorMiddleSchool']").val();
-        var tutorHighSchool = $("input[name='tutorHighSchool']").val();
-        var tutorUni = $("input[name='tutorUni']:checked").val();
-        var tutorUniIsEnrolled = $("input[name='tutorUniIsEnrolled']").val();
-        var tutorMajor = $("input[name='tutorMajor']").val();
-        console.log(tutorMiddleSchool)
-        console.log(tutorHighSchool)
-        console.log(tutorUni)
-        console.log(tutorUniIsEnrolled)
-        console.log(tutorMajor)
-        // 서버로 데이터 전송
+        // FormData 객체 생성
+        var formData = new FormData();
+        formData.append("imgFile", $("#imgFile")[0].files[0]);
+        formData.append("tutorMiddleSchool", $("#tutorMiddleSchool").val());
+        formData.append("tutorHighSchool", $("#tutorHighSchool").val());
+        formData.append("selectedUnivName", $("#selectedUnivName").val()); // 변경된 부분
+        formData.append("tutorUniIsEnrolled", $("input[name='tutorUniIsEnrolled']:checked").val());
+        formData.append("tutorMajor", $("#tutorMajor").val());
+         // 서버로 데이터 전송
         $.ajax({
             type: "POST",
             url: "/member/tutorInfo",
-            data: {
-                tutorMiddleSchool: tutorMiddleSchool,
-                tutorHighSchool: tutorHighSchool,
-                tutorUni: tutorUni,
-                tutorUniIsEnrolled: tutorUniIsEnrolled,
-                tutorMajor: tutorMajor
-            },
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function(response) {
                 // 업데이트가 성공하면 마이 페이지로 리디렉션
                 window.location.href = "/member/my_page";
@@ -37,7 +30,6 @@
             }
         });
     }
-
 </script>
 <head>
     <meta charset="UTF-8">
@@ -87,48 +79,64 @@
 </head>
 
 <body>
-<h1>튜터정보 페이지 (수정)</h1>
+<h1>과외정보관리</h1>
 <div class="container">
     <th:block sec:authorize="isAuthenticated()">
-        <table>
-            <tr>
-                <td>중학교</td>
-                <td>
-                    <input type="text" name="tutorMiddleSchool" th:value="${#authentication.principal.tutorMiddleSchool}">
-                </td>
-            </tr>
-            <tr>
-                <td>고등학교</td>
-                <td>
-                    <input type="text" name="tutorHighSchool" th:value="${#authentication.principal.tutorHighSchool}">
-                </td>
-            </tr>
-            <tr>
-                <td>대학교</td>
-                <td>
-                    <input type="text" name="tutorUni" th:value="${#authentication.principal.tutorUni}">
-                </td>
-            </tr>
-
-            <tr>
-                <td>학번 </td>
-                <td>
-                    <input type="text" name="tutorUniIsEnrolled" th:value="${#authentication.principal.tutorUniIsEnrolled}">
-                </td>
-            </tr>
-            <tr>
-                <td>전공</td>
-                <td>
-                    <input type="text" name="tutorMajor" th:value="${#authentication.principal.tutorMajor}">
-                </td>
-            </tr>
-
-        </table>
-
-        <div class="btns">
-            <input type="submit" value="저장하기" id="saveButton" onclick="updateTutorInfo()">
-            <a href="/member/my_page">마이 페이지로 돌아가기</a>
-        </div>
+        <form id="tutorInfoForm" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>프로필 사진</td>
+                    <td><input type="file" name="imgFile" id="imgFile"  accept=".jpg, .png"></td>
+                </tr>
+                <tr>
+                    <td>중학교</td>
+                    <td><input type="text" name="tutorMiddleSchool" placeholder="OO중 까지만 입력해주세요"
+                               th:value="${#authentication.principal.tutorMiddleSchool}"></td>
+                </tr>
+                <tr>
+                    <td>고등학교</td>
+                    <td><input type="text" name="tutorHighSchool" placeholder="OO고 까지만 입력해주세요"
+                               th:value="${#authentication.principal.tutorHighSchool}"></td>
+                </tr>
+                <tr>
+                    <td>대학교</td>
+                    <td>
+                        <span>대학교: </span>
+                        <select name="selectedUnivName" id="selectedUnivName">
+                            <option value="서울대학교">서울대학교</option>
+                            <option value="고려대학교(본캠)">고려대학교(본캠)</option>
+                            <option value="연세대학교(본캠)">연세대학교(본캠)</option>
+                            <option value="서강대학교">서강대학교</option>
+                            <option value="성균관대학교">성균관대학교</option>
+                            <option value="한양대학교">한양대학교</option>
+                            <option value="중앙대학교">중앙대학교</option>
+                            <option value="경희대학교">경희대학교</option>
+                            <option value="한국외국어대학교">한국외국어대학교</option>
+                            <option value="서울시립대학교">서울시립대학교</option>
+                            <option value="국민대학교">국민대학교</option>
+                            <option value="숭실대학교">숭실대학교</option>
+                            <option value="세종대학교">세종대학교</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>재학여부</td>
+                    <td>
+                        <input type="radio" name="tutorUniIsEnrolled" value="Y" th:checked="${#strings.equals(#authentication.principal.tutorUniIsEnrolled, 'Y')}"> Y
+                        <input type="radio" name="tutorUniIsEnrolled" value="N" th:checked="${#strings.equals(#authentication.principal.tutorUniIsEnrolled, 'N')}"> N
+                    </td>
+                </tr>
+                <tr>
+                    <td>전공</td>
+                    <td><input type="text" name="tutorMajor"
+                               th:value="${#authentication.principal.tutorMajor}"></td>
+                </tr>
+            </table>
+            <div class="btns">
+                <input type="button" value="저장하기" id="saveButton" onclick="updateTutorInfo()">
+                <a href="/member/my_page">마이 페이지로 돌아가기</a>
+            </div>
+        </form>
     </th:block>
 </div>
 </body>

@@ -7,16 +7,23 @@ import com.capstone.tutorlink.domain.member.command.domain.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,6 +36,8 @@ public class MemberService {
     private final UniversityRepository universityRepository;
     private final LikedMemberRepository likedMemberRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private static final String uploadPath = "/Users/yeonjojang/javaProgramming/workspace/tutorLinkTest/src/main/resources/static/images";
+
     public MemberService(MemberRepository memberRepository, AuthorityRepository authorityRepository,
                          ModelMapper modelMapper, PasswordEncoder passwordEncoder, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository, LikedMemberRepository likedMemberRepository, ApplicationEventPublisher eventPublisher) {
         this.memberRepository = memberRepository;
@@ -138,22 +147,33 @@ public class MemberService {
     }
 
     @Transactional
-    public Member modifyTutorInfo(MemberDTO updateMember, MemberDTO loginMember) {
+    public Member modifyTutorInfo(MemberDTO updateMember, MemberDTO loginMember, MultipartFile imgFile,University university) throws IOException {
         try {
             Member savedMember = memberRepository.findByMemberNo(loginMember.getMemberNo());
 
             if (savedMember != null) {
+                // 파일 업로드
+                if (imgFile != null && !imgFile.isEmpty()) {
+                    UUID uuid = UUID.randomUUID();
+                    String fileName = uuid.toString() + "_" + imgFile.getOriginalFilename();
+                    File profileImg = new File(uploadPath, fileName);
+                    imgFile.transferTo(profileImg);
+
+                    // 튜터 관련 정보 업데이트
+                    savedMember.setProfileImgName(fileName);
+                    savedMember.setProfileImgPath(uploadPath + "/" + fileName);
+                }
                 // 튜터 관련 정보 업데이트
                 savedMember.setTutorMiddleSchool(updateMember.getTutorMiddleSchool());
                 savedMember.setTutorHighSchool(updateMember.getTutorHighSchool());
-                savedMember.setTutorUni(updateMember.getTutorUni());
-                savedMember.setMemberEnrollDate(updateMember.getMemberEnrollDate());
+                savedMember.setTutorUni(university.getUnivCode());
+                savedMember.setTutorUniIsEnrolled(updateMember.getTutorUniIsEnrolled());
                 savedMember.setTutorMajor(updateMember.getTutorMajor());
 
                 // 변경사항을 저장
-                memberRepository.save(savedMember);
+                Member updatedMember = memberRepository.save(savedMember);
 
-                return savedMember;
+                return updatedMember;
             } else {
                 // 사용자를 찾을 수 없음
                 throw new EntityNotFoundException("User not found with ID: " + loginMember.getMemberNo());
@@ -164,10 +184,6 @@ public class MemberService {
             throw e; // 예외 다시 던지기
         }
     }
-
-
-
-
     @Transactional
     public Member modifyMember(MemberDTO updateMember, MemberDTO loginMember) {
         try {

@@ -12,6 +12,8 @@ import com.capstone.tutorlink.global.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,12 +29,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -44,6 +51,8 @@ public class MemberController {
     private final AuthenticationService authenticationService;
     private AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private UniversityRepository universityRepository;
+
+
 
     public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
         this.memberService = memberService;
@@ -228,24 +237,26 @@ public class MemberController {
 
     @PostMapping("/tutorInfo")
     public String modifyTutorInfo(@ModelAttribute MemberDTO updateMember,
-                               @AuthenticationPrincipal MemberDTO loginMember,
-                               RedirectAttributes rttr) {
+                                  @AuthenticationPrincipal MemberDTO loginMember,
+                                  @RequestPart(value = "imgFile", required = false) MultipartFile imgFile,
+                                  RedirectAttributes rttr) throws IOException {
         log.info("[MemberController] modifyMember ==============================");
         log.info("매개변수로 넘어온 멤버", loginMember);
 
-        // 업데이트된 정보를 loginMember에 반영
-        loginMember.setTutorMiddleSchool(updateMember.getTutorMiddleSchool());
-        loginMember.setTutorHighSchool(updateMember.getTutorHighSchool());
-        loginMember.setTutorUni(updateMember.getTutorUni());
-        loginMember.setMemberEnrollDate(updateMember.getMemberEnrollDate());
-        loginMember.setTutorMajor(updateMember.getTutorMajor());
-        // updateMember.setMyKey(updateMember.getMyKey()); // 필요하다면 처리
+        // 대학 이름으로 대학 정보 조회
+        University university = universityRepository.findByUnivName(updateMember.getSelectedUnivName());
 
-        log.info("수정 후 멤버", loginMember);
-        log.info("[MemberController] modifyMember request Member : {}", updateMember);
+        // loginMember의 대학 코드를 업데이트
+        updateMember.setTutorUni(university.getUnivCode());
+
+        // 기존 이미지 정보를 유지하기 위해 업로드되지 않은 경우에는 updateMember에 기존 정보를 설정
+        if (imgFile == null || imgFile.isEmpty()) {
+            updateMember.setProfileImgName(loginMember.getProfileImgName());
+            updateMember.setProfileImgPath(loginMember.getProfileImgPath());
+        }
 
         // memberService를 통해 회원 정보 업데이트
-        memberService.modifyTutorInfo(updateMember, loginMember);
+        memberService.modifyTutorInfo(updateMember, loginMember, imgFile, university);
 
         // 변경된 튜터 정보로 Authentication을 업데이트
 
