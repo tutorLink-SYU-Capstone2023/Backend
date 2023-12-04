@@ -1,7 +1,7 @@
 package com.capstone.tutorlink.domain.member.command.application.controller;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
-import com.capstone.tutorlink.domain.member.command.application.service.AuthenticationService;
+
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.AcceptedTypeCategory;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.University;
@@ -48,17 +48,16 @@ public class MemberController {
     private final MemberService memberService;
     private final MessageSourceAccessor messageSourceAccessor;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationService authenticationService;
+
     private AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private UniversityRepository universityRepository;
 
 
 
-    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
+    public MemberController(MemberService memberService, MessageSourceAccessor messageSourceAccessor, PasswordEncoder passwordEncoder,  AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
         this.memberService = memberService;
         this.messageSourceAccessor = messageSourceAccessor;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationService = authenticationService;
         this.acceptedTypeCategoryRepository= acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }
@@ -337,13 +336,13 @@ public class MemberController {
         ErrorResponse errorResponse = new ErrorResponse(code, description, detail);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    protected Authentication createNewAuthentication(Authentication currentAuth, String memberId) {
+    /*protected Authentication createNewAuthentication(Authentication currentAuth, String memberId) {
 
         UserDetails newPrincipal = authenticationService.loadUserByUsername(memberId);
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
         newAuth.setDetails(currentAuth.getDetails());
         return newAuth;
 
-    }
+    }*/
 
 }

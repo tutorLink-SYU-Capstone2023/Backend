@@ -27,14 +27,16 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+
 public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthorityRepository authorityRepository;
     private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
+
     private final AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private final UniversityRepository universityRepository;
     private final LikedMemberRepository likedMemberRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
     private static final String uploadPath = "/Users/yeonjojang/javaProgramming/workspace/tutorLinkTest/src/main/resources/static/images";
 
@@ -160,8 +162,8 @@ public class MemberService {
                     imgFile.transferTo(profileImg);
 
                     // 튜터 관련 정보 업데이트
-                    savedMember.setProfileImgName(fileName);
-                    savedMember.setProfileImgPath(uploadPath + "/" + fileName);
+                    //savedMember.setProfileImgName(fileName);
+                    //savedMember.setProfileImgPath(uploadPath + "/" + fileName);
                 }
                 // 튜터 관련 정보 업데이트
                 savedMember.setTutorMiddleSchool(updateMember.getTutorMiddleSchool());

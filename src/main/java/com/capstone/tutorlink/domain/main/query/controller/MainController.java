@@ -11,7 +11,7 @@ import java.util.List;
 
 @Controller
 public class MainController {
-    private final MemberService memberService;
+    /*private final MemberService memberService;
 
     public MainController(MemberService memberService) {
         this.memberService = memberService;
@@ -34,5 +34,5 @@ public class MainController {
         return "redirect:/";
     }
 
-
+*/
 }

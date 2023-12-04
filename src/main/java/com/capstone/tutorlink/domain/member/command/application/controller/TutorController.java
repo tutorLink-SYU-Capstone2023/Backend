@@ -1,7 +1,6 @@
 package com.capstone.tutorlink.domain.member.command.application.controller;
 
 import com.capstone.tutorlink.domain.member.command.application.dto.MemberDTO;
-import com.capstone.tutorlink.domain.member.command.application.service.AuthenticationService;
 import com.capstone.tutorlink.domain.member.command.application.service.MemberService;
 import com.capstone.tutorlink.domain.member.command.domain.aggregate.Member;
 import com.capstone.tutorlink.domain.member.command.domain.repository.AcceptedTypeCategoryRepository;
@@ -19,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class TutorController {
     private final MemberService memberService;
-    private final AuthenticationService authenticationService;
+    //private final AuthenticationService authenticationService;
     private AcceptedTypeCategoryRepository acceptedTypeCategoryRepository;
     private UniversityRepository universityRepository;
 
-    public TutorController(MemberService memberService, AuthenticationService authenticationService, AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
+    public TutorController(MemberService memberService, /*AuthenticationService authenticationService,*/ AcceptedTypeCategoryRepository acceptedTypeCategoryRepository, UniversityRepository universityRepository) {
         this.memberService = memberService;
-        this.authenticationService = authenticationService;
+       // this.authenticationService = authenticationService;
         this.acceptedTypeCategoryRepository = acceptedTypeCategoryRepository;
         this.universityRepository = universityRepository;
     }

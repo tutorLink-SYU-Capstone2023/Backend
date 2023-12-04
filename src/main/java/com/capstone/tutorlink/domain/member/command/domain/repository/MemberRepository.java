@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByMemberIdAndMemberCurrentStatus(String memberId, String memberCurrentStatus);
+
+    Optional<Member> findByMemberId(String memberId);
     Member findByMemberNo(int memberNo);
 
     @Query("SELECT m FROM Member m JOIN m.memberRoleList r WHERE r.authority.authorityName = 'ROLE_TUTEE'")

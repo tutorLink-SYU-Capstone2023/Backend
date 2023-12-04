@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/member")
 public class LikeController {
-
+/*
     private final MemberService memberService;
 
     public LikeController(MemberService memberService) {
@@ -61,5 +61,5 @@ public class LikeController {
     public ResponseEntity<String> unlikeMemberAjax(@RequestParam int likedMemberId, @AuthenticationPrincipal MemberDTO member) {
         memberService.unlikeMember(member.getMemberNo(), likedMemberId);
         return ResponseEntity.ok("Unliked successfully");
-    }
+    }*/
 }
