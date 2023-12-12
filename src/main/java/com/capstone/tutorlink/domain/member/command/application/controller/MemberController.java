@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
@@ -77,7 +77,7 @@ public class MemberController {
 
     @PostMapping("/signup_as_tutee")
     public String joinMember(
-            @ModelAttribute MemberDTO member,
+            @RequestBody MemberDTO member,
             @RequestParam String zipCode,
             @RequestParam String address1,
             @RequestParam String address2,
